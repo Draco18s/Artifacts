@@ -82,7 +82,7 @@ public class PlaceTraps implements IWorldGenerator {
 				}
 			}
 			if(genStrongholds) {
-				for(int vary=0;vary < 130; vary++) {
+				for(int vary=0;vary < 60; vary++) {
 					tex = chunkX*16+8;
 					tez = chunkZ*16+12;
 					bID = world.getBlockId(tex, vary, tez);

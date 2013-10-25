@@ -99,6 +99,7 @@ public class ComponentJumping implements IArtifactComponent {
 			out.writeInt(4);
 			Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
 			PacketDispatcher.sendPacketToServer(packet);
+			par1ItemStack.damageItem(1, par3EntityPlayer);
 		}
 		catch (IOException ex)
 		{

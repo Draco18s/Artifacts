@@ -91,11 +91,12 @@ public class ComponentVision implements IArtifactComponent {
 		{
 			out.writeInt(10);
 			out.writeInt(par3EntityPlayer.entityId);
-			out.writeInt(11);
+			out.writeInt(16);
 			out.writeInt(2400);
 			out.writeInt(1);
 			Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
 			PacketDispatcher.sendPacketToServer(packet);
+			par1ItemStack.damageItem(1, par3EntityPlayer);
 		}
 		catch (IOException ex)
 		{

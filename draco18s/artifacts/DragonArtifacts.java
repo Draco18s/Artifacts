@@ -41,7 +41,7 @@ import draco18s.artifacts.network.PacketHandlerClient;
 import draco18s.artifacts.network.PacketHandlerServer;
 import draco18s.artifacts.worldgen.PlaceTraps;
 
-@Mod(modid = "DragArti", name = "Dragon Artifacts", version = "0.6.0")
+@Mod(modid = "DragArti", name = "Dragon Artifacts", version = "0.6.3")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false,
 	clientPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerClient.class),
 	serverPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerServer.class))
@@ -102,6 +102,11 @@ public class DragonArtifacts {
     		conf = config.get("rendering", "BoundInvis", true);
     		conf.comment = "Set this to false to disable bounding boxes on invisible blocks.\nALERT: without bounding boxes you will not be able to destroy them!\nThis is only recommended for playing adventure maps.";
     		boundingInvis = conf.getBoolean(true);
+
+    		conf = config.get("rendering", "TrapSword", "blade");
+    		conf.comment = "Sets the rendering type for swords in arrow traps.\nDefault is 'blade' which attempts to maintain the jaggy nature of the vanilla sword.\n'blade_alt' uses a smaller texture, maintaining strait lines and mirroring the vanilla item as closely as possible.\nAdditional textures can be created and set here as well, if desired, without replacing existing textures.";
+    		String bladeRender = conf.getString();
+    		
     		int invis2ID = config.getBlock("InvisBedrock", 4002).getInt();
     		int spikesID = config.getBlock("SpikeBlock", 4003).getInt();
     		int arrowSlotID = config.getBlock("ArrowTrap", 4004).getInt();
@@ -134,11 +139,11 @@ public class DragonArtifacts {
 		config.save();
         FactoryArtifact.instance = new FactoryArtifact();
 		ItemArtifact.instance = new ItemArtifact(artifactID);
-		ItemFakeSwordRenderable.wood = new ItemFakeSwordRenderable(tb1, EnumToolMaterial.WOOD, "artifacts:wood_blade");
-		ItemFakeSwordRenderable.stone = new ItemFakeSwordRenderable(tb2, EnumToolMaterial.STONE, "artifacts:stone_blade");
-		ItemFakeSwordRenderable.iron = new ItemFakeSwordRenderable(tb3, EnumToolMaterial.IRON, "artifacts:iron_blade");
-		ItemFakeSwordRenderable.gold = new ItemFakeSwordRenderable(tb4, EnumToolMaterial.GOLD, "artifacts:gold_blade");
-		ItemFakeSwordRenderable.diamond = new ItemFakeSwordRenderable(tb5, EnumToolMaterial.EMERALD, "artifacts:diamond_blade");
+		ItemFakeSwordRenderable.wood = new ItemFakeSwordRenderable(tb1, EnumToolMaterial.WOOD, "artifacts:wood_"+bladeRender);
+		ItemFakeSwordRenderable.stone = new ItemFakeSwordRenderable(tb2, EnumToolMaterial.STONE, "artifacts:stone_"+bladeRender);
+		ItemFakeSwordRenderable.iron = new ItemFakeSwordRenderable(tb3, EnumToolMaterial.IRON, "artifacts:iron_"+bladeRender);
+		ItemFakeSwordRenderable.gold = new ItemFakeSwordRenderable(tb4, EnumToolMaterial.GOLD, "artifacts:gold_"+bladeRender);
+		ItemFakeSwordRenderable.diamond = new ItemFakeSwordRenderable(tb5, EnumToolMaterial.EMERALD, "artifacts:diamond_"+bladeRender);
 		ItemArtifact.doEnchName = enchName.getBoolean(true);
 		ItemArtifact.doMatName = matName.getBoolean(true);
 		ItemArtifact.doAdjName = adjName.getBoolean(true);

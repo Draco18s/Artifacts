@@ -101,8 +101,10 @@ public class RenderArrowTrap implements ISimpleBlockRenderingHandler {
 			}
 		}
 		Icon camo = Block.blocksList[wid].getIcon(l, meta);
-		Icon furnace = Block.furnaceIdle.getIcon(2,3);
-		Icon top = Block.furnaceIdle.getIcon(1,0);
+		Icon furnace = Block.blocksList[61].getIcon(2,3);
+		Icon top = Block.blocksList[61].getIcon(1,0);
+		//Icon furnace = Block.furnaceIdle.getIcon(2,3);
+		//Icon top = Block.furnaceIdle.getIcon(1,0);
 		Icon self = block.getIcon(0, l);
 		renderer.renderBlockUsingTexture(Block.stone, x, y, z, camo);
 		switch(l) {

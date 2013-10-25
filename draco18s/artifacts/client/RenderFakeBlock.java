@@ -26,19 +26,19 @@ public class RenderFakeBlock implements ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		float f = 0.03125F;
-		float xn = 0.001F;
-		float xp = 0.999F;
-		float yn = 0.001F;
-		float yp = 0.999F;
-		float zn = 0.001F;
-		float zp = 0.999F;
+		float xn = 0F;
+		float xp = 1F;
+		float yn = 0F;
+		float yp = 1F;
+		float zn = 0F;
+		float zp = 1F;
 		if(!world.isBlockOpaqueCube(x-1, y, z)) {
 			if(world.getBlockId(x-1, y, z) != block.blockID)
 				xn = f;
 		}
 		if(!world.isBlockOpaqueCube(x+1, y, z)) {
 			if(world.getBlockId(x+1, y, z) != block.blockID)
-				xp = 0.999F-f;
+				xp = 1F-f;
 		}
 		if(!world.isBlockOpaqueCube(x, y-1, z)) {
 			if(world.getBlockId(x, y-1, z) != block.blockID)
@@ -46,7 +46,7 @@ public class RenderFakeBlock implements ISimpleBlockRenderingHandler {
 		}
 		if(!world.isBlockOpaqueCube(x, y+1, z)) {
 			if(world.getBlockId(x, y+1, z) != block.blockID)
-				yp = 0.999F-f;
+				yp = 1F-f;
 		}
 		if(!world.isBlockOpaqueCube(x, y, z-1)) {
 			if(world.getBlockId(x, y, z-1) != block.blockID)
@@ -54,7 +54,7 @@ public class RenderFakeBlock implements ISimpleBlockRenderingHandler {
 		}
 		if(!world.isBlockOpaqueCube(x, y, z+1)) {
 			if(world.getBlockId(x, y, z+1) != block.blockID)
-				zp = 0.999F-f;
+				zp = 1F-f;
 		}
 		//block.setBlockBounds(xn, yn, zn, xp, yp, zp);
 		renderer.setRenderBounds(xn, yn, zn, xp, yp, zp);
@@ -74,9 +74,11 @@ public class RenderFakeBlock implements ISimpleBlockRenderingHandler {
             f2 = f5;
         }
         
-        f0 *= 1.5;
+        //if() {
+        /*f0 *= 1.5;
         f1 *= 1.5;
-        f2 *= 1.5;
+        f2 *= 1.5;*/
+        //}
 
         return renderer.renderStandardBlockWithColorMultiplier(block, x, y, z, f0, f1, f2);
 	}
