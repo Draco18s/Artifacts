@@ -92,7 +92,7 @@ public class ComponentNormalDamage implements IArtifactComponent {
 
 	@Override
 	public float getStrVsBlock(ItemStack par1ItemStack, Block par2Block) {
-		if (par2Block.blockID == Block.web.blockID)
+		/*if (par2Block.blockID == Block.web.blockID)
         {
             return 15.0F;
         }
@@ -100,7 +100,8 @@ public class ComponentNormalDamage implements IArtifactComponent {
         {
             Material material = par2Block.blockMaterial;
             return material != Material.plants && material != Material.vine && material != Material.coral && material != Material.leaves && material != Material.pumpkin ? 0.0F : 1.5F;
-        }
+        }*/
+		return 0;
 	}
 
 	@Override

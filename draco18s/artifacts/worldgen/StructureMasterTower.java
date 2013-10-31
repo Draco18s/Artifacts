@@ -2293,7 +2293,7 @@ public class StructureMasterTower extends WorldGenerator
 
             if (tileentitymobspawner != null)
             {
-                tileentitymobspawner.getSpawnerLogic().setMobID("DragArti.EntClayGolem");
+                tileentitymobspawner.getSpawnerLogic().setMobID("Artifacts.EntClayGolem");
                 NBTTagCompound nbt = new NBTTagCompound();
                 tileentitymobspawner.writeToNBT(nbt);
                 nbt.setShort("MinSpawnDelay",(short)800);

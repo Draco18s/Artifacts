@@ -44,7 +44,7 @@ import draco18s.artifacts.network.PacketHandlerClient;
 import draco18s.artifacts.network.PacketHandlerServer;
 import draco18s.artifacts.worldgen.PlaceTraps;
 
-@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "0.6.5")
+@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "0.7.0")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false,
 	clientPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerClient.class),
 	serverPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerServer.class))
@@ -272,6 +272,7 @@ public class DragonArtifacts {
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt));
 		GameRegistry.addShapedRecipe(new ItemStack(BlockWallPlate.instance, 2), "s", "s", "s", 's', stone);
 		GameRegistry.addShapedRecipe(new ItemStack(BlockWallPlate.obsidian, 2), "s", "s", "s", 's', new ItemStack(Block.obsidian));
+		MinecraftForge.setToolClass(ItemArtifact.instance, "pickaxe", 3);
     }
 	
 	@EventHandler

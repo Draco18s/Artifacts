@@ -67,7 +67,7 @@ public class ComponentMining implements IArtifactComponent {
 
 	@Override
 	public float getStrVsBlock(ItemStack par1ItemStack, Block par2Block) {
-		if (par2Block.blockID == Block.web.blockID)
+		/*if (par2Block.blockID == Block.web.blockID)
         {
             return 15.0F;
         }
@@ -75,7 +75,9 @@ public class ComponentMining implements IArtifactComponent {
         {
             Material material = par2Block.blockMaterial;
             return material != Material.plants && material != Material.vine && material != Material.coral && material != Material.leaves && material != Material.pumpkin ? 0.0F : 1.5F;
-        }
+        }*/
+		return Item.pickaxeWood.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial();
+		//return 0;
 	}
 
 	@Override
@@ -151,7 +153,7 @@ public class ComponentMining implements IArtifactComponent {
 				str = "of Mining";
 				break;
 			case 1:
-				str = "of Quarying";
+				str = "of Quarrying";
 				break;
 		}
 		return str;

@@ -25,6 +25,9 @@ public class FactoryItemIcons implements IItemIconAPI {
 	        registerArtifactIcon("amulet","artifacts:amulet2","artifacts:amulet2_overlay");
 	        registerArtifactIcon("amulet","artifacts:amulet3","artifacts:amulet3_overlay");
 	        registerArtifactIcon("amulet","artifacts:amulet4","artifacts:amulet4_overlay");
+	        registerArtifactIcon("amulet","artifacts:amulet5","artifacts:amulet5_overlay");
+	        registerArtifactIcon("amulet","artifacts:amulet6","artifacts:amulet6_overlay");
+	        registerArtifactIcon("amulet","artifacts:amulet7","artifacts:amulet7_overlay");
 	        registerArtifactIcon("dagger","artifacts:dagger1","artifacts:dagger1_overlay");
 	        registerArtifactIcon("dagger","artifacts:dagger2","artifacts:dagger2_overlay");
 	        registerArtifactIcon("dagger","artifacts:dagger3","artifacts:dagger3_overlay");
@@ -41,6 +44,7 @@ public class FactoryItemIcons implements IItemIconAPI {
 	        registerArtifactIcon("ring","artifacts:ring5","artifacts:ring5_overlay");
 	        registerArtifactIcon("ring","artifacts:ring6","artifacts:ring6_overlay");
 	        registerArtifactIcon("ring","artifacts:ring7");
+	        registerArtifactIcon("ring","artifacts:ring8","artifacts:ring8_overlay");
 	        registerArtifactIcon("staff","artifacts:staff1","artifacts:staff1_overlay");
 	        registerArtifactIcon("staff","artifacts:staff2","artifacts:staff2_overlay");
 	        registerArtifactIcon("staff","artifacts:staff3");
@@ -62,11 +66,15 @@ public class FactoryItemIcons implements IItemIconAPI {
 	        registerArtifactIcon("trinket","artifacts:trinket6","artifacts:trinket6_overlay");
 	        registerArtifactIcon("trinket","artifacts:trinket7","artifacts:trinket7_overlay");
 	        registerArtifactIcon("trinket","artifacts:trinket8","artifacts:trinket8_overlay");
+	        registerArtifactIcon("trinket","artifacts:trinket9","artifacts:trinket9_overlay");
+	        registerArtifactIcon("trinket","artifacts:trinket10");
 	        registerArtifactIcon("wand","artifacts:wand1","artifacts:wand1_overlay");
 	        registerArtifactIcon("wand","artifacts:wand2","artifacts:wand2_overlay");
 	        registerArtifactIcon("wand","artifacts:wand3","artifacts:wand3_overlay");
 	        registerArtifactIcon("wand","artifacts:wand4","artifacts:wand4_overlay");
 	        registerArtifactIcon("wand","artifacts:wand5","artifacts:wand5_overlay");
+	        registerArtifactIcon("wand","artifacts:wand6","artifacts:wand6_overlay");
+	        registerArtifactIcon("wand","artifacts:wand7","artifacts:wand7_overlay");
 		}
 		catch (Exception e) {
 			System.out.println("Error!" + e.getMessage());

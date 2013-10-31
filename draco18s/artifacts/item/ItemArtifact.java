@@ -168,10 +168,12 @@ public class ItemArtifact extends Item {
 						r = y;
 				}
 			}
+			//System.out.println("str: " + r);
 			if(r > 0)
 				return r;
 		}
-        return 0.25F * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial();
+		//System.out.println("No strength");
+        return 0.25F;// * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial();
     }
 	
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
