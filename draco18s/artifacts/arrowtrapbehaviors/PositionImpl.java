@@ -1,5 +1,7 @@
 package draco18s.artifacts.arrowtrapbehaviors;
 
+import net.minecraft.dispenser.IPosition;
+
 public class PositionImpl implements IPosition
 {
     protected final double x;

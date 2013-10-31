@@ -1,6 +1,8 @@
 package draco18s.artifacts.arrowtrapbehaviors;
 
 import java.util.List;
+
+import draco18s.artifacts.api.internals.IBlockSource;
 import draco18s.artifacts.entity.TileEntityTrap;
 
 import net.minecraft.block.BlockDispenser;

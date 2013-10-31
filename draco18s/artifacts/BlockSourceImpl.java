@@ -1,6 +1,6 @@
 package draco18s.artifacts;
 
-import draco18s.artifacts.arrowtrapbehaviors.IBlockSource;
+import draco18s.artifacts.api.internals.IBlockSource;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 

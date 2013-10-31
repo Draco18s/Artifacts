@@ -1,5 +1,6 @@
-package draco18s.artifacts.arrowtrapbehaviors;
+package draco18s.artifacts.api.internals;
 
+import net.minecraft.dispenser.ILocatableSource;
 import net.minecraft.tileentity.TileEntity;
 
 public interface IBlockSource extends ILocatableSource

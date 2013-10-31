@@ -1,11 +1,14 @@
 package draco18s.artifacts.arrowtrapbehaviors;
 
 import java.util.Random;
+
+import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.projectile.EntitySmallFireball;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import draco18s.artifacts.api.internals.IBlockSource;
 import draco18s.artifacts.block.BlockTrap;
 
 final class DispenserBehaviorFireball extends BehaviorDefaultDispenseItem

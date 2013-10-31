@@ -1,13 +1,16 @@
 package draco18s.artifacts.arrowtrapbehaviors;
 
+import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import draco18s.artifacts.api.interfaces.IBehaviorTrapItem;
+import draco18s.artifacts.api.internals.IBlockSource;
 import draco18s.artifacts.block.BlockTrap;
 
-public class BehaviorDefaultDispenseItem implements IBehaviorDispenseItem
+public class BehaviorDefaultDispenseItem implements IBehaviorTrapItem
 {
     /**
      * Dispenses the specified ItemStack from a dispenser.

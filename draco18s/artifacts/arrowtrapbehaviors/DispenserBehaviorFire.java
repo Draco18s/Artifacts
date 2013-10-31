@@ -1,5 +1,6 @@
 package draco18s.artifacts.arrowtrapbehaviors;
 
+import draco18s.artifacts.api.internals.IBlockSource;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.item.ItemStack;

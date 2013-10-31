@@ -67,7 +67,35 @@ public class TileEntityAntibuilder extends TileEntity {
 					for(int oy = 0; oy <= 10; oy++) {
 						for(int oz = 0; oz <= 10; oz++) {
 							//chests too?
-							if(blocks[ox*121+oy*11+oz] == Block.woodenButton.blockID || blocks[ox*121+oy*11+oz] == Block.stoneButton.blockID || blocks[ox*121+oy*11+oz] == Block.pressurePlatePlanks.blockID || blocks[ox*121+oy*11+oz] == Block.pressurePlateStone.blockID || blocks[ox*121+oy*11+oz] == Block.pressurePlateIron.blockID || blocks[ox*121+oy*11+oz] == Block.pressurePlateGold.blockID || blocks[ox*121+oy*11+oz] == BlockInvisiblePressurePlate.obsidian.blockID || blocks[ox*121+oy*11+oz] == BlockInvisiblePressurePlate.instance.blockID || blocks[ox*121+oy*11+oz] == BlockWallPlate.obsidian.blockID || blocks[ox*121+oy*11+oz] == BlockWallPlate.instance.blockID || blocks[ox*121+oy*11+oz] == Block.trapdoor.blockID || blocks[ox*121+oy*11+oz] == BlockTrap.instance.blockID || blocks[ox*121+oy*11+oz] == Block.doorIron.blockID || blocks[ox*121+oy*11+oz] == Block.doorWood.blockID || blocks[ox*121+oy*11+oz] == Block.lever.blockID || blocks[ox*121+oy*11+oz] == Block.redstoneWire.blockID || blocks[ox*121+oy*11+oz] == Block.daylightSensor.blockID || Block.blocksList[blocks[ox*121+oy*11+oz]].blockMaterial == Material.circuits) {
+							if(blocks[ox*121+oy*11+oz] != 0 && 
+									(Block.blocksList[blocks[ox*121+oy*11+oz]].blockMaterial == Material.circuits 
+									|| blocks[ox*121+oy*11+oz] == BlockTrap.instance.blockID
+									|| blocks[ox*121+oy*11+oz] == Block.daylightSensor.blockID
+									|| blocks[ox*121+oy*11+oz] == Block.doorIron.blockID
+									|| blocks[ox*121+oy*11+oz] == Block.doorWood.blockID
+									|| blocks[ox*121+oy*11+oz] == Block.trapdoor.blockID
+									|| blocks[ox*121+oy*11+oz] == Block.pressurePlatePlanks.blockID
+									|| blocks[ox*121+oy*11+oz] == Block.pressurePlateStone.blockID
+									|| blocks[ox*121+oy*11+oz] == Block.pressurePlateIron.blockID
+									|| blocks[ox*121+oy*11+oz] == Block.pressurePlateGold.blockID)) {
+							/*if(blocks[ox*121+oy*11+oz] == Block.woodenButton.blockID //
+								|| blocks[ox*121+oy*11+oz] == Block.stoneButton.blockID //
+								|| blocks[ox*121+oy*11+oz] == Block.pressurePlatePlanks.blockID //
+								|| blocks[ox*121+oy*11+oz] == Block.pressurePlateStone.blockID //
+								|| blocks[ox*121+oy*11+oz] == Block.pressurePlateIron.blockID //
+								|| blocks[ox*121+oy*11+oz] == Block.pressurePlateGold.blockID //
+								|| blocks[ox*121+oy*11+oz] == BlockInvisiblePressurePlate.obsidian.blockID //
+								|| blocks[ox*121+oy*11+oz] == BlockInvisiblePressurePlate.instance.blockID //
+								|| blocks[ox*121+oy*11+oz] == BlockWallPlate.obsidian.blockID //
+								|| blocks[ox*121+oy*11+oz] == BlockWallPlate.instance.blockID //
+								|| blocks[ox*121+oy*11+oz] == Block.trapdoor.blockID //
+								|| blocks[ox*121+oy*11+oz] == BlockTrap.instance.blockID //
+								|| blocks[ox*121+oy*11+oz] == Block.doorIron.blockID //
+								|| blocks[ox*121+oy*11+oz] == Block.doorWood.blockID //
+								|| blocks[ox*121+oy*11+oz] == Block.lever.blockID //
+								|| blocks[ox*121+oy*11+oz] == Block.redstoneWire.blockID //
+								|| blocks[ox*121+oy*11+oz] == Block.daylightSensor.blockID //
+								|| Block.blocksList[blocks[ox*121+oy*11+oz]].blockMaterial == Material.circuits) {*/
 								int wid = worldObj.getBlockId(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5);
 								if(wid != blocks[ox*121+oy*11+oz]) {
 									//System.out.println("Bad Block ID (A)");
@@ -88,13 +116,83 @@ public class TileEntityAntibuilder extends TileEntity {
 									
 								}
 							}
-							else if(blocks[ox*121+oy*11+oz] == Block.fire.blockID || blocks[ox*121+oy*11+oz] == BlockAntibuilder.instance.blockID || blocks[ox*121+oy*11+oz] == Block.redstoneComparatorIdle.blockID || blocks[ox*121+oy*11+oz] == Block.redstoneComparatorActive.blockID || blocks[ox*121+oy*11+oz] == Block.redstoneRepeaterIdle.blockID || blocks[ox*121+oy*11+oz] == Block.redstoneRepeaterActive.blockID || blocks[ox*121+oy*11+oz] == Block.furnaceBurning.blockID || blocks[ox*121+oy*11+oz] == Block.furnaceIdle.blockID || blocks[ox*121+oy*11+oz] == Block.tripWireSource.blockID || blocks[ox*121+oy*11+oz] == Block.tripWire.blockID || blocks[ox*121+oy*11+oz] == Block.web.blockID || blocks[ox*121+oy*11+oz] == Block.redstoneLampActive.blockID || blocks[ox*121+oy*11+oz] == Block.redstoneLampIdle.blockID ||blocks[ox*121+oy*11+oz] == Block.torchRedstoneIdle.blockID || blocks[ox*121+oy*11+oz] == Block.torchRedstoneActive.blockID || blocks[ox*121+oy*11+oz] == BlockStoneBrickMovable.instance.blockID || blocks[ox*121+oy*11+oz] == Block.pistonStickyBase.blockID || blocks[ox*121+oy*11+oz] == Block.pistonMoving.blockID || blocks[ox*121+oy*11+oz] == Block.pistonBase.blockID || blocks[ox*121+oy*11+oz] == Block.pistonExtension.blockID) {
-								
+							else if(blocks[ox*121+oy*11+oz] == Block.fire.blockID 
+									|| blocks[ox*121+oy*11+oz] == BlockAntibuilder.instance.blockID 
+									/*|| blocks[ox*121+oy*11+oz] == Block.redstoneComparatorIdle.blockID 
+									|| blocks[ox*121+oy*11+oz] == Block.redstoneComparatorActive.blockID 
+									|| blocks[ox*121+oy*11+oz] == Block.redstoneRepeaterIdle.blockID 
+									|| blocks[ox*121+oy*11+oz] == Block.redstoneRepeaterActive.blockID */
+									|| blocks[ox*121+oy*11+oz] == Block.furnaceBurning.blockID 
+									|| blocks[ox*121+oy*11+oz] == Block.furnaceIdle.blockID 
+									/*|| blocks[ox*121+oy*11+oz] == Block.tripWireSource.blockID 
+									|| blocks[ox*121+oy*11+oz] == Block.tripWire.blockID*/ 
+									|| blocks[ox*121+oy*11+oz] == Block.web.blockID 
+									|| blocks[ox*121+oy*11+oz] == Block.redstoneLampActive.blockID 
+									|| blocks[ox*121+oy*11+oz] == Block.redstoneLampIdle.blockID 
+									/*|| blocks[ox*121+oy*11+oz] == Block.torchRedstoneIdle.blockID 
+									|| blocks[ox*121+oy*11+oz] == Block.torchRedstoneActive.blockID */
+									|| blocks[ox*121+oy*11+oz] == BlockStoneBrickMovable.instance.blockID 
+									|| blocks[ox*121+oy*11+oz] == Block.pistonStickyBase.blockID 
+									|| blocks[ox*121+oy*11+oz] == Block.pistonMoving.blockID 
+									|| blocks[ox*121+oy*11+oz] == Block.pistonBase.blockID 
+									|| blocks[ox*121+oy*11+oz] == Block.pistonExtension.blockID) {
+
+								int wid = worldObj.getBlockId(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5);
+								int wmd = worldObj.getBlockMetadata(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5);
+								if(blocks[ox*121+oy*11+oz] == BlockStoneBrickMovable.instance.blockID && wid == 0) {
+									int a1 = worldObj.getBlockId(xCoord+ox-4, yCoord+oy-5, zCoord+oz-5);
+									int a2 = worldObj.getBlockId(xCoord+ox-6, yCoord+oy-5, zCoord+oz-5);
+									int a3 = worldObj.getBlockId(xCoord+ox-5, yCoord+oy-4, zCoord+oz-5);
+									int a4 = worldObj.getBlockId(xCoord+ox-5, yCoord+oy-6, zCoord+oz-5);
+									int a5 = worldObj.getBlockId(xCoord+ox-5, yCoord+oy-5, zCoord+oz-4);
+									int a6 = worldObj.getBlockId(xCoord+ox-5, yCoord+oy-5, zCoord+oz-6);
+									
+									int b1 = worldObj.getBlockId(xCoord+ox-3, yCoord+oy-5, zCoord+oz-5);
+									int b2 = worldObj.getBlockId(xCoord+ox-7, yCoord+oy-5, zCoord+oz-5);
+									int b3 = worldObj.getBlockId(xCoord+ox-5, yCoord+oy-3, zCoord+oz-5);
+									int b4 = worldObj.getBlockId(xCoord+ox-5, yCoord+oy-7, zCoord+oz-5);
+									int b5 = worldObj.getBlockId(xCoord+ox-5, yCoord+oy-5, zCoord+oz-3);
+									int b6 = worldObj.getBlockId(xCoord+ox-5, yCoord+oy-5, zCoord+oz-7);
+									if((a1 == BlockStoneBrickMovable.instance.blockID && b1 == Block.pistonStickyBase.blockID)
+											|| (a2 == BlockStoneBrickMovable.instance.blockID && b2 == Block.pistonStickyBase.blockID)
+											|| (a3 == BlockStoneBrickMovable.instance.blockID && b3 == Block.pistonStickyBase.blockID)
+											|| (a4 == BlockStoneBrickMovable.instance.blockID && b4 == Block.pistonStickyBase.blockID)
+											|| (a5 == BlockStoneBrickMovable.instance.blockID && b5 == Block.pistonStickyBase.blockID)
+											|| (a6 == BlockStoneBrickMovable.instance.blockID && b6 == Block.pistonStickyBase.blockID)) {
+										blocks[ox*121+oy*11+oz] = (short) wid;
+										metas[ox*121+oy*11+oz] = (byte)wmd;
+									}
+									else {
+										worldObj.setBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, blocks[ox*121+oy*11+oz], metas[ox*121+oy*11+oz], 3);
+										drawParticleLine(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5, xCoord+0.5, yCoord+0.5, zCoord+0.5);
+										particles.add(Vec3.createVectorHelper(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5));
+									}
+									/*if(a1 != BlockStoneBrickMovable.instance.blockID 
+											&& a2 != BlockStoneBrickMovable.instance.blockID 
+											&& a3 != BlockStoneBrickMovable.instance.blockID 
+											&& a4 != BlockStoneBrickMovable.instance.blockID 
+											&& a5 != BlockStoneBrickMovable.instance.blockID 
+											&& a6 != BlockStoneBrickMovable.instance.blockID) {
+										worldObj.setBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, blocks[ox*121+oy*11+oz], metas[ox*121+oy*11+oz], 3);
+										drawParticleLine(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5, xCoord+0.5, yCoord+0.5, zCoord+0.5);
+										particles.add(Vec3.createVectorHelper(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5));
+									}
+									else {
+										blocks[ox*121+oy*11+oz] = (short) wid;
+										metas[ox*121+oy*11+oz] = (byte)wmd;
+									}*/
+								}
 							}
 							else {
 								int wid = worldObj.getBlockId(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5);
 								int wmd = worldObj.getBlockMetadata(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5);
-								if(wid != Block.fire.blockID && wid != Block.torchWood.blockID && wid != BlockStoneBrickMovable.instance.blockID && wid != Block.pistonStickyBase.blockID && wid != Block.pistonMoving.blockID && wid != Block.pistonBase.blockID && wid != Block.pistonExtension.blockID) {
+								if(wid != Block.fire.blockID 
+										&& wid != Block.torchWood.blockID 
+										&& wid != BlockStoneBrickMovable.instance.blockID 
+										&& wid != Block.pistonStickyBase.blockID 
+										&& wid != Block.pistonMoving.blockID 
+										&& wid != Block.pistonBase.blockID 
+										&& wid != Block.pistonExtension.blockID) {
 									if(wid != blocks[ox*121+oy*11+oz] && blocks[ox*121+oy*11+oz] == Block.tnt.blockID) {
 										if(expTNT < maxTNT) {
 											expTNT++;
@@ -114,6 +212,11 @@ public class TileEntityAntibuilder extends TileEntity {
 											//blocks[ox*121+oy*11+oz] = 0;
 										}
 									}
+									else if(blocks[ox*121+oy*11+oz] != 0 && (Block.blocksList[blocks[ox*121+oy*11+oz]].getUnlocalizedName().toLowerCase().contains("leaves") || Block.blocksList[blocks[ox*121+oy*11+oz]].getUnlocalizedName().toLowerCase().contains("leaf"))) {
+										//don't touch leaves
+										blocks[ox*121+oy*11+oz] = (short)wid;
+										metas[ox*121+oy*11+oz] = (byte)wmd;
+									}
 									else if(wid != blocks[ox*121+oy*11+oz] || wmd != metas[ox*121+oy*11+oz]) {
 										//System.out.println("Bad Block ID (B)");
 										List l = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getAABBPool().getAABB(xCoord-10, yCoord-10, zCoord-10, xCoord+10, yCoord+10, zCoord+10));
@@ -128,6 +231,11 @@ public class TileEntityAntibuilder extends TileEntity {
 										drawParticleLine(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5, xCoord+0.5, yCoord+0.5, zCoord+0.5);
 										particles.add(Vec3.createVectorHelper(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5));
 									}
+								}
+								else {
+									//System.out.println("Block special: " + blocks[ox*121+oy*11+oz] + "->" + wid);
+									blocks[ox*121+oy*11+oz] = (short) wid;
+									metas[ox*121+oy*11+oz] = (byte)wmd;
 								}
 							}
 						}

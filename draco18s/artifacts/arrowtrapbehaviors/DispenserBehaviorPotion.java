@@ -1,9 +1,11 @@
 package draco18s.artifacts.arrowtrapbehaviors;
 
+import draco18s.artifacts.api.interfaces.IBehaviorTrapItem;
+import draco18s.artifacts.api.internals.IBlockSource;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 
-final class DispenserBehaviorPotion implements IBehaviorDispenseItem
+final class DispenserBehaviorPotion implements IBehaviorTrapItem
 {
     private final BehaviorDefaultDispenseItem defaultDispenserItemBehavior = new BehaviorDefaultDispenseItem();
 

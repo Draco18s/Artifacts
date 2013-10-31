@@ -16,10 +16,10 @@ import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.dispenser.IPosition;
+import draco18s.artifacts.api.interfaces.IBehaviorTrapItem;
+import draco18s.artifacts.api.internals.IBlockSource;
 import draco18s.artifacts.arrowtrapbehaviors.BehaviorDefaultDispenseItem;
-import draco18s.artifacts.arrowtrapbehaviors.IBehaviorDispenseItem;
-import draco18s.artifacts.arrowtrapbehaviors.IBlockSource;
-import draco18s.artifacts.arrowtrapbehaviors.IPosition;
 import draco18s.artifacts.arrowtrapbehaviors.IRegistry;
 import draco18s.artifacts.arrowtrapbehaviors.PositionImpl;
 import draco18s.artifacts.arrowtrapbehaviors.RegistryDefaulted;
@@ -215,9 +215,9 @@ public class BlockTrap extends BlockContainer
             else
             {
                 ItemStack itemstack = tileentitydispenser.getStackInSlot(l);
-                IBehaviorDispenseItem ibehaviordispenseitem = this.getBehaviorForItemStack(itemstack);
+                IBehaviorTrapItem ibehaviordispenseitem = this.getBehaviorForItemStack(itemstack);
                 
-                if (ibehaviordispenseitem != IBehaviorDispenseItem.itemDispenseBehaviorProvider)
+                if (ibehaviordispenseitem != IBehaviorTrapItem.itemDispenseBehaviorProvider)
                 {
                     //ItemStack itemstack1 = ibehaviordispenseitem.dispense((IBlockSource) blocksourceimpl, itemstack);
                     ItemStack itemstack1 = ibehaviordispenseitem.dispense(blocksourceimpl, itemstack);
@@ -230,9 +230,9 @@ public class BlockTrap extends BlockContainer
     /**
      * Returns the behavior for the given ItemStack.
      */
-    protected IBehaviorDispenseItem getBehaviorForItemStack(ItemStack par1ItemStack)
+    protected IBehaviorTrapItem getBehaviorForItemStack(ItemStack par1ItemStack)
     {
-        return (IBehaviorDispenseItem)dispenseBehaviorRegistry.func_82594_a(par1ItemStack.getItem());
+        return (IBehaviorTrapItem)dispenseBehaviorRegistry.func_82594_a(par1ItemStack.getItem());
     }
 
     /**

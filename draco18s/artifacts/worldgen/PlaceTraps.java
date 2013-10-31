@@ -1,5 +1,6 @@
 package draco18s.artifacts.worldgen;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import com.xcompwiz.mystcraft.api.MystObjects;
@@ -13,6 +14,7 @@ import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -31,12 +33,16 @@ public class PlaceTraps implements IWorldGenerator {
 	public final boolean genStrongholds;
 	public final boolean genQuicksand;
 	public final boolean genTowers;
+	public final boolean whitelistEnabled;
+	public final boolean blacklistEnabled;
+	public final int[] whitelist;
+	public final int[] blacklist;
 
 	public PlaceTraps() {
-		this(true, true, true, true, true);
+		this(true, true, true, true, true, false, false, new int[] {}, new int[] {});
 	}
 
-	public PlaceTraps(boolean pyrm, boolean temp, boolean strn, boolean quik, boolean tow) {
+	public PlaceTraps(boolean pyrm, boolean temp, boolean strn, boolean quik, boolean tow, boolean usewhite, boolean useblack, int[] white, int[] black) {
 		//if(quik)
 		quicksandPit = new WorldGenLakes(BlockQuickSand.instance.blockID);
 		wizardTowerA = new StructureApprenticeTower();
@@ -47,6 +53,12 @@ public class PlaceTraps implements IWorldGenerator {
 		genStrongholds = strn;
 		genQuicksand = quik;
 		genTowers = tow;
+		whitelistEnabled = usewhite;
+		blacklistEnabled = useblack;
+		Arrays.sort(white);
+		Arrays.sort(black);
+		whitelist = white;
+		blacklist = black;
 	}
 
 	@Override
@@ -56,7 +68,7 @@ public class PlaceTraps implements IWorldGenerator {
 		int tex;
 		int tez;
 		int bID;
-		if (dim == 0)
+		if (dim == 0 && (!whitelistEnabled || Arrays.binarySearch(whitelist, 0) >= 0) && !(blacklistEnabled && Arrays.binarySearch(blacklist, 0) >= 0))
 		{
 			tex = chunkX*16+10;
 			tez = chunkZ*16+10;
@@ -144,7 +156,8 @@ public class PlaceTraps implements IWorldGenerator {
 					quicksandPit.generate(world, rand, tex, 128, tez);
 				}
 			}
-			if(genTowers && (bid == 0 || bid == 3 || bid == 14)) {
+			boolean TFgen = BiomeGenBase.biomeList[bid].biomeName.toLowerCase().contains("magic");
+			if(genTowers && (bid == 0 || bid == 3 || bid == 14 || TFgen)) {
 				int R = 6;
 				int mod = 57;
 				if(bid == 0) {
@@ -158,12 +171,15 @@ public class PlaceTraps implements IWorldGenerator {
 				int ny = chunkZ % R;
 				int Z = nx + (ny * R);
 				if(mX % 2 == 0 || mY %2 == 0) {
-					Z = -1;
+					//Z = -1;
 				}
-				if(ch == Z) {
+				else if(ch == Z) {
 					tex = chunkX*16+8;
 					tez = chunkZ*16+8;
 					int m = rand.nextInt(12);
+					if(TFgen && m >= 3) {
+						m -= 2;
+					}
 					//System.out.println("Tower rand: " + m);
 					switch(m) {
 						case 0:
@@ -175,20 +191,20 @@ public class PlaceTraps implements IWorldGenerator {
 						case 4:
 						case 5:
 						case 6:
-							wizardTowerC.generate(world, rand, tex, 128, tez);
+							wizardTowerB.generate(world, rand, tex, 128, tez);
 							break;
 						case 7:
 						case 8:
 						case 9:
 						case 10:
 						case 11:
-							wizardTowerC.generate(world, rand, tex, 128, tez);
+							wizardTowerA.generate(world, rand, tex, 128, tez);
 							break;
 					}
 				}
 			}
 		}
-		else if(dim != 1 && dim != -1){
+		else if(dim != 1 && dim != -1 && (!whitelistEnabled || Arrays.binarySearch(whitelist, dim) >= 0) && !(blacklistEnabled && Arrays.binarySearch(blacklist, dim) >= 0)	){
 			int bid = world.getBiomeGenForCoords(chunkX*16, chunkZ*16).biomeID;
 			if(genTowers && (bid == 0 || bid == 3 || bid == 14)) {
 				int R = 6;
@@ -205,9 +221,9 @@ public class PlaceTraps implements IWorldGenerator {
 				int ny = chunkZ % R;
 				int Z = nx + (ny * R);
 				if(mX % 2 == 0 || mY %2 == 0) {
-					Z = -1;
+					//Z = -1;
 				}
-				if(ch == Z) {
+				else if(ch == Z) {
 					tex = chunkX*16+8;
 					tez = chunkZ*16+8;
 					switch(rand.nextInt(12)) {

@@ -10,6 +10,7 @@ import com.google.common.collect.Multimap;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import draco18s.artifacts.api.interfaces.IArtifactComponent;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

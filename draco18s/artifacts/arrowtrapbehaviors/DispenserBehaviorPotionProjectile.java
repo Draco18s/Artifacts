@@ -1,5 +1,6 @@
 package draco18s.artifacts.arrowtrapbehaviors;
 
+import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.projectile.EntityPotion;
 import net.minecraft.item.ItemStack;

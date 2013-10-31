@@ -1,5 +1,6 @@
 package draco18s.artifacts.arrowtrapbehaviors;
 
+import draco18s.artifacts.api.internals.IBlockSource;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.item.ItemStack;

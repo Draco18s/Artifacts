@@ -1,11 +1,13 @@
 package draco18s.artifacts.arrowtrapbehaviors;
 
+import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import draco18s.artifacts.api.internals.IBlockSource;
 import draco18s.artifacts.block.BlockTrap;
 
 public abstract class BehaviorProjectileDispense extends BehaviorDefaultDispenseItem

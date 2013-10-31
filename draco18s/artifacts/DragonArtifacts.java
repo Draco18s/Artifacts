@@ -2,6 +2,7 @@ package draco18s.artifacts;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.EnumMobType;
@@ -32,21 +33,23 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import draco18s.artifacts.api.ArtifactsAPI;
 import draco18s.artifacts.arrowtrapbehaviors.DispenserBehaviors;
 import draco18s.artifacts.block.*;
 import draco18s.artifacts.client.*;
 import draco18s.artifacts.entity.*;
+import draco18s.artifacts.factory.*;
 import draco18s.artifacts.item.*;
 import draco18s.artifacts.network.PacketHandlerClient;
 import draco18s.artifacts.network.PacketHandlerServer;
 import draco18s.artifacts.worldgen.PlaceTraps;
 
-@Mod(modid = "DragArti", name = "Dragon Artifacts", version = "0.6.3")
+@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "0.6.5")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false,
 	clientPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerClient.class),
 	serverPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerServer.class))
 public class DragonArtifacts {
-	@Instance("DragArti")
+	@Instance("Artifacts")
     public static DragonArtifacts instance;
 	public static boolean renderNamesInPedestals = false;
 	public static boolean renderInvis = false;
@@ -83,6 +86,26 @@ public class DragonArtifacts {
 			boolean strn = config.get("WorldGen","Strongholds",true).getBoolean(true);
 			boolean quik = config.get("WorldGen","QuicksandPits",true).getBoolean(true);
 			boolean towers = config.get("WorldGen","WizardTowers",true).getBoolean(true);
+			Property conf = config.get("WorldGen","dimensionWhitelistEnable",false);
+			conf.comment = "Enables the whitelist for worldgen.  If enabled, world gen objects will only generate in whitelisted dimensions.";
+			boolean usewhite = conf.getBoolean(false);
+			conf = config.get("WorldGen","dimensionBlacklistEnable",false);
+			conf.comment = "Enables the blacklist for worldgen.  If enabled, world gen objects will never generate in blacklisted dimensions.\nBlacklist will override whitelist.  -1 and 1 (Nether and End) are always blacklisted.";
+			boolean useblack = conf.getBoolean(false);
+			
+			int[] white = config.get("WorldGen","dimensionWhitelistList", new int[] {0}).getIntList();
+			int[] black = config.get("WorldGen","dimensionBlacklistList", new int[] {-1,1}).getIntList();
+			
+			Arrays.sort(white);
+			Arrays.sort(black);
+			
+			String a=Arrays.toString(white);
+			String whitestring[]=a.substring(1,a.length()-1).split(", ");
+			String b=Arrays.toString(black);
+			String blackstring[]=b.substring(1,b.length()-1).split(", ");
+
+			config.get("WorldGen","dimensionWhitelistList", new int[] {0}).set(whitestring);
+			config.get("WorldGen","dimensionBlacklistList", new int[] {-1,1}).set(blackstring);
 			
 			ConfigCategory longNames = config.getCategory("general");
 			longNames.setComment("These settings dictate how item names are displayed.");
@@ -95,7 +118,7 @@ public class DragonArtifacts {
 			
 			ConfigCategory renderConf = config.getCategory("rendering");
 			renderConf.setComment("Determines some options on invisible blocks");
-			Property conf = config.get("rendering", "RenderInvis", false);
+			conf = config.get("rendering", "RenderInvis", false);
     		conf.comment = "Set this to true to render invisible blocks.  Even when false, they will render in your inventory.";
     		renderInvis = conf.getBoolean(false);
     		
@@ -103,7 +126,10 @@ public class DragonArtifacts {
     		conf.comment = "Set this to false to disable bounding boxes on invisible blocks.\nALERT: without bounding boxes you will not be able to destroy them!\nThis is only recommended for playing adventure maps.";
     		boundingInvis = conf.getBoolean(true);
 
-    		conf = config.get("rendering", "TrapSword", "blade");
+    		conf = config.get("rendering", "TrapSwordPackage", "artifacts");
+    		conf.comment = "Sets the package the icons should be pulled from.\nDefault is 'artifacts' which pulls the default icons.\nNot sure where this points otherwise.";
+    		String bladePackage = conf.getString();
+    		conf = config.get("rendering", "TrapSwordIcon", "blade");
     		conf.comment = "Sets the rendering type for swords in arrow traps.\nDefault is 'blade' which attempts to maintain the jaggy nature of the vanilla sword.\n'blade_alt' uses a smaller texture, maintaining strait lines and mirroring the vanilla item as closely as possible.\nAdditional textures can be created and set here as well, if desired, without replacing existing textures.";
     		String bladeRender = conf.getString();
     		
@@ -137,13 +163,15 @@ public class DragonArtifacts {
     		int villRare = config.get("spawning","Blacksmith",1).getInt(1);
     		int wizRare = config.get("spawning","WizTowers",10).getInt(10);
 		config.save();
-        FactoryArtifact.instance = new FactoryArtifact();
+        ArtifactsAPI.artifacts = new FactoryArtifact();
+        ArtifactsAPI.itemicons = new FactoryItemIcons();
+        ArtifactsAPI.traps = new FactoryTrapBehaviors();
 		ItemArtifact.instance = new ItemArtifact(artifactID);
-		ItemFakeSwordRenderable.wood = new ItemFakeSwordRenderable(tb1, EnumToolMaterial.WOOD, "artifacts:wood_"+bladeRender);
-		ItemFakeSwordRenderable.stone = new ItemFakeSwordRenderable(tb2, EnumToolMaterial.STONE, "artifacts:stone_"+bladeRender);
-		ItemFakeSwordRenderable.iron = new ItemFakeSwordRenderable(tb3, EnumToolMaterial.IRON, "artifacts:iron_"+bladeRender);
-		ItemFakeSwordRenderable.gold = new ItemFakeSwordRenderable(tb4, EnumToolMaterial.GOLD, "artifacts:gold_"+bladeRender);
-		ItemFakeSwordRenderable.diamond = new ItemFakeSwordRenderable(tb5, EnumToolMaterial.EMERALD, "artifacts:diamond_"+bladeRender);
+		ItemFakeSwordRenderable.wood = new ItemFakeSwordRenderable(tb1, EnumToolMaterial.WOOD, bladePackage+":wood_"+bladeRender);
+		ItemFakeSwordRenderable.stone = new ItemFakeSwordRenderable(tb2, EnumToolMaterial.STONE, bladePackage+":stone_"+bladeRender);
+		ItemFakeSwordRenderable.iron = new ItemFakeSwordRenderable(tb3, EnumToolMaterial.IRON, bladePackage+":iron_"+bladeRender);
+		ItemFakeSwordRenderable.gold = new ItemFakeSwordRenderable(tb4, EnumToolMaterial.GOLD, bladePackage+":gold_"+bladeRender);
+		ItemFakeSwordRenderable.diamond = new ItemFakeSwordRenderable(tb5, EnumToolMaterial.EMERALD, bladePackage+":diamond_"+bladeRender);
 		ItemArtifact.doEnchName = enchName.getBoolean(true);
 		ItemArtifact.doMatName = matName.getBoolean(true);
 		ItemArtifact.doAdjName = adjName.getBoolean(true);
@@ -215,7 +243,7 @@ public class DragonArtifacts {
         EntityRegistry.registerModEntity(EntityClayGolem.class, "EntClayGolem", 0, this, 350, 5, false);
         EntityList.addMapping(EntityClayGolem.class, "Clay Golem", 3, 13347172, 7033635);//13347172 is pale
 		
-        worldGen = new PlaceTraps(pyrm, temp, strn, quik, towers);
+        worldGen = new PlaceTraps(pyrm, temp, strn, quik, towers, usewhite, useblack, white, black);
         GameRegistry.registerWorldGenerator(worldGen);
         
         ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomArtifact(ItemArtifact.instance.itemID, 0, 1, 1, Math.max(6, wizRare)));
