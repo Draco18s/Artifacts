@@ -132,7 +132,7 @@ public class ComponentVision implements IArtifactComponent {
 		if(!world.isRemote) {
 			if(par3Entity instanceof EntityLivingBase) {
 				EntityLivingBase ent = (EntityLivingBase) par3Entity;
-				ent.addPotionEffect(new PotionEffect(16, 10, 0));
+				ent.addPotionEffect(new PotionEffect(16, 200, 0));
 			}
 		}
 	}
