@@ -208,6 +208,7 @@ public class ItemArtifact extends Item {
 		return false;
     }
 
+	@Override
     public boolean onBlockDestroyed(ItemStack par1ItemStack, World par2World, int blockID, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase)
     {
     	NBTTagCompound data = par1ItemStack.getTagCompound();
@@ -215,6 +216,11 @@ public class ItemArtifact extends Item {
 		if(data != null) {
 			if(!par2World.isRemote) {
 				effectID = data.getInteger("onBlockDestroyed");
+				if(effectID != 0) {
+					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
+					return c.onBlockDestroyed(par1ItemStack, par2World, blockID, par4, par5, par6, par7EntityLivingBase);
+				}
+				effectID = data.getInteger("onDig");
 				if(effectID != 0) {
 					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
 					return c.onBlockDestroyed(par1ItemStack, par2World, blockID, par4, par5, par6, par7EntityLivingBase);

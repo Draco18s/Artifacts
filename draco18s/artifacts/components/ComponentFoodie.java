@@ -55,9 +55,6 @@ public class ComponentFoodie implements IArtifactComponent {
 			case 1:
 				str = "hitEntity";
 				break;
-			case 2:
-				str = "onHeld";
-				break;
 		}
 		return str;
 	}
@@ -111,7 +108,7 @@ public class ComponentFoodie implements IArtifactComponent {
 
 	@Override
 	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
-		if(par3EntityLivingBase instanceof EntityClientPlayerMP) {
+		if(par3EntityLivingBase.worldObj.isRemote) {
 			if(par2EntityLivingBase.hurtTime == 0) {
 				ByteArrayOutputStream bt = new ByteArrayOutputStream();
 				DataOutputStream out = new DataOutputStream(bt);
@@ -169,10 +166,10 @@ public class ComponentFoodie implements IArtifactComponent {
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		int time = 0;
 		if(trigger == "when inflicting damage.") {
-			time = 1;
+			time = 5;
 		}
 		else if(trigger == "when used.") {
-			time = 5;
+			time = 1;
 		}
 		par3List.add(EnumChatFormatting.AQUA + "Food Saturation");
 		par3List.add(EnumChatFormatting.AQUA + trigger + " (" + time + "seconds)");

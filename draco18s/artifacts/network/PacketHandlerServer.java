@@ -52,8 +52,14 @@ public class PacketHandlerServer implements IPacketHandler{
             		if(dis.readInt() == p.entityId) {
                         Vec3 vec3 = p.getLook(1.0F);
                         double d8 = 4.0D;
-                        //System.out.println(vec3);
-            			EntityLargeFireball entitylargefireball = new EntityLargeFireball(world, p.posX + vec3.xCoord * d8, p.posY, p.posZ + vec3.zCoord * d8, vec3.xCoord, vec3.yCoord, vec3.zCoord);
+                        System.out.println(vec3);
+            			//EntityLargeFireball entitylargefireball = new EntityLargeFireball(world, p.posX + vec3.xCoord * d8, p.posY, p.posZ + vec3.zCoord * d8, vec3.xCoord, vec3.yCoord, vec3.zCoord);
+                        EntityLargeFireball entitylargefireball = new EntityLargeFireball(world, p, vec3.xCoord, vec3.yCoord, vec3.zCoord);
+                        entitylargefireball.posX += vec3.xCoord * d8;
+                        entitylargefireball.posZ += vec3.zCoord * d8;
+                        entitylargefireball.accelerationX = vec3.xCoord;
+                        entitylargefireball.accelerationY = vec3.yCoord;
+                        entitylargefireball.accelerationZ = vec3.zCoord;
                         entitylargefireball.field_92057_e = 1;
                         /*entitylargefireball.posX = p.posX;// + vec3.xCoord * d8;
                         entitylargefireball.posY = p.posY + (double)(p.height / 2.0F);

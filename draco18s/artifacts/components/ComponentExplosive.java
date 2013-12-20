@@ -182,7 +182,7 @@ public class ComponentExplosive implements IArtifactComponent {
 
 	@Override
 	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
-		if(par3EntityLivingBase instanceof EntityClientPlayerMP) {
+		if(par3EntityLivingBase.worldObj.isRemote) {
 			if(par2EntityLivingBase.hurtTime == 0) {
 				ByteArrayOutputStream bt = new ByteArrayOutputStream();
 				DataOutputStream out = new DataOutputStream(bt);

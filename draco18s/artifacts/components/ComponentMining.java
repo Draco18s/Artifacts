@@ -67,17 +67,23 @@ public class ComponentMining implements IArtifactComponent {
 
 	@Override
 	public float getStrVsBlock(ItemStack par1ItemStack, Block par2Block) {
-		/*if (par2Block.blockID == Block.web.blockID)
-        {
-            return 15.0F;
-        }
-        else
-        {
-            Material material = par2Block.blockMaterial;
-            return material != Material.plants && material != Material.vine && material != Material.coral && material != Material.leaves && material != Material.pumpkin ? 0.0F : 1.5F;
-        }*/
-		return Item.pickaxeWood.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial();
-		//return 0;
+		EnumToolMaterial toolMaterial = EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")];
+		if(toolMaterial == EnumToolMaterial.WOOD) {
+			return (Item.pickaxeWood.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+		}
+		else if(toolMaterial == EnumToolMaterial.STONE) {
+			return (Item.pickaxeStone.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+		}
+		else if(toolMaterial == EnumToolMaterial.GOLD) {
+			return (Item.pickaxeGold.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+		}
+		else if(toolMaterial == EnumToolMaterial.IRON) {
+			return (Item.pickaxeIron.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+		}
+		else if(toolMaterial == EnumToolMaterial.EMERALD) {
+			return (Item.pickaxeDiamond.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+		}
+		return (EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
 	}
 
 	@Override
@@ -97,7 +103,23 @@ public class ComponentMining implements IArtifactComponent {
 
 	@Override
 	public boolean canHarvestBlock(Block par1Block, ItemStack itemStack) {
-		EnumToolMaterial toolMaterial = EnumToolMaterial.values()[itemStack.stackTagCompound.getInteger("material")]; 
+		EnumToolMaterial toolMaterial = EnumToolMaterial.values()[itemStack.stackTagCompound.getInteger("material")];
+		
+		if(toolMaterial == EnumToolMaterial.WOOD) {
+			return Item.pickaxeWood.canHarvestBlock(par1Block);
+		}
+		else if(toolMaterial == EnumToolMaterial.STONE) {
+			return Item.pickaxeStone.canHarvestBlock(par1Block);
+		}
+		else if(toolMaterial == EnumToolMaterial.EMERALD) {
+			return Item.pickaxeDiamond.canHarvestBlock(par1Block);
+		}
+		else if(toolMaterial == EnumToolMaterial.IRON) {
+			return Item.pickaxeIron.canHarvestBlock(par1Block);
+		}
+		else if(toolMaterial == EnumToolMaterial.GOLD) {
+			return Item.pickaxeGold.canHarvestBlock(par1Block);
+		}
 		return par1Block == Block.obsidian ? toolMaterial.getHarvestLevel() == 3 : (par1Block != Block.blockDiamond && par1Block != Block.oreDiamond ? (par1Block != Block.oreEmerald && par1Block != Block.blockEmerald ? (par1Block != Block.blockGold && par1Block != Block.oreGold ? (par1Block != Block.blockIron && par1Block != Block.oreIron ? (par1Block != Block.blockLapis && par1Block != Block.oreLapis ? (par1Block != Block.oreRedstone && par1Block != Block.oreRedstoneGlowing ? (par1Block.blockMaterial == Material.rock ? true : (par1Block.blockMaterial == Material.iron ? true : par1Block.blockMaterial == Material.anvil)) : toolMaterial.getHarvestLevel() >= 2) : toolMaterial.getHarvestLevel() >= 1) : toolMaterial.getHarvestLevel() >= 1) : toolMaterial.getHarvestLevel() >= 2) : toolMaterial.getHarvestLevel() >= 2) : toolMaterial.getHarvestLevel() >= 2);
 	}
 

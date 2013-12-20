@@ -115,30 +115,32 @@ public class ComponentLightning implements IArtifactComponent {
 
 	@Override
 	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
-		ByteArrayOutputStream bt = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(bt);
-		try
-		{
-			if(par3EntityLivingBase instanceof Player) {
-				//System.out.println("Building packet...");
-				out.writeInt(5);
-				out.writeInt(par3EntityLivingBase.entityId);
-				EntityPlayer par3EntityPlayer = (EntityPlayer) par3EntityLivingBase;
-				out.writeInt(par3EntityPlayer.inventory.currentItem);
-				//out.writeFloat(par3EntityPlayer.getHealth()+1);
-				Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
-				Player player = (Player)par3EntityLivingBase;
-				//System.out.println("Sending packet..." + player);
-				PacketDispatcher.sendPacketToServer(packet);
-				//par1ItemStack.damageItem(1, par3EntityLivingBase);
-				return true;
+		if(par3EntityLivingBase.worldObj.isRemote) {
+			ByteArrayOutputStream bt = new ByteArrayOutputStream();
+			DataOutputStream out = new DataOutputStream(bt);
+			try
+			{
+				if(par3EntityLivingBase instanceof Player) {
+					//System.out.println("Building packet...");
+					out.writeInt(5);
+					out.writeInt(par3EntityLivingBase.entityId);
+					EntityPlayer par3EntityPlayer = (EntityPlayer) par3EntityLivingBase;
+					out.writeInt(par3EntityPlayer.inventory.currentItem);
+					//out.writeFloat(par3EntityPlayer.getHealth()+1);
+					Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
+					Player player = (Player)par3EntityLivingBase;
+					//System.out.println("Sending packet..." + player);
+					PacketDispatcher.sendPacketToServer(packet);
+					//par1ItemStack.damageItem(1, par3EntityLivingBase);
+					return true;
+				}
+				System.out.println("hitEntity par3Entity is not Player");
+				return false;
 			}
-			System.out.println("hitEntity par3Entity is not Player");
-			return false;
-		}
-		catch (IOException ex)
-		{
-			System.out.println("couldnt send packet!");
+			catch (IOException ex)
+			{
+				System.out.println("couldnt send packet!");
+			}
 		}
 		return false;
 	}

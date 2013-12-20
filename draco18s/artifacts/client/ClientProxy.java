@@ -1,5 +1,7 @@
 package draco18s.artifacts.client;
 
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -7,6 +9,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import draco18s.artifacts.CommonProxy;
 import draco18s.artifacts.GuiHandler;
+import draco18s.artifacts.block.BlockPedestal;
+import draco18s.artifacts.block.BlockSpikes;
 import draco18s.artifacts.block.BlockTrap;
 import draco18s.artifacts.block.BlockCoverPlate;
 import draco18s.artifacts.block.BlockIllusionary;
@@ -24,7 +28,6 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(handler);
 		((BlockIllusionary)BlockIllusionary.instance).renderType = r;
 		GameRegistry.registerTileEntity(EntitySpikes.class, "draco18s.spike_trap");
-		ClientRegistry.bindTileEntitySpecialRenderer(EntitySpikes.class, new SpikesRenderer());
 		r = RenderingRegistry.getNextAvailableRenderId();
 		handler = new RenderArrowTrap(r);
 		RenderingRegistry.registerBlockHandler(handler);
@@ -35,8 +38,15 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(handler);
 		((BlockCoverPlate)BlockCoverPlate.instance).renderType = r;
         NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDisplayPedestal.class, new PedestalRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySword.class, new TESwordRenderer());
         RenderingRegistry.registerEntityRenderingHandler(EntityClayGolem.class, new RenderClayGolem());
+        
+        TileEntitySpecialRenderer render = new PedestalRenderer();
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDisplayPedestal.class, render);
+        MinecraftForgeClient.registerItemRenderer(BlockPedestal.instance.blockID, new ItemRenderPedestal(render, new TileEntityDisplayPedestal()));
+        
+        render = new SpikesRenderer();
+        ClientRegistry.bindTileEntitySpecialRenderer(EntitySpikes.class, render);
+        MinecraftForgeClient.registerItemRenderer(BlockSpikes.instance.blockID, new ItemRenderPedestal(render, new EntitySpikes()));
 	}
 }

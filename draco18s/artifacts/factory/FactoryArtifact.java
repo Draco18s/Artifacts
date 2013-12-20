@@ -1,6 +1,7 @@
 package draco18s.artifacts.factory;
 
 import java.awt.Color;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Vector;
@@ -12,30 +13,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.ChestGenHooks;
+import net.minecraftforge.common.Configuration;
 import draco18s.artifacts.WeightedRandomArtifact;
 import draco18s.artifacts.api.ArtifactsAPI;
 import draco18s.artifacts.api.IArtifactAPI;
 import draco18s.artifacts.api.interfaces.IArtifactComponent;
-import draco18s.artifacts.components.ComponentAirWalk;
-import draco18s.artifacts.components.ComponentBreathing;
-import draco18s.artifacts.components.ComponentCashout;
-import draco18s.artifacts.components.ComponentDamage;
-import draco18s.artifacts.components.ComponentExplosive;
-import draco18s.artifacts.components.ComponentFireball;
-import draco18s.artifacts.components.ComponentFoodie;
-import draco18s.artifacts.components.ComponentHarvesting;
-import draco18s.artifacts.components.ComponentHeal;
-import draco18s.artifacts.components.ComponentHealth;
-import draco18s.artifacts.components.ComponentJumping;
-import draco18s.artifacts.components.ComponentLight;
-import draco18s.artifacts.components.ComponentLightning;
-import draco18s.artifacts.components.ComponentMassWeb;
-import draco18s.artifacts.components.ComponentMining;
-import draco18s.artifacts.components.ComponentNormalDamage;
-import draco18s.artifacts.components.ComponentRepair;
-import draco18s.artifacts.components.ComponentResistance;
-import draco18s.artifacts.components.ComponentSpeed;
-import draco18s.artifacts.components.ComponentVision;
+import draco18s.artifacts.components.*;
 import draco18s.artifacts.item.ItemArtifact;
 
 public class FactoryArtifact implements IArtifactAPI {
@@ -59,25 +42,49 @@ public class FactoryArtifact implements IArtifactAPI {
 	private final IArtifactComponent baseDamage = new ComponentNormalDamage();
 
 	public FactoryArtifact() {
-		registerComponent(new ComponentHeal());
-		registerComponent(new ComponentDamage());
-		registerComponent(new ComponentFireball());
-		registerComponent(new ComponentHarvesting());
-		registerComponent(new ComponentLightning());
-		registerComponent(new ComponentMining());
-		registerComponent(new ComponentExplosive());
-		registerComponent(new ComponentLight());
-		registerComponent(new ComponentCashout());
-		registerComponent(new ComponentResistance());
-		registerComponent(new ComponentJumping());
-		registerComponent(new ComponentVision());
-		registerComponent(new ComponentBreathing());
-		registerComponent(new ComponentFoodie());
-		registerComponent(new ComponentSpeed());
-		registerComponent(new ComponentHealth());
-		registerComponent(new ComponentRepair());
-		registerComponent(new ComponentMassWeb());
-		registerComponent(new ComponentAirWalk());
+		Configuration config = new Configuration(new File("./config", "ArtifactEffects.cfg"));
+		config.load();
+		if(config.get("Effects", "Healing", true).getBoolean(true))
+			registerComponent(new ComponentHeal());
+		if(config.get("Effects", "ExtraDamage", true).getBoolean(true))
+			registerComponent(new ComponentDamage());
+		if(config.get("Effects", "Fireballs", true).getBoolean(true))
+			registerComponent(new ComponentFireball());
+		if(config.get("Effects", "Harvesting", true).getBoolean(true))
+			registerComponent(new ComponentHarvesting());
+		if(config.get("Effects", "Lightning", true).getBoolean(true))
+			registerComponent(new ComponentLightning());
+		if(config.get("Effects", "Mining", true).getBoolean(true))
+			registerComponent(new ComponentMining());
+		if(config.get("Effects", "Exploding", true).getBoolean(true))
+			registerComponent(new ComponentExplosive());
+		if(config.get("Effects", "Illumination", true).getBoolean(true))
+			registerComponent(new ComponentLight());
+		if(config.get("Effects", "Value", true).getBoolean(true))
+			registerComponent(new ComponentCashout());
+		if(config.get("Effects", "Resistance", true).getBoolean(true))
+			registerComponent(new ComponentResistance());
+		if(config.get("Effects", "JumpBoost", true).getBoolean(true))
+			registerComponent(new ComponentJumping());
+		if(config.get("Effects", "NightVision", true).getBoolean(true))
+			registerComponent(new ComponentVision());
+		if(config.get("Effects", "WaterBreathing", true).getBoolean(true))
+			registerComponent(new ComponentBreathing());
+		if(config.get("Effects", "FoodSaturation", true).getBoolean(true))
+			registerComponent(new ComponentFoodie());
+		if(config.get("Effects", "MoveSpeed", true).getBoolean(true))
+			registerComponent(new ComponentSpeed());
+		if(config.get("Effects", "MaxHealth", true).getBoolean(true))
+			registerComponent(new ComponentHealth());
+		if(config.get("Effects", "ToolRepair", true).getBoolean(true))
+			registerComponent(new ComponentRepair());
+		if(config.get("Effects", "MassWeb", true).getBoolean(true))
+			registerComponent(new ComponentMassWeb());
+		if(config.get("Effects", "AirWalking", true).getBoolean(true))
+			registerComponent(new ComponentAirWalk());
+		if(config.get("Effects", "Excavation", true).getBoolean(true))
+			registerComponent(new ComponentExcavation());
+		config.save();
 	}
 	
 	@Override
@@ -126,10 +133,10 @@ public class FactoryArtifact implements IArtifactAPI {
 		Vector effectsOnItem = new Vector();
 		IArtifactComponent c;
 		int count = 0, a[];
-		int numEff = rand.nextInt(5)+1;
+		int numEff = 1;//rand.nextInt(5)+1;
 		a = new int[numEff];
 		for(; numEff > 0; numEff--) {
-			effID = rand.nextInt(effects.size())+1;
+			effID = effects.size();//rand.nextInt(effects.size())+1;
 			if(effID == 17 && a.length < 3) {
 				numEff++;
 				a = new int[numEff];
@@ -344,14 +351,14 @@ public class FactoryArtifact implements IArtifactAPI {
 				matName = "Iron";
 				break;
 			case 4:
-				r4 = 4;
+				r4 = 3;
 				matName = "Diamond";
 				break;
 			case 3:
 			case 5:
 			case 6:
 			case 10:
-				r4 = 3;
+				r4 = 4;
 				matName = "Gold";
 				break;
 		}

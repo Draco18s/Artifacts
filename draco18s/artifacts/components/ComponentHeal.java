@@ -108,7 +108,7 @@ public class ComponentHeal implements IArtifactComponent {
 
 	@Override
 	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
-		if(par3EntityLivingBase instanceof EntityClientPlayerMP) {
+		if(par3EntityLivingBase.worldObj.isRemote) {
 			//System.out.println("Atk: " + par2EntityLivingBase.hurtTime);
 			//EntityClientPlayerMP player = (EntityClientPlayerMP)par3EntityLivingBase;
 			//player.heal(1.0F);
