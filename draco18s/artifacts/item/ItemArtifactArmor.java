@@ -52,6 +52,12 @@ public class ItemArtifactArmor extends ItemArmor {
     public static boolean doMatName = true;
     public static boolean doAdjName = true;
     private int iconn;
+    
+    public static Item[] clothArray;// = {hcloth, ccloth, lcloth, bcloth};
+    public static Item[] chainArray;// = {hchain, cchain, lchain, bchain};
+    public static Item[] ironArray;// = {hiron, ciron, liron, biron};
+    public static Item[] goldArray;// = {hgold, cgold, lgold, bgold};
+    public static Item[] diamondArray;// = {hdiamond, cdiamond, ldiamond, bdiamond};
 
 	public ItemArtifactArmor(int par1, EnumArmorMaterial par2EnumArmorMaterial, int renderID, int iconNum, int damageIndex) {
 		super(par1, par2EnumArmorMaterial, renderID, damageIndex);
@@ -60,6 +66,14 @@ public class ItemArtifactArmor extends ItemArmor {
 		if(iconNum != 2) {
 	        this.setCreativeTab(null);
 		}
+	}
+	
+	public static void setupArrays() {
+		clothArray = new Item[]{hcloth, ccloth, lcloth, bcloth};
+	    chainArray = new Item[]{hchain, cchain, lchain, bchain};
+	    ironArray = new Item[]{hiron, ciron, liron, biron};
+	    goldArray = new Item[]{hgold, cgold, lgold, bgold};
+	    diamondArray = new Item[]{hdiamond, cdiamond, ldiamond, bdiamond};
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -74,7 +88,17 @@ public class ItemArtifactArmor extends ItemArmor {
 		//type will be either null or overlay (cloth armor)
 		//can use stack.stackTagCompound.getString("matName") for material, etc.
 		//return "artifacts:textures/armor/Models/artifact_layer1.png";
-		return super.getArmorTexture(stack, entity, slot, type);
+		String layer = "1";
+		String material = stack.stackTagCompound.getString("matName").toLowerCase();
+		if(type == null) {
+			type = "";
+			material = "iron";
+		}
+		if(slot == 2) {
+			layer="2";
+		}
+		return "artifacts:textures/models/armor/"+material+"_layer_"+layer+type+".png";
+		//return super.getArmorTexture(stack, entity, slot, type);
 	}
 	
 	@Override
@@ -342,5 +366,20 @@ public class ItemArtifactArmor extends ItemArmor {
 			n = "Artifact";
 		}
         return n;//("" + StatCollector.translateToLocal(this.getUnlocalizedNameInefficiently(par1ItemStack) + ".name")).trim();
+    }
+    
+    @Override
+    public int getColor(ItemStack par1ItemStack)
+    {
+		if(par1ItemStack.stackTagCompound != null) {
+			return (int) par1ItemStack.stackTagCompound.getLong("overlay_color");	
+		}
+		return 16777215;
+    }
+    
+    @Override
+    public boolean hasColor(ItemStack par1ItemStack)
+    {
+        return true;
     }
 }

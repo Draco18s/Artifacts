@@ -45,7 +45,7 @@ import draco18s.artifacts.network.PacketHandlerClient;
 import draco18s.artifacts.network.PacketHandlerServer;
 import draco18s.artifacts.worldgen.PlaceTraps;
 
-@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "0.7.3")
+@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "0.8.0")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false,
 	clientPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerClient.class),
 	serverPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerServer.class))
@@ -211,6 +211,7 @@ public class DragonArtifacts {
 		ItemArtifactArmor.biron = new ItemArtifactArmor(armorIDb3, EnumArmorMaterial.IRON, 2, 5, 3);
 		ItemArtifactArmor.bgold = new ItemArtifactArmor(armorIDb4, EnumArmorMaterial.GOLD, 4, 5, 3);
 		ItemArtifactArmor.bdiamond = new ItemArtifactArmor(armorIDb5, EnumArmorMaterial.DIAMOND, 3, 5, 3);
+		ItemArtifactArmor.setupArrays();
 		ItemFakeSwordRenderable.wood = new ItemFakeSwordRenderable(tb1, EnumToolMaterial.WOOD, bladePackage+":wood_"+bladeRender);
 		ItemFakeSwordRenderable.stone = new ItemFakeSwordRenderable(tb2, EnumToolMaterial.STONE, bladePackage+":stone_"+bladeRender);
 		ItemFakeSwordRenderable.iron = new ItemFakeSwordRenderable(tb3, EnumToolMaterial.IRON, bladePackage+":iron_"+bladeRender);

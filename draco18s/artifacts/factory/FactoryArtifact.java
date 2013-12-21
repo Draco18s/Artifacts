@@ -432,7 +432,7 @@ public class FactoryArtifact implements IArtifactAPI {
 				numEff++;
 				continue;
 			}
-			System.out.println(effID);
+			//System.out.println(effID);
 			effectsOnItem.add(c);
 			/*if(effID == 9) {
 				int bonus = a.length*5;
@@ -522,26 +522,31 @@ public class FactoryArtifact implements IArtifactAPI {
 		}
 		
 		String matName = "[Material]";
-		
+		int r4 = -1;
 		ItemArtifactArmor ar = (ItemArtifactArmor)(artifact.getItem());
 		if(ar.getArmorMaterial().equals(EnumArmorMaterial.CLOTH)) {
 			matName = "Leather";
+			r4 = 0;
 		}
 		if(ar.getArmorMaterial().equals(EnumArmorMaterial.CHAIN)) {
 			matName = "Chain";
+			r4 = 1;
 		}
 		if(ar.getArmorMaterial().equals(EnumArmorMaterial.IRON)) {
 			matName = "Iron";
+			r4 = 2;
 		}
 		if(ar.getArmorMaterial().equals(EnumArmorMaterial.GOLD)) {
 			matName = "Gold";
+			r4 = 3;
 		}
 		if(ar.getArmorMaterial().equals(EnumArmorMaterial.DIAMOND)) {
 			matName = "Diamond";
+			r4 = 4;
 		}
 
 		String nameChunk = "";
-		int r2=-1,r3=-1,r4 = rand.nextInt(10);
+		int r2=-1,r3=-1;
 		artifact.stackTagCompound.setString("iconName", iconType);
 		artifact.stackTagCompound.setString("matName", matName);
 		if(effectsOnItem.size() > 1) {
@@ -595,11 +600,29 @@ public class FactoryArtifact implements IArtifactAPI {
 		ItemArtifactArmor aa = (ItemArtifactArmor)artifact.getItem();
 		int nbtType = artifact.stackTagCompound.getInteger("armorType");
 		if(aa.armorType != nbtType) {
-			System.out.println("Wanted: " + aa.armorType);
-			System.out.println("NBTrng: " + nbtType);
-			int offset = (nbtType - aa.armorType)*5;
-			System.out.println("Changing from " + artifact.itemID + " to " + (artifact.itemID+offset));
-			artifact.itemID += offset;
+			//System.out.println("Wanted: " + aa.armorType);
+			//System.out.println("NBTrng: " + nbtType);
+			int newid = artifact.itemID;
+			switch(r4) {
+				case 0:
+					newid = ItemArtifactArmor.clothArray[nbtType].itemID;
+					break;
+				case 1:
+					newid = ItemArtifactArmor.chainArray[nbtType].itemID;
+					break;
+				case 2:
+					newid = ItemArtifactArmor.ironArray[nbtType].itemID;
+					break;
+				case 3:
+					newid = ItemArtifactArmor.goldArray[nbtType].itemID;
+					break;
+				case 4:
+					newid = ItemArtifactArmor.diamondArray[nbtType].itemID;
+					break;
+			}
+			//int offset = (nbtType - aa.armorType)*5;
+			//System.out.println("Changing from " + artifact.itemID + " to " + (artifact.itemID+offset));
+			artifact.itemID = newid;
 		}
 		
 		return artifact;
