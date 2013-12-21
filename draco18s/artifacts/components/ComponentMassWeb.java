@@ -45,22 +45,14 @@ public class ComponentMassWeb implements IArtifactComponent {
 	public ComponentMassWeb() {
 	}
 	
-	public String getName() {
-		return "Webbing";
-	}
-	
-	public String getRandomTrigger(Random rand) {
+	@Override
+	public String getRandomTrigger(Random rand, boolean isArmor) {
 		return "onDropped";
 	}
 
 	@Override
 	public ItemStack attached(ItemStack i, Random rand) {
 		return i;
-	}
-
-	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
-		return null;
 	}
 
 	@Override
@@ -221,4 +213,7 @@ public class ComponentMassWeb implements IArtifactComponent {
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
 		
 	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
 }

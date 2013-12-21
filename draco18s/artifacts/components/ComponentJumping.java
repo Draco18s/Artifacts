@@ -46,7 +46,10 @@ public class ComponentJumping implements IArtifactComponent {
 		return "Resistance";
 	}
 	
-	public String getRandomTrigger(Random rand) {
+	public String getRandomTrigger(Random rand, boolean isArmor) {
+		if(isArmor) {
+			return "onArmorTickUpdate";
+		}
 		String str = "";
 		switch(rand.nextInt(3)) {
 			case 0:
@@ -65,11 +68,6 @@ public class ComponentJumping implements IArtifactComponent {
 	@Override
 	public ItemStack attached(ItemStack i, Random rand) {
 		return i;
-	}
-
-	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
-		return null;
 	}
 
 	@Override
@@ -223,12 +221,12 @@ public class ComponentJumping implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 349;
+		return 861;
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
-		return 130;
+		return 3202;
 	}
 
 	@Override
@@ -244,5 +242,11 @@ public class ComponentJumping implements IArtifactComponent {
 	@Override
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
 		
+	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
+		if(worn)
+			onUpdate(itemStack, world, player, 0, true);
 	}
 }

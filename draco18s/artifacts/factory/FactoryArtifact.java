@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,6 +21,7 @@ import draco18s.artifacts.api.IArtifactAPI;
 import draco18s.artifacts.api.interfaces.IArtifactComponent;
 import draco18s.artifacts.components.*;
 import draco18s.artifacts.item.ItemArtifact;
+import draco18s.artifacts.item.ItemArtifactArmor;
 
 public class FactoryArtifact implements IArtifactAPI {
 	private HashMap effects = new HashMap();
@@ -84,6 +86,8 @@ public class FactoryArtifact implements IArtifactAPI {
 			registerComponent(new ComponentAirWalk());
 		if(config.get("Effects", "Excavation", true).getBoolean(true))
 			registerComponent(new ComponentExcavation());
+		if(config.get("Effects", "KnockbackResist", true).getBoolean(true))
+			registerComponent(new ComponentKnockbackResist());
 		config.save();
 	}
 	
@@ -128,15 +132,18 @@ public class FactoryArtifact implements IArtifactAPI {
 		Chestplate = 1;
 		Helm = 1;
 		Leggings = 1;
+		if(artifact.getItem() instanceof ItemArtifactArmor) {
+			return applyRandomArmorEffects(artifact);
+		}
 		int flags,effID;
 		String artiName = "";
 		Vector effectsOnItem = new Vector();
 		IArtifactComponent c;
 		int count = 0, a[];
-		int numEff = 1;//rand.nextInt(5)+1;
+		int numEff = rand.nextInt(5)+1;
 		a = new int[numEff];
 		for(; numEff > 0; numEff--) {
-			effID = effects.size();//rand.nextInt(effects.size())+1;
+			effID = rand.nextInt(effects.size())+1;
 			if(effID == 17 && a.length < 3) {
 				numEff++;
 				a = new int[numEff];
@@ -146,7 +153,7 @@ public class FactoryArtifact implements IArtifactAPI {
 				numEff++;
 				continue;
 			}
-			String trigName = c.getRandomTrigger(rand);
+			String trigName = c.getRandomTrigger(rand, false);
 			if(artifact.stackTagCompound.hasKey(trigName)) {
 				//make NBTTagLists to remove this condition;
 				numEff++;
@@ -293,36 +300,6 @@ public class FactoryArtifact implements IArtifactAPI {
 				iconType = "Wand";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberWands;
 			}
-			else if((r -= Armor) < 0) {
-				/*t = Boots+Chestplate+Helm+Leggings;
-				if(t < 1)
-					t = 1;
-				r = rand.nextInt(t);
-				if((r -= Boots) < 0) {
-					iconType = "Boots";
-					t = 1;
-					artifact.stackTagCompound.setInteger("armorType", 3);
-				}
-				else if((r -= Chestplate) < 0) {
-					iconType = "Chestplate";
-					t = 1;
-					artifact.stackTagCompound.setInteger("armorType", 1);
-				}
-				else if((r -= Helm) < 0) {
-					iconType = "Helm";
-					t = 1;
-					artifact.stackTagCompound.setInteger("armorType", 0);
-				}
-				else if((r -= Leggings) < 0) {
-					iconType = "Leggings";
-					t = 1;
-					artifact.stackTagCompound.setInteger("armorType", 2);
-				}
-				else {*/
-					iconType = "Artifact";
-					t = 1;
-				//}
-			}
 			else {
 				iconType = "Artifact";
 				t = 1;
@@ -414,6 +391,219 @@ public class FactoryArtifact implements IArtifactAPI {
 		return artifact;
 	}
 	
+
+	private ItemStack applyRandomArmorEffects(ItemStack artifact) {
+		
+		int flags,effID;
+		String artiName = "";
+		Vector effectsOnItem = new Vector();
+		IArtifactComponent c;
+		int count = 0, a[];
+		int numEff = rand.nextInt(3)+1;
+		a = new int[numEff];
+		for(; numEff > 0; numEff--) {
+			effID = rand.nextInt(effects.size())+1;
+			c = getComponent(effID);
+			if(effectsOnItem.contains(c)) {
+				numEff++;
+				if(rand.nextInt(8) == 0) {
+					numEff--;
+					if(numEff > 0)
+						a[numEff-1] = 0;
+				}
+				continue;
+			}
+			String trigName = c.getRandomTrigger(rand, true);
+			if(artifact.stackTagCompound.hasKey(trigName)) {
+				//make NBTTagLists to remove this condition;
+				numEff++;
+				if(rand.nextInt(8) == 0) {
+					numEff--;
+					if(numEff > 0)
+						a[numEff-1] = 0;
+				}
+				continue;
+			}
+			
+			flags = c.getNegTextureBitflags();
+			//flags >>= 8;
+			
+			if((flags & 256) > 0) {
+				numEff++;
+				continue;
+			}
+			System.out.println(effID);
+			effectsOnItem.add(c);
+			/*if(effID == 9) {
+				int bonus = a.length*5;
+				if(numEff == a.length) {
+					numEff = 1;
+					bonus = 0;
+					artifact.stackSize = 10;
+				}
+				artifact.stackTagCompound.setInteger("cashBonus", bonus);
+			}
+			if(effID == 7) {
+				if(numEff == a.length) {
+					if(trigName == "onDropped") {
+						numEff = 1;
+						artifact.stackSize = 10;
+					}
+				}
+			}*/
+			artifact.stackTagCompound.setInteger(trigName, effID);
+			flags = c.getTextureBitflags();
+			flags >>= 9;
+			Boots += flags % 2;
+			flags >>= 1;
+			Chestplate += flags % 2;
+			flags >>= 1;
+			Helm += flags % 2;
+			flags >>= 1;
+			Leggings += flags % 2;
+
+			flags = c.getNegTextureBitflags();
+			flags >>= 8;
+			Armor -= flags % 2;
+			flags >>= 1;
+			Boots -= flags % 2;
+			flags >>= 1;
+			Chestplate -= flags % 2;
+			flags >>= 1;
+			Helm -= flags % 2;
+			flags >>= 1;
+			Leggings -= flags % 2;
+			
+			if(rand.nextInt(4) == 0) {
+				numEff--;
+				if(numEff > 0)
+					a[numEff-1] = 0;
+			}
+		}
+		
+		Boots = Math.max(Boots, 0);
+		Chestplate = Math.max(Chestplate, 0);
+		Helm = Math.max(Helm, 0);
+		Leggings = Math.max(Leggings, 0);
+		//end loop
+		int t = Boots + Chestplate + Helm + Leggings;
+		int r = 0;
+		String iconType;
+		if(t > 0) {
+			r = rand.nextInt(t);
+			if((r -= Boots) < 0) {
+				iconType = "Boots";
+				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberBoots;
+				artifact.stackTagCompound.setInteger("armorType", 3);
+			}
+			else if((r -= Chestplate) < 0) {
+				iconType = "Chestplate";
+				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberChestplates;
+				artifact.stackTagCompound.setInteger("armorType", 1);
+			}
+			else if((r -= Helm) < 0) {
+				iconType = "Helm";
+				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberHelms;
+				artifact.stackTagCompound.setInteger("armorType", 0);
+			}
+			else if((r -= Leggings) < 0) {
+				iconType = "Leggings";
+				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberLeggings;
+				artifact.stackTagCompound.setInteger("armorType", 2);
+			}
+			else {
+				iconType = "Artifact";
+				t = 1;
+			}
+		}
+		else {
+			iconType = "Artifact";
+			t = 1;
+		}
+		
+		String matName = "[Material]";
+		
+		ItemArtifactArmor ar = (ItemArtifactArmor)(artifact.getItem());
+		if(ar.getArmorMaterial().equals(EnumArmorMaterial.CLOTH)) {
+			matName = "Leather";
+		}
+		if(ar.getArmorMaterial().equals(EnumArmorMaterial.CHAIN)) {
+			matName = "Chain";
+		}
+		if(ar.getArmorMaterial().equals(EnumArmorMaterial.IRON)) {
+			matName = "Iron";
+		}
+		if(ar.getArmorMaterial().equals(EnumArmorMaterial.GOLD)) {
+			matName = "Gold";
+		}
+		if(ar.getArmorMaterial().equals(EnumArmorMaterial.DIAMOND)) {
+			matName = "Diamond";
+		}
+
+		String nameChunk = "";
+		int r2=-1,r3=-1,r4 = rand.nextInt(10);
+		artifact.stackTagCompound.setString("iconName", iconType);
+		artifact.stackTagCompound.setString("matName", matName);
+		if(effectsOnItem.size() > 1) {
+			r2 = rand.nextInt(effectsOnItem.size());
+			c = (IArtifactComponent) effectsOnItem.get(r2);
+			//System.out.println("Pre: " + c.getPreAdj(rand));
+			nameChunk = c.getPreAdj(rand);
+			artifact.stackTagCompound.setString("preadj", nameChunk);
+			artiName = nameChunk + " ";
+			artiName += matName + " " + iconType;
+			do {
+				r3 = rand.nextInt(effectsOnItem.size());
+			} while(r2 == r3);
+			c = (IArtifactComponent) effectsOnItem.get(r3);
+			nameChunk = c.getPostAdj(rand);
+			artifact.stackTagCompound.setString("postadj", nameChunk);
+			artiName += " " + nameChunk;
+		}
+		else {
+			//System.out.println("Singular");
+			if(rand.nextBoolean()) {
+				r2 = rand.nextInt(effectsOnItem.size());
+				c = (IArtifactComponent) effectsOnItem.get(r2);
+				nameChunk = c.getPreAdj(rand);
+				artifact.stackTagCompound.setString("preadj", nameChunk);
+				artifact.stackTagCompound.setString("postadj", "");
+				artiName = nameChunk + " " + matName + " " + iconType;
+			}
+			else {
+				r3 = rand.nextInt(effectsOnItem.size());
+				c = (IArtifactComponent) effectsOnItem.get(r3);
+				nameChunk = c.getPostAdj(rand);
+				artifact.stackTagCompound.setString("preadj", "");
+				artifact.stackTagCompound.setString("postadj", nameChunk);
+				artiName = matName + " " + iconType + " " + nameChunk;
+			}
+		}
+		r = rand.nextInt(t);
+		artifact.stackTagCompound.setString("name", artiName);
+		artifact.stackTagCompound.setString("icon", iconType+(r+1));
+		int col = Color.HSBtoRGB((float)(rand.nextInt(360) / 360F), .8f, 1);
+		artifact.stackTagCompound.setLong("overlay_color", col);
+		artiName = "";
+		artifact.stackTagCompound.setInteger("material", r4);
+		
+		artifact.stackTagCompound.setIntArray("allComponents", a);
+		if(rand.nextInt(8) == 0) {
+			artifact = enchantArtifact(artifact, effectsOnItem, (iconType == "Sword" || iconType == "Dagger"));
+		}
+		
+		ItemArtifactArmor aa = (ItemArtifactArmor)artifact.getItem();
+		int nbtType = artifact.stackTagCompound.getInteger("armorType");
+		if(aa.armorType != nbtType) {
+			System.out.println("Wanted: " + aa.armorType);
+			System.out.println("NBTrng: " + nbtType);
+			int offset = (nbtType - aa.armorType)*5;
+			System.out.println("Changing from " + artifact.itemID + " to " + (artifact.itemID+offset));
+			artifact.itemID += offset;
+		}
+		
+		return artifact;
+	}
 
 	public NBTTagCompound createDefault()
 	{
@@ -570,7 +760,7 @@ public class FactoryArtifact implements IArtifactAPI {
 		IArtifactComponent c = getComponent(id);
 		if(!effectsOnItem.contains(c)) {
 			if(trigger == null || trigger.equals(""))
-				trigger = c.getRandomTrigger(rand);
+				trigger = c.getRandomTrigger(rand, false);
 			if(!artifact.stackTagCompound.hasKey(trigger)) {
 				effectsOnItem.add(c);
 				if(id == 9) {

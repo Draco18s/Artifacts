@@ -16,6 +16,10 @@ public class FactoryItemIcons implements IItemIconAPI {
 	public int numberSwords = 0;
 	public int numberTrinkets = 0;
 	public int numberWands = 0;
+	public int numberBoots = 0;
+	public int numberChestplates = 0;
+	public int numberHelms = 0;
+	public int numberLeggings = 0;
 	private final ArrayList<AbstractIcon> iconList = new ArrayList<AbstractIcon>();
 	
 	public FactoryItemIcons() {
@@ -75,6 +79,27 @@ public class FactoryItemIcons implements IItemIconAPI {
 	        registerArtifactIcon("wand","artifacts:wand5","artifacts:wand5_overlay");
 	        registerArtifactIcon("wand","artifacts:wand6","artifacts:wand6_overlay");
 	        registerArtifactIcon("wand","artifacts:wand7","artifacts:wand7_overlay");
+
+	        registerArtifactIcon("boots","artifacts:boots1","artifacts:boots1_overlay");
+	        registerArtifactIcon("boots","artifacts:boots2","artifacts:boots2_overlay");
+	        registerArtifactIcon("boots","artifacts:boots3","artifacts:boots3_overlay");
+	        registerArtifactIcon("boots","artifacts:boots4","artifacts:boots4_overlay");
+	        registerArtifactIcon("boots","artifacts:boots5","artifacts:boots5_overlay");
+	        registerArtifactIcon("chestplate","artifacts:chestplate1","artifacts:chestplate1_overlay");
+	        registerArtifactIcon("chestplate","artifacts:chestplate2","artifacts:chestplate2_overlay");
+	        registerArtifactIcon("chestplate","artifacts:chestplate3","artifacts:chestplate3_overlay");
+	        registerArtifactIcon("chestplate","artifacts:chestplate4","artifacts:chestplate4_overlay");
+	        registerArtifactIcon("chestplate","artifacts:chestplate5","artifacts:chestplate5_overlay");
+	        registerArtifactIcon("helm","artifacts:helm1","artifacts:helm1_overlay");
+	        registerArtifactIcon("helm","artifacts:helm2","artifacts:helm2_overlay");
+	        registerArtifactIcon("helm","artifacts:helm3","artifacts:helm3_overlay");
+	        registerArtifactIcon("helm","artifacts:helm4","artifacts:helm4_overlay");
+	        registerArtifactIcon("helm","artifacts:helm5","artifacts:helm5_overlay");
+	        registerArtifactIcon("leggings","artifacts:leggings1","artifacts:leggings1_overlay");
+	        registerArtifactIcon("leggings","artifacts:leggings2","artifacts:leggings2_overlay");
+	        registerArtifactIcon("leggings","artifacts:leggings3","artifacts:leggings3_overlay");
+	        registerArtifactIcon("leggings","artifacts:leggings4","artifacts:leggings4_overlay");
+	        registerArtifactIcon("leggings","artifacts:leggings5","artifacts:leggings5_overlay");
 		}
 		catch (Exception e) {
 			System.out.println("Error!" + e.getMessage());
@@ -112,6 +137,18 @@ public class FactoryItemIcons implements IItemIconAPI {
 		else if(type.toLowerCase().equals("wand")) {
 			iconList.add(new AbstractIcon("wand"+(++numberWands),icon));
 		}
+		else if(type.toLowerCase().equals("boots")) {
+			iconList.add(new AbstractIcon("boots"+(++numberBoots),icon));
+		}
+		else if(type.toLowerCase().equals("chestplate")) {
+			iconList.add(new AbstractIcon("chestplate"+(++numberChestplates),icon));
+		}
+		else if(type.toLowerCase().equals("helm")) {
+			iconList.add(new AbstractIcon("helm"+(++numberHelms),icon));
+		}
+		else if(type.toLowerCase().equals("leggings")) {
+			iconList.add(new AbstractIcon("leggings"+(++numberLeggings),icon));
+		}
 		else {
 			throw new Exception("Invalid artifact icon type for " + icon + " with type " + type + ".  Only valid types are: amulet, dagger, figurine, ring, staff, sword, trinket, wand");
 		}
@@ -143,6 +180,18 @@ public class FactoryItemIcons implements IItemIconAPI {
 		else if(type.toLowerCase().equals("wand")) {
 			iconList.add(new AbstractIcon("wand"+(++numberWands),icon,overlay));
 		}
+		else if(type.toLowerCase().equals("boots")) {
+			iconList.add(new AbstractIcon("boots"+(++numberBoots),icon,overlay));
+		}
+		else if(type.toLowerCase().equals("chestplate")) {
+			iconList.add(new AbstractIcon("chestplate"+(++numberChestplates),icon,overlay));
+		}
+		else if(type.toLowerCase().equals("helm")) {
+			iconList.add(new AbstractIcon("helm"+(++numberHelms),icon,overlay));
+		}
+		else if(type.toLowerCase().equals("leggings")) {
+			iconList.add(new AbstractIcon("leggings"+(++numberLeggings),icon,overlay));
+		}
 		else {
 			throw new Exception("Invalid artifact icon type '" + icon + "' with type '" + type + "'.  Only valid types are: amulet, dagger, figurine, ring, staff, sword, trinket, wand");
 		}
@@ -152,7 +201,18 @@ public class FactoryItemIcons implements IItemIconAPI {
 	public Icon registerIcons(IconRegister iconReg) {
 		Icon defaultIcon = iconReg.registerIcon("artifacts:artifact1");
 		icons.put("artifact1", defaultIcon);
-		icons.put("overlay_artifact1",iconReg.registerIcon("artifacts:blank_overlay"));
+		icons.put("artifact2", iconReg.registerIcon("artifacts:artifact2"));
+		icons.put("artifact3", iconReg.registerIcon("artifacts:artifact2"));
+		icons.put("artifact4", iconReg.registerIcon("artifacts:artifact2"));
+		icons.put("artifact5", iconReg.registerIcon("artifacts:artifact2"));
+		icons.put("artifact6", iconReg.registerIcon("artifacts:artifact2"));
+		Icon overlay = iconReg.registerIcon("artifacts:blank_overlay");
+		icons.put("overlay_artifact1",overlay);
+		icons.put("overlay_artifact2",overlay);
+		icons.put("overlay_artifact3",overlay);
+		icons.put("overlay_artifact4",overlay);
+		icons.put("overlay_artifact5",overlay);
+		icons.put("overlay_artifact6",overlay);
 		AbstractIcon a;
 		for(int i=0; i < iconList.size(); ++i) {
 			a = (AbstractIcon)iconList.get(i);

@@ -9,6 +9,7 @@ import net.minecraft.block.EnumMobType;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
+import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.EnumToolMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -70,6 +71,29 @@ public class DragonArtifacts {
     {
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 			config.load();
+			int armorIDh1 = config.getItem("artifact_helm1", 3980).getInt();
+			int armorIDh2 = config.getItem("artifact_helm2", 3981).getInt();
+			int armorIDh3 = config.getItem("artifact_helm3", 3982).getInt();
+			int armorIDh4 = config.getItem("artifact_helm4", 3983).getInt();
+			int armorIDh5 = config.getItem("artifact_helm5", 3984).getInt();
+			
+			int armorIDc1 = config.getItem("artifact_chest1", 3985).getInt();
+			int armorIDc2 = config.getItem("artifact_chest2", 3986).getInt();
+			int armorIDc3 = config.getItem("artifact_chest3", 3987).getInt();
+			int armorIDc4 = config.getItem("artifact_chest4", 3988).getInt();
+			int armorIDc5 = config.getItem("artifact_chest5", 3989).getInt();
+			
+			int armorIDl1 = config.getItem("artifact_legs1", 3990).getInt();
+			int armorIDl2 = config.getItem("artifact_legs2", 3991).getInt();
+			int armorIDl3 = config.getItem("artifact_legs3", 3992).getInt();
+			int armorIDl4 = config.getItem("artifact_legs4", 3993).getInt();
+			int armorIDl5 = config.getItem("artifact_legs5", 3994).getInt();
+			
+			int armorIDb1 = config.getItem("artifact_boots1", 3995).getInt();
+			int armorIDb2 = config.getItem("artifact_boots2", 3996).getInt();
+			int armorIDb3 = config.getItem("artifact_boots3", 3997).getInt();
+			int armorIDb4 = config.getItem("artifact_boots4", 3998).getInt();
+			int armorIDb5 = config.getItem("artifact_boots5", 3999).getInt();
 			int artifactID = config.getItem("artifact", 4000).getInt();
 			int tb1 = config.getItem("trapblade_wood", 4001).getInt();
 			int tb2 = config.getItem("trapblade_stone", 4002).getInt();
@@ -167,14 +191,34 @@ public class DragonArtifacts {
         ArtifactsAPI.itemicons = new FactoryItemIcons();
         ArtifactsAPI.traps = new FactoryTrapBehaviors();
 		ItemArtifact.instance = new ItemArtifact(artifactID);
+		ItemArtifactArmor.hcloth = new ItemArtifactArmor(armorIDh1, EnumArmorMaterial.CLOTH, 0, 2, 0);
+		ItemArtifactArmor.hchain = new ItemArtifactArmor(armorIDh2, EnumArmorMaterial.CHAIN, 1, 2, 0);
+		ItemArtifactArmor.hiron = new ItemArtifactArmor(armorIDh3, EnumArmorMaterial.IRON, 2, 2, 0);
+		ItemArtifactArmor.hgold = new ItemArtifactArmor(armorIDh4, EnumArmorMaterial.GOLD, 4, 2, 0);
+		ItemArtifactArmor.hdiamond = new ItemArtifactArmor(armorIDh5, EnumArmorMaterial.DIAMOND, 3, 2, 0);
+		ItemArtifactArmor.ccloth = new ItemArtifactArmor(armorIDc1, EnumArmorMaterial.CLOTH, 0, 3, 1);
+		ItemArtifactArmor.cchain = new ItemArtifactArmor(armorIDc2, EnumArmorMaterial.CHAIN, 1, 3, 1);
+		ItemArtifactArmor.ciron = new ItemArtifactArmor(armorIDc3, EnumArmorMaterial.IRON, 2, 3, 1);
+		ItemArtifactArmor.cgold = new ItemArtifactArmor(armorIDc4, EnumArmorMaterial.GOLD, 4, 3, 1);
+		ItemArtifactArmor.cdiamond = new ItemArtifactArmor(armorIDc5, EnumArmorMaterial.DIAMOND, 3, 3, 1);
+		ItemArtifactArmor.lcloth = new ItemArtifactArmor(armorIDl1, EnumArmorMaterial.CLOTH, 0, 4, 2);
+		ItemArtifactArmor.lchain = new ItemArtifactArmor(armorIDl2, EnumArmorMaterial.CHAIN, 1, 4, 2);
+		ItemArtifactArmor.liron = new ItemArtifactArmor(armorIDl3, EnumArmorMaterial.IRON, 2, 4, 2);
+		ItemArtifactArmor.lgold = new ItemArtifactArmor(armorIDl4, EnumArmorMaterial.GOLD, 4, 4, 2);
+		ItemArtifactArmor.ldiamond = new ItemArtifactArmor(armorIDl5, EnumArmorMaterial.DIAMOND, 3, 4, 2);
+		ItemArtifactArmor.bcloth = new ItemArtifactArmor(armorIDb1, EnumArmorMaterial.CLOTH, 0, 5, 3);
+		ItemArtifactArmor.bchain = new ItemArtifactArmor(armorIDb2, EnumArmorMaterial.CHAIN, 1, 5, 3);
+		ItemArtifactArmor.biron = new ItemArtifactArmor(armorIDb3, EnumArmorMaterial.IRON, 2, 5, 3);
+		ItemArtifactArmor.bgold = new ItemArtifactArmor(armorIDb4, EnumArmorMaterial.GOLD, 4, 5, 3);
+		ItemArtifactArmor.bdiamond = new ItemArtifactArmor(armorIDb5, EnumArmorMaterial.DIAMOND, 3, 5, 3);
 		ItemFakeSwordRenderable.wood = new ItemFakeSwordRenderable(tb1, EnumToolMaterial.WOOD, bladePackage+":wood_"+bladeRender);
 		ItemFakeSwordRenderable.stone = new ItemFakeSwordRenderable(tb2, EnumToolMaterial.STONE, bladePackage+":stone_"+bladeRender);
 		ItemFakeSwordRenderable.iron = new ItemFakeSwordRenderable(tb3, EnumToolMaterial.IRON, bladePackage+":iron_"+bladeRender);
 		ItemFakeSwordRenderable.gold = new ItemFakeSwordRenderable(tb4, EnumToolMaterial.GOLD, bladePackage+":gold_"+bladeRender);
 		ItemFakeSwordRenderable.diamond = new ItemFakeSwordRenderable(tb5, EnumToolMaterial.EMERALD, bladePackage+":diamond_"+bladeRender);
-		ItemArtifact.doEnchName = enchName.getBoolean(true);
-		ItemArtifact.doMatName = matName.getBoolean(true);
-		ItemArtifact.doAdjName = adjName.getBoolean(true);
+		ItemArtifactArmor.doEnchName = ItemArtifact.doEnchName = enchName.getBoolean(true);
+		ItemArtifactArmor.doMatName = ItemArtifact.doMatName = matName.getBoolean(true);
+		ItemArtifactArmor.doAdjName = ItemArtifact.doAdjName = adjName.getBoolean(true);
 		BlockLight.instance = new BlockLight(lightID);
 		BlockPedestal.instance = new BlockPedestal(pedID);
 		BlockIllusionary.instance = new BlockIllusionary(fakeID);
@@ -204,6 +248,30 @@ public class DragonArtifacts {
 		
 		
         GameRegistry.registerItem(ItemArtifact.instance, "Artifact");
+        GameRegistry.registerItem(ItemArtifactArmor.hcloth, "Artifact Leather Helm");
+        GameRegistry.registerItem(ItemArtifactArmor.hchain, "Artifact Chain Helm");
+        GameRegistry.registerItem(ItemArtifactArmor.hiron, "Artifact Iron Helm");
+        GameRegistry.registerItem(ItemArtifactArmor.hgold, "Artifact Gold Helm");
+        GameRegistry.registerItem(ItemArtifactArmor.hdiamond, "Artifact Diamond Helm");
+        
+        GameRegistry.registerItem(ItemArtifactArmor.ccloth, "Artifact Leather Chestplate");
+        GameRegistry.registerItem(ItemArtifactArmor.cchain, "Artifact Chain Chestplate");
+        GameRegistry.registerItem(ItemArtifactArmor.ciron, "Artifact Iron Chestplate");
+        GameRegistry.registerItem(ItemArtifactArmor.cgold, "Artifact Gold Chestplate");
+        GameRegistry.registerItem(ItemArtifactArmor.cdiamond, "Artifact Diamond Chestplate");
+
+        GameRegistry.registerItem(ItemArtifactArmor.lcloth, "Artifact Leather Leggings");
+        GameRegistry.registerItem(ItemArtifactArmor.lchain, "Artifact Chain Leggings");
+        GameRegistry.registerItem(ItemArtifactArmor.liron, "Artifact Iron Leggings");
+        GameRegistry.registerItem(ItemArtifactArmor.lgold, "Artifact Gold Leggings");
+        GameRegistry.registerItem(ItemArtifactArmor.ldiamond, "Artifact Diamond Leggings");
+        
+        GameRegistry.registerItem(ItemArtifactArmor.bcloth, "Artifact Leather Boots");
+        GameRegistry.registerItem(ItemArtifactArmor.bchain, "Artifact Chain Boots");
+        GameRegistry.registerItem(ItemArtifactArmor.biron, "Artifact Iron Boots");
+        GameRegistry.registerItem(ItemArtifactArmor.bgold, "Artifact Gold Boots");
+        GameRegistry.registerItem(ItemArtifactArmor.bdiamond, "Artifact Diamond Boots");
+        
         GameRegistry.registerBlock(BlockPedestal.instance, "Display Pedestal");
 		GameRegistry.registerBlock(BlockIllusionary.instance, "Illusionary Block");
 		GameRegistry.registerBlock(BlockInvisibleBlock.instance, "Invisible Block");
@@ -219,6 +287,26 @@ public class DragonArtifacts {
 		GameRegistry.registerBlock(BlockStoneBrickMovable.instance, "Anti Anti-Builder Stone");
         
         LanguageRegistry.addName(ItemArtifact.instance, "Artifact");
+        LanguageRegistry.addName(ItemArtifactArmor.hcloth, "Artifact Leather Helm");
+        LanguageRegistry.addName(ItemArtifactArmor.hchain, "Artifact Chain Helm");
+        LanguageRegistry.addName(ItemArtifactArmor.hiron, "Artifact Iron Helm");
+        LanguageRegistry.addName(ItemArtifactArmor.hgold, "Artifact Gold Helm");
+        LanguageRegistry.addName(ItemArtifactArmor.hdiamond, "Artifact Diamond Helm");
+        LanguageRegistry.addName(ItemArtifactArmor.ccloth, "Artifact Leather Chestplate");
+        LanguageRegistry.addName(ItemArtifactArmor.cchain, "Artifact Chain Chestplate");
+        LanguageRegistry.addName(ItemArtifactArmor.ciron, "Artifact Iron Chestplate");
+        LanguageRegistry.addName(ItemArtifactArmor.cgold, "Artifact Gold Chestplate");
+        LanguageRegistry.addName(ItemArtifactArmor.cdiamond, "Artifact Diamond Chestplate");
+        LanguageRegistry.addName(ItemArtifactArmor.lcloth, "Artifact Leather Leggings");
+        LanguageRegistry.addName(ItemArtifactArmor.lchain, "Artifact Chain Leggings");
+        LanguageRegistry.addName(ItemArtifactArmor.liron, "Artifact Iron Leggings");
+        LanguageRegistry.addName(ItemArtifactArmor.lgold, "Artifact Gold Leggings");
+        LanguageRegistry.addName(ItemArtifactArmor.ldiamond, "Artifact Diamond Leggings");
+        LanguageRegistry.addName(ItemArtifactArmor.bcloth, "Artifact Leather Boots");
+        LanguageRegistry.addName(ItemArtifactArmor.bchain, "Artifact Chain Boots");
+        LanguageRegistry.addName(ItemArtifactArmor.biron, "Artifact Iron Boots");
+        LanguageRegistry.addName(ItemArtifactArmor.bgold, "Artifact Gold Boots");
+        LanguageRegistry.addName(ItemArtifactArmor.bdiamond, "Artifact Diamond Boots");
         LanguageRegistry.addName(BlockPedestal.instance, "Display Pedestal");
 		LanguageRegistry.addName(BlockIllusionary.instance, "Illusionary Block");
 		LanguageRegistry.addName(BlockInvisibleBlock.instance, "Invisible Block");

@@ -26,18 +26,12 @@ public class ComponentExcavation implements IArtifactComponent {
 	}
 
 	@Override
-	public String getRandomTrigger(Random rand) {
+	public String getRandomTrigger(Random rand, boolean isArmor) {
 		return "onBlockDestroyed";
 	}
 
 	@Override
 	public ItemStack attached(ItemStack i, Random rand) {
-		return null;
-	}
-
-	@Override
-	@Deprecated
-	public Icon getIcon(ItemStack stack, int pass) {
 		return null;
 	}
 
@@ -56,25 +50,25 @@ public class ComponentExcavation implements IArtifactComponent {
 		EnumToolMaterial toolMaterial = EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")];
 		if(toolMaterial == EnumToolMaterial.WOOD) {
 			//System.out.println("Wood " + Item.pickaxeWood.getStrVsBlock(par1ItemStack, par2Block));
-			return (Item.pickaxeWood.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+			return (Item.pickaxeWood.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 10;
 		}
 		else if(toolMaterial == EnumToolMaterial.STONE) {
 			//System.out.println("Stone " + Item.pickaxeStone.getStrVsBlock(par1ItemStack, par2Block));
-			return (Item.pickaxeStone.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+			return (Item.pickaxeStone.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 10;
 		}
 		else if(toolMaterial == EnumToolMaterial.EMERALD) {
 			//System.out.println("Diamond " + Item.pickaxeDiamond.getStrVsBlock(par1ItemStack, par2Block));
-			return (Item.pickaxeDiamond.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+			return (Item.pickaxeDiamond.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 10;
 		}
 		else if(toolMaterial == EnumToolMaterial.IRON) {
 			//System.out.println("Iron " + Item.pickaxeIron.getStrVsBlock(par1ItemStack, par2Block));
-			return (Item.pickaxeIron.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+			return (Item.pickaxeIron.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 10;
 		}
 		else if(toolMaterial == EnumToolMaterial.GOLD) {
 			//System.out.println("Gold " + Item.pickaxeGold.getStrVsBlock(par1ItemStack, par2Block));
-			return (Item.pickaxeGold.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+			return (Item.pickaxeGold.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 10;
 		}
-		return (EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+		return (EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 10;
 	}
 
 	@Override
@@ -180,12 +174,6 @@ public class ComponentExcavation implements IArtifactComponent {
 	}
 
 	@Override
-	@Deprecated
-	public String getName() {
-		return null;
-	}
-
-	@Override
 	public String getPreAdj(Random rand) {
 		return "Excavator's";
 	}
@@ -204,5 +192,8 @@ public class ComponentExcavation implements IArtifactComponent {
 	public int getNegTextureBitflags() {
 		return 261;
 	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
 
 }

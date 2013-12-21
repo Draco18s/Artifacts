@@ -34,11 +34,11 @@ public class ComponentHeal implements IArtifactComponent {
 	public ComponentHeal() {
 	}
 	
-	public String getName() {
-		return "Heal Effect";
-	}
-	
-	public String getRandomTrigger(Random rand) {
+	@Override
+	public String getRandomTrigger(Random rand, boolean isArmor) {
+		if(isArmor) {
+			return "onArmorTickUpdate";
+		}
 		String str = "";
 		switch(rand.nextInt(4)) {
 			case 0:
@@ -60,11 +60,6 @@ public class ComponentHeal implements IArtifactComponent {
 	@Override
 	public ItemStack attached(ItemStack i, Random rand) {
 		return i;
-	}
-
-	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
-		return null;
 	}
 
 	@Override
@@ -242,5 +237,10 @@ public class ComponentHeal implements IArtifactComponent {
 				//elb.heal(1F);
 			}
 		}
+	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
+		onUpdate(itemStack, world, player, 0, true);
 	}
 }

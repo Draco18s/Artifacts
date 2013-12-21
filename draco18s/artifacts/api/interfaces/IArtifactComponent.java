@@ -96,7 +96,7 @@ public interface IArtifactComponent {
 	 * @param rand
 	 * @return the trigger string (see static properties)
 	 */
-	public String getRandomTrigger(Random rand);
+	public String getRandomTrigger(Random rand, boolean isArmor);
 	
 	/**
 	 * Effectively this is the function that gets called when the user switches to the item.
@@ -108,11 +108,6 @@ public interface IArtifactComponent {
 	 * @return
 	 */
 	public ItemStack attached(ItemStack i, Random rand);
-	/**
-	 * Not used.  Should be removed.
-	 */
-	@Deprecated
-	public Icon getIcon(ItemStack stack, int pass);
 	/**
      * Called when a player drops the item into the world, returning false from this will prevent the item from
      * being removed from the players inventory and spawning in the world.<br/><br/>Probably not as useful
@@ -167,15 +162,18 @@ public interface IArtifactComponent {
      */
     public boolean onEntityItemUpdate(EntityItem entityItem, String type);
     /**
-     * Called each tick as long the item is on a player inventory. Uses by maps to check if is on a player hand and
-     * update it's contents.
+     * Called each tick as long the item is in a player inventory.
      */
     public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5);
     /**
-     * Called each tick as long the item is on a player inventory. Uses by maps to check if is on a player hand and
-     * update it's contents.
+     * Called each tick as long the item is the player's active item.
      */
     public void onHeld(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5);
+    /**
+     * Called each tick as long the item is equipped in one of the player's armor slots.
+	 * If it is not equipped, @param worn will be false (to disable 'permanent' effects).
+     */
+    public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn);
     /**
      * returns the action that specifies what animation to play when the items is being used
      */
@@ -199,12 +197,6 @@ public interface IArtifactComponent {
      * @param trigger the trigger string (returned by {@link #getRandomTrigger(Random)}
      */
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip);
-
-    /**
-     * Not used.  Should be removed.  Use {@link #getPreAdj(Random)} and {@link #getPostAdj(Random)} instead.
-     */
-    @Deprecated
-	public String getName();
 	
     /**
      * Should return a non-empty non-null string that would fill in the blank: ______ Wooden Sword<br/><br/>

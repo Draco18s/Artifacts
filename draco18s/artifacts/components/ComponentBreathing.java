@@ -42,11 +42,10 @@ public class ComponentBreathing implements IArtifactComponent {
 	public ComponentBreathing() {
 	}
 	
-	public String getName() {
-		return "Water Breathing";
-	}
-	
-	public String getRandomTrigger(Random rand) {
+	public String getRandomTrigger(Random rand, boolean isArmor) {
+		if(isArmor) {
+			return "onArmorTickUpdate";
+		}
 		String str = "";
 		switch(rand.nextInt(3)) {
 			case 0:
@@ -65,11 +64,6 @@ public class ComponentBreathing implements IArtifactComponent {
 	@Override
 	public ItemStack attached(ItemStack i, Random rand) {
 		return i;
-	}
-
-	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
-		return null;
 	}
 
 	@Override
@@ -216,12 +210,12 @@ public class ComponentBreathing implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 349;
+		return 2397;
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
-		return 130;
+		return 4738;
 	}
 
 	@Override
@@ -236,6 +230,18 @@ public class ComponentBreathing implements IArtifactComponent {
 
 	@Override
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
-		onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
+		//onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
+		if(!par2World.isRemote) {
+			if(par3Entity instanceof EntityLivingBase) {
+				EntityLivingBase ent = (EntityLivingBase) par3Entity;
+				ent.addPotionEffect(new PotionEffect(13, 10, 1));
+			}
+		}
+	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
+		if(worn)
+			onHeld(itemStack, world, player, 0, true);
 	}
 }

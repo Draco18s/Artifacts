@@ -43,11 +43,7 @@ public class ComponentCashout implements IArtifactComponent {
 	public ComponentCashout() {
 	}
 	
-	public String getName() {
-		return "Extra Damage";
-	}
-	
-	public String getRandomTrigger(Random rand) {
+	public String getRandomTrigger(Random rand, boolean isArmor) {
 		return "onDropped";
 	}
 
@@ -55,11 +51,6 @@ public class ComponentCashout implements IArtifactComponent {
 	public ItemStack attached(ItemStack i, Random rand) {
 		i.stackTagCompound.setInteger("droppedDelay", 60);
 		return i;
-	}
-
-	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
-		return null;
 	}
 
 	@Override
@@ -197,4 +188,7 @@ public class ComponentCashout implements IArtifactComponent {
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
 		
 	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
 }

@@ -54,7 +54,7 @@ public class BlockSolidAir extends IInvisibleBlock {
 	public void onEntityWalking(World par1World, int par2, int par3, int par4, Entity par5Entity)
     {
         super.onEntityWalking(par1World, par2, par3, par4, par5Entity);
-        if(par5Entity instanceof EntityPlayer)
+        if(par5Entity instanceof EntityPlayer && !par5Entity.isSneaking())
         	par1World.setBlockMetadataWithNotify(par2, par3, par4, 0, 3);
     }
 	

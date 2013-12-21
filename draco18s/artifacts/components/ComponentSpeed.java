@@ -35,6 +35,7 @@ import net.minecraft.network.packet.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
@@ -45,11 +46,11 @@ public class ComponentSpeed implements IArtifactComponent {
 	public ComponentSpeed() {
 	}
 	
-	public String getName() {
-		return "Movement";
-	}
-	
-	public String getRandomTrigger(Random rand) {
+	@Override
+	public String getRandomTrigger(Random rand, boolean isArmor) {
+		if(isArmor) {
+			return "onArmorTickUpdate";
+		}
 		String str = "";
 		switch(rand.nextInt(2)) {
 			case 0:
@@ -78,11 +79,6 @@ public class ComponentSpeed implements IArtifactComponent {
 		inbt.setTag("AttributeModifiers", nnbtl);
 		//i.addEnchantment(Enchantment.sharpness, rand.nextInt(5)+1);
 		return i;
-	}
-
-	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
-		return null;
 	}
 
 	@Override
@@ -237,7 +233,7 @@ public class ComponentSpeed implements IArtifactComponent {
 
 	@Override
 	public int getNegTextureBitflags() {
-		return 2082;
+		return 3106;
 	}
 
 	@Override
@@ -267,5 +263,20 @@ public class ComponentSpeed implements IArtifactComponent {
 	@Override
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
 		
+	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
+		if(worn)
+			onUpdate(itemStack, world, player, 0, true);
+		else {
+			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
+			AttributeModifier mod;
+			mod = new AttributeModifier(speedID,"SpeedBoostComponent",0.05F,2);
+			if(atinst.getModifier(speedID) != null)
+			{
+				atinst.removeModifier(mod);
+			}
+		}
 	}
 }

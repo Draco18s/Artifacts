@@ -41,11 +41,7 @@ public class ComponentDamage implements IArtifactComponent {
 	public ComponentDamage() {
 	}
 	
-	public String getName() {
-		return "Extra Damage";
-	}
-	
-	public String getRandomTrigger(Random rand) {
+	public String getRandomTrigger(Random rand, boolean isArmor) {
 		return "onHeld";
 	}
 
@@ -73,11 +69,6 @@ public class ComponentDamage implements IArtifactComponent {
 		inbt.setTag("AttributeModifiers", nnbtl);
 		//i.addEnchantment(Enchantment.sharpness, rand.nextInt(5)+1);
 		return i;
-	}
-
-	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
-		return null;
 	}
 
 	@Override
@@ -216,4 +207,7 @@ public class ComponentDamage implements IArtifactComponent {
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
 		
 	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
 }

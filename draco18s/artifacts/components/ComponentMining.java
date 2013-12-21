@@ -42,22 +42,14 @@ public class ComponentMining implements IArtifactComponent {
 	public ComponentMining() {
 	}
 	
-	public String getName() {
-		return "Miner";
-	}
-	
-	public String getRandomTrigger(Random rand) {
+	@Override
+	public String getRandomTrigger(Random rand, boolean isArmor) {
 		return "onDig";
 	}
 
 	@Override
 	public ItemStack attached(ItemStack i, Random rand) {
 		return i;
-	}
-
-	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
-		return null;
 	}
 
 	@Override
@@ -69,21 +61,21 @@ public class ComponentMining implements IArtifactComponent {
 	public float getStrVsBlock(ItemStack par1ItemStack, Block par2Block) {
 		EnumToolMaterial toolMaterial = EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")];
 		if(toolMaterial == EnumToolMaterial.WOOD) {
-			return (Item.pickaxeWood.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+			return (Item.pickaxeWood.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial());
 		}
 		else if(toolMaterial == EnumToolMaterial.STONE) {
-			return (Item.pickaxeStone.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+			return (Item.pickaxeStone.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial());
 		}
 		else if(toolMaterial == EnumToolMaterial.GOLD) {
-			return (Item.pickaxeGold.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+			return (Item.pickaxeGold.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial());
 		}
 		else if(toolMaterial == EnumToolMaterial.IRON) {
-			return (Item.pickaxeIron.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+			return (Item.pickaxeIron.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial());
 		}
 		else if(toolMaterial == EnumToolMaterial.EMERALD) {
-			return (Item.pickaxeDiamond.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+			return (Item.pickaxeDiamond.getStrVsBlock(par1ItemStack, par2Block) / 2 * EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial());
 		}
-		return (EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial()) / 5;
+		return (EnumToolMaterial.values()[par1ItemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial());
 	}
 
 	@Override
@@ -210,4 +202,7 @@ public class ComponentMining implements IArtifactComponent {
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
 		
 	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
 }

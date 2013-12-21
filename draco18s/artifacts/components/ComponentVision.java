@@ -42,11 +42,11 @@ public class ComponentVision implements IArtifactComponent {
 	public ComponentVision() {
 	}
 	
-	public String getName() {
-		return "Night Vision";
-	}
-	
-	public String getRandomTrigger(Random rand) {
+	@Override
+	public String getRandomTrigger(Random rand, boolean isArmor) {
+		if(isArmor) {
+			return "onArmorTickUpdate";
+		}
 		String str = "";
 		switch(rand.nextInt(2)) {
 			case 0:
@@ -62,11 +62,6 @@ public class ComponentVision implements IArtifactComponent {
 	@Override
 	public ItemStack attached(ItemStack i, Random rand) {
 		return i;
-	}
-
-	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
-		return null;
 	}
 
 	@Override
@@ -132,7 +127,7 @@ public class ComponentVision implements IArtifactComponent {
 		if(!world.isRemote) {
 			if(par3Entity instanceof EntityLivingBase) {
 				EntityLivingBase ent = (EntityLivingBase) par3Entity;
-				ent.addPotionEffect(new PotionEffect(16, 200, 0));
+				ent.addPotionEffect(new PotionEffect(16, 300, 0));
 			}
 		}
 	}
@@ -196,12 +191,12 @@ public class ComponentVision implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 349;
+		return 2397;
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
-		return 130;
+		return 4738;
 	}
 
 	@Override
@@ -217,5 +212,11 @@ public class ComponentVision implements IArtifactComponent {
 	@Override
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
 		
+	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
+		if(worn)
+			onUpdate(itemStack, world, player, 0, true);
 	}
 }

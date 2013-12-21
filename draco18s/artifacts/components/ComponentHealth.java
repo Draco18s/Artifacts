@@ -46,11 +46,11 @@ public class ComponentHealth implements IArtifactComponent {
 	public ComponentHealth() {
 	}
 	
-	public String getName() {
-		return "Max Health";
-	}
-	
-	public String getRandomTrigger(Random rand) {
+	@Override
+	public String getRandomTrigger(Random rand, boolean isArmor) {
+		if(isArmor) {
+			return "onArmorTickUpdate";
+		}
 		return "onUpdate";
 	}
 
@@ -58,12 +58,6 @@ public class ComponentHealth implements IArtifactComponent {
 	public ItemStack attached(ItemStack i, Random rand) {
 		return i;
 	}
-
-	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
-		return null;
-	}
-
 	@Override
 	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
 		return true;
@@ -256,5 +250,30 @@ public class ComponentHealth implements IArtifactComponent {
 	@Override
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
 		
+	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
+		if(worn)
+			onUpdate(itemStack, world, player, 0, true);
+		else {
+			String uu = itemStack.stackTagCompound.getString("HealthUUID");
+			if(uu.equals("")) {
+				return;
+			}
+			UUID healthID = UUID.fromString(uu);
+			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
+			AttributeModifier mod;
+			mod = new AttributeModifier(healthID,"HealthBoostComponent",0.05F,2);
+			if(player.capabilities.isCreativeMode && player.openContainer != null && player.openContainer == player.inventoryContainer) {
+				if(atinst.getModifier(healthID) != null)
+				{
+					atinst.removeModifier(mod);
+					if(player.getHealth() > player.getMaxHealth()) {
+						player.attackEntityFrom(DamageSource.generic, 1);
+					}
+				}
+			}
+		}
 	}
 }

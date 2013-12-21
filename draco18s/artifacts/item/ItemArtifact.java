@@ -44,6 +44,7 @@ public class ItemArtifact extends Item {
 		weaponDamage = 0.0F;
 		setMaxDamage(128);
 		setCreativeTab(CreativeTabs.tabCombat);
+		setUnlocalizedName("Artifact");
 	}
 	
 	@SideOnly(Side.CLIENT)

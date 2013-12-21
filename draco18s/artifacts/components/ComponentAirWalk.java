@@ -43,22 +43,18 @@ public class ComponentAirWalk implements IArtifactComponent {
 	public ComponentAirWalk() {
 	}
 	
-	public String getName() {
-		return "Air Walking";
-	}
-	
-	public String getRandomTrigger(Random rand) {
-		return "onHeld";
+	public String getRandomTrigger(Random rand, boolean isArmor) {
+		if(!isArmor) {
+			return "onHeld";
+		}
+		else {
+			return "onArmorTickUpdate";
+		}
 	}
 
 	@Override
 	public ItemStack attached(ItemStack i, Random rand) {
 		return i;
-	}
-
-	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
-		return null;
 	}
 
 	@Override
@@ -118,12 +114,12 @@ public class ComponentAirWalk implements IArtifactComponent {
 	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add("Allows walking on air " + trigger);
+		par3List.add("Allows sneaking on air " + trigger);
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add("Allows walking on air");
+		par3List.add("Allows walking on air while sneaking.");
 	}
 
 	@Override
@@ -156,12 +152,12 @@ public class ComponentAirWalk implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 0;
+		return 985;
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
-		return 0;
+		return 2086;
 	}
 
 	@Override
@@ -176,6 +172,9 @@ public class ComponentAirWalk implements IArtifactComponent {
 
 	@Override
 	public void onHeld(ItemStack par1ItemStack, World world,Entity par3Entity, int par4, boolean par5) {
+		if(par3Entity.isSneaking()) {
+			return;
+		}
 		double xx = par3Entity.posX;
 		double yy = par3Entity.posY-1;
 		double zz = par3Entity.posZ;
@@ -189,5 +188,10 @@ public class ComponentAirWalk implements IArtifactComponent {
 			world.setBlock(x, y, z, BlockSolidAir.instance.blockID);
 			world.scheduleBlockUpdate(x, y, z, BlockSolidAir.instance.blockID, 10);
 		}
+	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
+		onHeld(itemStack, world, player, 0, true);
 	}
 }

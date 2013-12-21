@@ -42,22 +42,14 @@ public class ComponentHarvesting implements IArtifactComponent {
 	public ComponentHarvesting() {
 	}
 	
-	public String getName() {
-		return "Harvesting";
-	}
-	
-	public String getRandomTrigger(Random rand) {
+	@Override
+	public String getRandomTrigger(Random rand, boolean isArmor) {
 		return "onBlockDestroyed";
 	}
 
 	@Override
 	public ItemStack attached(ItemStack i, Random rand) {
 		return i;
-	}
-
-	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
-		return null;
 	}
 
 	@Override
@@ -184,4 +176,7 @@ public class ComponentHarvesting implements IArtifactComponent {
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
 		
 	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
 }

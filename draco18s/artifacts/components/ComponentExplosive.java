@@ -47,11 +47,7 @@ public class ComponentExplosive implements IArtifactComponent {
 	public ComponentExplosive() {
 	}
 	
-	public String getName() {
-		return "Exploding";
-	}
-	
-	public String getRandomTrigger(Random rand) {
+	public String getRandomTrigger(Random rand, boolean isArmor) {
 		String str = "";
 		switch(rand.nextInt(5)) {
 			case 0:
@@ -82,11 +78,6 @@ public class ComponentExplosive implements IArtifactComponent {
 	@Override
 	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
 		return true;
-	}
-
-	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
-		return null;
 	}
 
 	@Override
@@ -332,4 +323,7 @@ public class ComponentExplosive implements IArtifactComponent {
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
 		
 	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
 }

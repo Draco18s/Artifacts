@@ -42,11 +42,8 @@ public class ComponentLight implements IArtifactComponent {
 	public ComponentLight() {
 	}
 	
-	public String getName() {
-		return "Light";
-	}
-	
-	public String getRandomTrigger(Random rand) {
+	@Override
+	public String getRandomTrigger(Random rand, boolean isArmor) {
 		return "onUpdate";
 	}
 
@@ -56,11 +53,6 @@ public class ComponentLight implements IArtifactComponent {
 		i.stackTagCompound.setInteger("lastLightY", -1);
 		i.stackTagCompound.setInteger("lastLightZ", -1);
 		return i;
-	}
-
-	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
-		return null;
 	}
 
 	@Override
@@ -236,4 +228,7 @@ public class ComponentLight implements IArtifactComponent {
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
 		
 	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
 }

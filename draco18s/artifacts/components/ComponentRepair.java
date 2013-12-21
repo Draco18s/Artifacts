@@ -41,12 +41,20 @@ public class ComponentRepair implements IArtifactComponent {
 	public ComponentRepair() {
 	}
 	
-	public String getName() {
-		return "Repair";
-	}
-	
-	public String getRandomTrigger(Random rand) {
+	@Override
+	public String getRandomTrigger(Random rand, boolean isArmor) {
 		String str = "";
+		if(isArmor) {
+			switch(rand.nextInt(2)) {
+				case 0:
+					str = "onArmorTickUpdate";
+					break;
+				case 1:
+					str = "onHeld";
+					break;
+			}
+			return str;
+		}
 		switch(rand.nextInt(2)) {
 			case 0:
 				str = "onUpdate";
@@ -61,11 +69,6 @@ public class ComponentRepair implements IArtifactComponent {
 	@Override
 	public ItemStack attached(ItemStack i, Random rand) {
 		return i;
-	}
-
-	@Override
-	public Icon getIcon(ItemStack stack, int pass) {
-		return null;
 	}
 
 	@Override
@@ -175,7 +178,7 @@ public class ComponentRepair implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 0;
+		return 77;
 	}
 
 	@Override
@@ -196,5 +199,10 @@ public class ComponentRepair implements IArtifactComponent {
 	@Override
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
 		onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
+	}
+
+	@Override
+	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
+		onUpdate(itemStack, world, player, 0, true);
 	}
 }
