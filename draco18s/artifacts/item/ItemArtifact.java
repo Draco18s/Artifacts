@@ -1,5 +1,6 @@
 package draco18s.artifacts.item;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -301,9 +302,22 @@ public class ItemArtifact extends Item {
 				effectID = data.getInteger("onDropped");
 				if(effectID != 0) {
 					int del = data.getInteger("droppedDelay");
+					System.out.println("Dropped: " + del + "<=" + entityItem.age);
 					if(del <= entityItem.age) {
 						IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
 						c.onEntityItemUpdate(entityItem,"onDropped");
+					}
+				}
+				ArrayList<String> keys = ArtifactsAPI.artifacts.getNBTKeys();
+				String kk = "";
+				int n = 0;
+				for(int k = keys.size() - 1; k >= 0; k--) {
+					kk = keys.get(k)+"_dropped";
+					if(data.hasKey(kk)) {
+						n = data.getInteger(kk);
+						if(n > 0)
+							n--;
+						data.setInteger(kk,n);
 					}
 				}
 			}
@@ -328,18 +342,31 @@ public class ItemArtifact extends Item {
 				}
 			}
 			else {
-				int d = par1ItemStack.stackTagCompound.getInteger("onItemRightClickDelay");
+				NBTTagCompound nbt = par1ItemStack.stackTagCompound;
+				int d = nbt.getInteger("onItemRightClickDelay");
 				if(d > 0)
 					d--;
 				else
 					d = 0;
-				par1ItemStack.stackTagCompound.setInteger("onItemRightClickDelay",d);
+				nbt.setInteger("onItemRightClickDelay",d);
+				ArrayList<String> keys = ArtifactsAPI.artifacts.getNBTKeys();
+				String kk = "";
+				int n = 0;
+				for(int k = keys.size() - 1; k >= 0; k--) {
+					kk = keys.get(k);
+					if(nbt.hasKey(kk)) {
+						n = nbt.getInteger(kk);
+						if(n > 0)
+							n--;
+						nbt.setInteger(kk,n);
+					}
+				}
 			}
 		}
 		else if(!par2World.isRemote) {
 			par1ItemStack = ArtifactsAPI.artifacts.applyRandomEffects(par1ItemStack);
 		}
-    }
+	}
     
     public EnumAction getItemUseAction(ItemStack par1ItemStack)
     {

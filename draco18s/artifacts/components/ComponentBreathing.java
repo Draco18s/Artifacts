@@ -36,25 +36,31 @@ import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class ComponentBreathing implements IArtifactComponent {
 
-	public ComponentBreathing() {
-	}
-	
 	public String getRandomTrigger(Random rand, boolean isArmor) {
 		if(isArmor) {
-			return "onArmorTickUpdate";
+			switch(rand.nextInt(3)) {
+				case 0:
+					return "onArmorTickUpdate";
+				default:
+					return "";
+			}
 		}
 		String str = "";
-		switch(rand.nextInt(3)) {
+		switch(rand.nextInt(5)) {
 			case 0:
+			case 1:
 				str = "onItemRightClick";
 				break;
-			case 1:
+			case 2:
+			case 3:
 				str = "hitEntity";
 				break;
-			case 2:
+			case 4:
 				str = "onHeld";
 				break;
 		}
@@ -62,7 +68,7 @@ public class ComponentBreathing implements IArtifactComponent {
 	}
 
 	@Override
-	public ItemStack attached(ItemStack i, Random rand) {
+	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
 		return i;
 	}
 
@@ -91,7 +97,7 @@ public class ComponentBreathing implements IArtifactComponent {
 			out.writeInt(par3EntityPlayer.entityId);
 			out.writeInt(13);
 			out.writeInt(1200);
-			out.writeInt(1);
+			out.writeInt(0);
 			Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
 			PacketDispatcher.sendPacketToServer(packet);
 			par1ItemStack.damageItem(1, par3EntityPlayer);
@@ -115,7 +121,7 @@ public class ComponentBreathing implements IArtifactComponent {
 					out.writeInt(par3EntityLivingBase.entityId);
 					out.writeInt(13);
 					out.writeInt(300);
-					out.writeInt(1);
+					out.writeInt(0);
 					EntityPlayer player = (EntityPlayer)par3EntityLivingBase;
 					Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
 					PacketDispatcher.sendPacketToServer(packet);
@@ -234,7 +240,7 @@ public class ComponentBreathing implements IArtifactComponent {
 		if(!par2World.isRemote) {
 			if(par3Entity instanceof EntityLivingBase) {
 				EntityLivingBase ent = (EntityLivingBase) par3Entity;
-				ent.addPotionEffect(new PotionEffect(13, 10, 1));
+				ent.addPotionEffect(new PotionEffect(13, 10, 0));
 			}
 		}
 	}
@@ -244,4 +250,10 @@ public class ComponentBreathing implements IArtifactComponent {
 		if(worn)
 			onHeld(itemStack, world, player, 0, true);
 	}
+
+	@Override
+	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
+
+	@Override
+	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
 }

@@ -1,5 +1,6 @@
 package draco18s.artifacts.item;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Multimap;
@@ -66,6 +67,7 @@ public class ItemArtifactArmor extends ItemArmor {
 		if(iconNum != 2) {
 	        this.setCreativeTab(null);
 		}
+		this.setMaxDamage(par2EnumArmorMaterial.getDurability(damageIndex)*3);
 	}
 	
 	public static void setupArrays() {
@@ -143,7 +145,7 @@ public class ItemArtifactArmor extends ItemArmor {
 		}
     }
 	
-	@Override
+	/*@Override
 	public int getMaxDamage(ItemStack stack)
     {
 		float base = 1;
@@ -157,7 +159,7 @@ public class ItemArtifactArmor extends ItemArmor {
 			}		
 		}
 		return (int) (Math.pow(2, base)-1);
-    }
+    }*/
 
 	@Override
 	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
@@ -170,6 +172,11 @@ public class ItemArtifactArmor extends ItemArmor {
 				return c.onDroppedByPlayer(item, player);
 			}
 			effectID = data.getInteger("onArmorTickUpdate");
+			if(effectID != 0) {
+				IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
+				return c.onDroppedByPlayer(item, player);
+			}
+			effectID = data.getInteger("onArmorTickUpdate2");
 			if(effectID != 0) {
 				IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
 				return c.onDroppedByPlayer(item, player);
@@ -189,10 +196,38 @@ public class ItemArtifactArmor extends ItemArmor {
 		int effectID = 0;
 		if(data != null) {
 			if(!world.isRemote) {
+				IArtifactComponent c;
 				effectID = data.getInteger("onArmorTickUpdate");
 				if(effectID != 0) {
-					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
+					c = ArtifactsAPI.artifacts.getComponent(effectID);
 					c.onArmorTickUpdate(world, player, itemStack, true);
+				}
+				effectID = data.getInteger("onArmorTickUpdate2");
+				if(effectID != 0) {
+					c = ArtifactsAPI.artifacts.getComponent(effectID);
+					c.onArmorTickUpdate(world, player, itemStack, true);
+				}
+				effectID = data.getInteger("onTakeDamage");
+				if(effectID != 0) {
+					c = ArtifactsAPI.artifacts.getComponent(effectID);
+					c.onArmorTickUpdate(world, player, itemStack, true);
+				}
+				effectID = data.getInteger("onDeath");
+				if(effectID != 0) {
+					c = ArtifactsAPI.artifacts.getComponent(effectID);
+					c.onArmorTickUpdate(world, player, itemStack, true);
+				}
+			}
+			ArrayList<String> keys = ArtifactsAPI.artifacts.getNBTKeys();
+			String kk = "";
+			int n = 0;
+			for(int k = keys.size() - 1; k >= 0; k--) {
+				kk = keys.get(k)+"_armor";
+				if(data.hasKey(kk)) {
+					n = data.getInteger(kk);
+					if(n > 0)
+						n--;
+					data.setInteger(kk,n);
 				}
 			}
 		}
@@ -268,6 +303,23 @@ public class ItemArtifactArmor extends ItemArmor {
 					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
 					c.onEntityItemUpdate(entityItem,"onUpdate");
 				}
+				effectID = data.getInteger("onArmorTickUpdate2");
+				if(effectID != 0) {
+					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
+					c.onEntityItemUpdate(entityItem,"onUpdate");
+				}
+			}
+			ArrayList<String> keys = ArtifactsAPI.artifacts.getNBTKeys();
+			String kk = "";
+			int n = 0;
+			for(int k = keys.size() - 1; k >= 0; k--) {
+				kk = keys.get(k)+"_dropped";
+				if(data.hasKey(kk)) {
+					n = data.getInteger(kk);
+					if(n > 0)
+						n--;
+					data.setInteger(kk,n);
+				}
 			}
 		}
 		return false;
@@ -278,15 +330,43 @@ public class ItemArtifactArmor extends ItemArmor {
 		int effectID = 0;
 		if(data != null) {
 			if(!par2World.isRemote) {
+				IArtifactComponent c;
 				effectID = data.getInteger("onUpdate");
 				if(effectID != 0) {
-					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
+					c = ArtifactsAPI.artifacts.getComponent(effectID);
 					c.onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
 				}
 				effectID = data.getInteger("onArmorTickUpdate");
 				if(effectID != 0) {
-					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
+					c = ArtifactsAPI.artifacts.getComponent(effectID);
 					c.onArmorTickUpdate(par2World, (EntityPlayer)par3Entity, par1ItemStack, false);
+				}
+				effectID = data.getInteger("onArmorTickUpdate2");
+				if(effectID != 0) {
+					c = ArtifactsAPI.artifacts.getComponent(effectID);
+					c.onArmorTickUpdate(par2World, (EntityPlayer)par3Entity, par1ItemStack, false);
+				}
+				effectID = data.getInteger("onTakeDamage");
+				if(effectID != 0) {
+					c = ArtifactsAPI.artifacts.getComponent(effectID);
+					c.onArmorTickUpdate(par2World, (EntityPlayer)par3Entity, par1ItemStack, false);
+				}
+				effectID = data.getInteger("onDeath");
+				if(effectID != 0) {
+					c = ArtifactsAPI.artifacts.getComponent(effectID);
+					c.onArmorTickUpdate(par2World, (EntityPlayer)par3Entity, par1ItemStack, false);
+				}
+			}
+			ArrayList<String> keys = ArtifactsAPI.artifacts.getNBTKeys();
+			String kk = "";
+			int n = 0;
+			for(int k = keys.size() - 1; k >= 0; k--) {
+				kk = keys.get(k);
+				if(data.hasKey(kk)) {
+					n = data.getInteger(kk);
+					if(n > 0)
+						n--;
+					data.setInteger(kk,n);
 				}
 			}
 		}
@@ -316,24 +396,38 @@ public class ItemArtifactArmor extends ItemArmor {
     	NBTTagCompound data = par1ItemStack.getTagCompound();
 		int effectID = 0;
 		if(data != null) {
-			//par1ItemStack = Artifact.applyRandomEffects(par1ItemStack);
-			//data = par1ItemStack.getTagCompound();
-		//}
 			IArtifactComponent c;
 			
 			effectID = data.getInteger("onArmorTickUpdate");
-			//System.out.println("Effect ID: " + effectID);
 			if(effectID != 0) {
 				c = ArtifactsAPI.artifacts.getComponent(effectID);
-				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when worn.", advTooltip);
+				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when equipped.", advTooltip);
+			}
+			effectID = data.getInteger("onArmorTickUpdate2");
+			if(effectID != 0) {
+				c = ArtifactsAPI.artifacts.getComponent(effectID);
+				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when equipped.", advTooltip);
 			}
 			effectID = data.getInteger("onUpdate");
-			//System.out.println("Effect ID: " + effectID);
 			if(effectID != 0) {
 				c = ArtifactsAPI.artifacts.getComponent(effectID);
 				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "passively.", advTooltip);
 			}
+			effectID = data.getInteger("onTakeDamage");
+			if(effectID != 0) {
+				c = ArtifactsAPI.artifacts.getComponent(effectID);
+				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "after taking damage.", advTooltip);
+			}
+			effectID = data.getInteger("onDeath");
+			if(effectID != 0) {
+				c = ArtifactsAPI.artifacts.getComponent(effectID);
+				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "after taking lethal damage.", advTooltip);
+			}
 		}
+		else {
+			par3List.add(this.getArmorMaterial().name());
+		}
+		//par3List.add(this.getMaxDamage() + " Durability");
     }
 
     public String getItemDisplayName(ItemStack par1ItemStack)
@@ -381,5 +475,11 @@ public class ItemArtifactArmor extends ItemArmor {
     public boolean hasColor(ItemStack par1ItemStack)
     {
         return true;
+    }
+    
+    public void func_82813_b(ItemStack par1ItemStack, int par2)
+    {
+    	par1ItemStack.stackTagCompound.setLong("overlay_color", par2);
+    	super.func_82813_b(par1ItemStack, par2);
     }
 }

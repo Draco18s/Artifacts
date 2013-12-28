@@ -34,6 +34,8 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class ComponentFireball implements IArtifactComponent {
 
@@ -41,6 +43,7 @@ public class ComponentFireball implements IArtifactComponent {
 	}
 	
 	public String getRandomTrigger(Random rand, boolean isArmor) {
+		if(isArmor) return "";
 		String str = "";
 		switch(rand.nextInt(2)) {
 			case 0:
@@ -54,7 +57,7 @@ public class ComponentFireball implements IArtifactComponent {
 	}
 
 	@Override
-	public ItemStack attached(ItemStack i, Random rand) {
+	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
 		return i;
 	}
 
@@ -218,4 +221,10 @@ public class ComponentFireball implements IArtifactComponent {
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
+
+	@Override
+	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
+
+	@Override
+	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
 }

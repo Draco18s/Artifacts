@@ -36,6 +36,8 @@ import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class ComponentFoodie implements IArtifactComponent {
 
@@ -60,7 +62,7 @@ public class ComponentFoodie implements IArtifactComponent {
 	}
 
 	@Override
-	public ItemStack attached(ItemStack i, Random rand) {
+	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
 		return i;
 	}
 
@@ -242,4 +244,10 @@ public class ComponentFoodie implements IArtifactComponent {
 		if(worn)
 			onHeld(itemStack, world, player, 0, true);
 	}
+
+	@Override
+	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
+
+	@Override
+	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
 }

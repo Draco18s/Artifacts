@@ -4,7 +4,11 @@ import java.util.HashMap;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
-
+/**
+ * API for registering artifact icons
+ * @author Draco18s
+ *
+ */
 public interface IItemIconAPI {
 	
 	/**

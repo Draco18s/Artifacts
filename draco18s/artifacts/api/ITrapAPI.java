@@ -2,7 +2,11 @@ package draco18s.artifacts.api;
 
 import draco18s.artifacts.api.interfaces.IBehaviorTrapItem;
 import net.minecraft.item.Item;
-
+/**
+ * If you know what you're doing, you can add additional trap behaviors with this API
+ * @author Draco18s
+ *
+ */
 public interface ITrapAPI {
 	/**
 	 * If you know what you're doing, you can add additional trap behaviors.

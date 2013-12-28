@@ -5,6 +5,8 @@ import java.util.Random;
 
 import com.google.common.collect.Multimap;
 
+import draco18s.artifacts.api.ArtifactsAPI;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
@@ -20,6 +22,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 /**
  * This class is functionally identical to {@link net.minecraft.item.Item} except for a handful of
@@ -84,6 +88,21 @@ public interface IArtifactComponent {
 	 * Not used by any default effects.
 	 */
 	public static String TRIGGER_DROPPED_PLAYER = "onDroppedByPlayer";
+	/**
+	 * Called every tick.  Effect should only trigger if worn is passed as TRUE, otherwise
+	 * is identical to {@link #TRIGGER_UPDATE}
+	 */
+	public static String TRIGGER_ARMOR_TICK = "onArmorTickUpdate";
+	/**
+	 * Calls onTakeDamage when the event happens.<br/>
+	 * Also calls onArmorTickUpdate every tick (both equipped and unequipped) for any delays you need.
+	 */
+	public static String TRIGGER_TAKE_DAMAGE = "onTakeDamage";
+	/**
+	 * Calls onDeath when the event happens.<br/>
+	 * Also calls onArmorTickUpdate every tick (both equipped and unequipped) for any delays you need.
+	 */
+	public static String TRIGGER_ON_DEATH = "onDeath";
 	
 	/**
 	 * Any given effect can have multiple triggers that it can work for.  Any given trigger
@@ -99,19 +118,20 @@ public interface IArtifactComponent {
 	public String getRandomTrigger(Random rand, boolean isArmor);
 	
 	/**
-	 * Effectively this is the function that gets called when the user switches to the item.
-	 * Currently only used by the +damage effects to add an NBT Shared Monster Attribute tag
-	 * to the item which is automatically applied to the player when it becomes active (and
-	 * removed when deactivated).
+	 * Used to supply some initial setup on some effects.  Currently called for all effects once.
+	 * onHeld is currently used by the +damage effects and applys NBT data to the item stack which is
+	 * later used by vanilla to modify the player's Shared Monster Attributes.  For onDropped, it's used
+	 * to set up the "fuse length" delay before the effect kicks in.
 	 * @param i
 	 * @param rand
+	 * @param effects list of all effects on the item (so far).
 	 * @return
 	 */
-	public ItemStack attached(ItemStack i, Random rand);
+	public ItemStack attached(ItemStack i, Random rand, int[] effects);
 	/**
      * Called when a player drops the item into the world, returning false from this will prevent the item from
-     * being removed from the players inventory and spawning in the world.<br/><br/>Probably not as useful
-     * as {@link #onEntityItemUpdate(EntityItem, String)}
+     * being removed from the players inventory and spawning in the world (with Q, dropping it outside the
+     * inventory window still drops it).<br/><br/>Probably not as useful as {@link #onEntityItemUpdate(EntityItem, String)}
      *
      * @param player The player that dropped the item
      * @param item The item stack, before the item is removed from the player's inventory.
@@ -119,12 +139,14 @@ public interface IArtifactComponent {
     public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player);
 	/**
      * Callback for item usage. If the item does something special on right clicking, he will have one of those. Return
-     * True if something happen and false if it don't. This is for ITEMS, not BLOCKS
+     * True if something happen and false if it don't. This is for ITEMS, not BLOCKS<br/><br/>
+     * Currently unused
      */
 	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10);
 	/**
      * Returns the strength of the stack against a given block. 1.0F base, (Quality+1)*2 if correct blocktype, 1.5F if
-     * sword
+     * sword.  Returning 0 is acceptable, and the default value will be used.<br/>
+     * Called for all effects and the largest value returned will be used.
      */
 	public float getStrVsBlock(ItemStack par1ItemStack, Block par2Block);
 	/**
@@ -141,7 +163,8 @@ public interface IArtifactComponent {
      */
     public boolean onBlockDestroyed(ItemStack par1ItemStack, World par2World, int par3, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase);
     /**
-     * Returns if the item (tool) can harvest results from the block type.
+     * Returns if the item (tool) can harvest results from the block type.<br/>
+     * Called for all effects.
      */
     public boolean canHarvestBlock(Block par1Block, ItemStack itemStack);
     /**
@@ -149,8 +172,9 @@ public interface IArtifactComponent {
      */
     public boolean itemInteractionForEntity(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase);
     /**
-     * Not used?  Use #onEntityItemUpdate(EntityItem, String)
+     * Use #onEntityItemUpdate(EntityItem, String)
      */
+    @Deprecated
     public boolean onEntityItemUpdate(EntityItem entityItem);
     /**
      * Called by the default implemetation of EntityItem's onUpdate method, allowing for cleaner 
@@ -175,24 +199,23 @@ public interface IArtifactComponent {
      */
     public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn);
     /**
-     * returns the action that specifies what animation to play when the items is being used
+     * Not used.
      */
+    @Deprecated
     public EnumAction getItemUseAction(ItemStack par1ItemStack);
     /**
-     * Called when the player releases the use item button.
-     * @param par1ItemStack
-     * @param par2World
-     * @param par3EntityPlayer
-     * @param par4
+     * Not used
      */
+    @Deprecated
     public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4);
     /**
-     * allows items to add custom lines of information to the mouseover description.
+     * Allows items to add custom lines of information to the mouseover description.  Used for triggers that
+     * don't have or need a string description.  Such as the "effective pickaxe" effect.
      * @see #addInformation(ItemStack, EntityPlayer, List, String, boolean)
      */
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip);
     /**
-     * allows items to add custom lines of information to the mouseover description, takes a String
+     * Allows items to add custom lines of information to the mouseover description, takes a String
      * for the trigger type.  99% of the time you'll want to use this one.
      * @param trigger the trigger string (returned by {@link #getRandomTrigger(Random)}
      */
@@ -240,4 +263,22 @@ public interface IArtifactComponent {
 	 * @return bitflag int
 	 */
 	public int getNegTextureBitflags();
+	/**
+	 * Called from a LivingHurtEvent handler.  Will only fire if the event.entity is of instance EntityPlayer
+	 * Using these requires an understanding of Shared Monster Attributes and using {@link ArtifactsAPI#OnHurtAttribute}<br/>
+	 * You will likely want to create unique components for behaviors that use this.
+	 * @param itemStack is the stack associated with the effect
+	 * @param event is the LivingHurtEvent
+	 * @param isWornArmor true if the item is equipped to the player's armor slots
+	 */
+	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor);
+	/**
+	 * Called from a LivingDeathEvent handler.  Will only fire if the event.entity is of instance EntityPlayer
+	 * Using these requires an understanding of Shared Monster Attributes and using {@link ArtifactsAPI#OnHurtAttribute}<br/>
+	 * You will likely want to create unique components for behaviors that use this.
+	 * @param itemStack is the stack associated with the effect
+	 * @param event is the LivingDeathEvent
+	 * @param isWornArmor true if the item is equipped to the player's armor slots
+	 */
+	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor);
 }

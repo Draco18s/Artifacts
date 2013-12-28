@@ -3,6 +3,7 @@ package draco18s.artifacts.network;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -23,7 +24,7 @@ import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 
 public class PacketHandlerServer implements IPacketHandler{
-    @Override
+	@Override
     public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player)
     {
     	//System.out.println("Packet found: " + packet.channel);
@@ -45,7 +46,8 @@ public class PacketHandlerServer implements IPacketHandler{
             switch(effectID) {
             	case 1:
             		//Healing
-            		p.setHealth(p.getHealth()+dis.readFloat());
+            		//p.setHealth(p.getHealth()+dis.readFloat());
+            		p.heal(dis.readFloat());
             		break;
             	case 3:
             		//Fireballs

@@ -11,6 +11,7 @@ import com.google.common.collect.Multimap;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import draco18s.artifacts.api.ArtifactsAPI;
 import draco18s.artifacts.api.interfaces.IArtifactComponent;
 
 import net.minecraft.block.Block;
@@ -20,9 +21,11 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeInstance;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.BaseAttributeMap;
+import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -42,18 +45,16 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-public class ComponentHealth implements IArtifactComponent {
-	//private UUID healthID = UUID.fromString("B3766B59-9546-4402-FC1F-2EE2A206D831");
-
-	public ComponentHealth() {
+public class ComponentResurrect implements IArtifactComponent {
+	public ComponentResurrect() {
 	}
 	
 	@Override
 	public String getRandomTrigger(Random rand, boolean isArmor) {
 		if(isArmor) {
-			return "onArmorTickUpdate";
+			return "onDeath";
 		}
-		return "onUpdate";
+		return "";
 	}
 
 	@Override
@@ -103,54 +104,48 @@ public class ComponentHealth implements IArtifactComponent {
 	//works great
 	@Override
 	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
-		String uu = par1ItemStack.stackTagCompound.getString("HealthUUID");
-		UUID healthID;
+		/*String uu = par1ItemStack.stackTagCompound.getString("ResurrectUUID");
+		UUID resID;
 		if(uu.equals("")) {
-			healthID = UUID.randomUUID();
-			par1ItemStack.stackTagCompound.setString("HealthUUID", healthID.toString());
+			resID = UUID.randomUUID();
+			par1ItemStack.stackTagCompound.setString("ResurrectUUID", resID.toString());
 		}
 		else {
-			healthID = UUID.fromString(uu);
+			resID = UUID.fromString(uu);
 		}
 		if(par3Entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer)par3Entity;
-			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
-			AttributeModifier mod;
-			mod = new AttributeModifier(healthID,"HealthBoostComponent",0.05F,2);
-			if(player.openContainer != null && player.openContainer != player.inventoryContainer || player.capabilities.isCreativeMode) {
-				if(atinst.getModifier(healthID) != null)
-				{
-					atinst.removeModifier(mod);
-					if(player.getHealth() > player.getMaxHealth()) {
-						player.attackEntityFrom(DamageSource.generic, 1);
+			AttributeInstance atinst = player.getEntityAttribute(ArtifactsAPI.OnDeathAttribute);
+			if(atinst != null) {
+				AttributeModifier mod;
+				mod = new AttributeModifier(resID,"ResurrectComponent",1F,2);
+				if(player.openContainer != null && player.openContainer != player.inventoryContainer || player.capabilities.isCreativeMode) {
+					if(atinst.getModifier(resID) != null)
+					{
+						atinst.removeModifier(mod);
 					}
 				}
-			}
-			else {
-				if(atinst.getModifier(healthID) == null)
-				{
-					atinst.applyModifier(mod);
-					if(player.getHealth() < player.getMaxHealth()) {
-						player.heal(5);
+				else {
+					if(atinst.getModifier(resID) == null)
+					{
+						atinst.applyModifier(mod);
+						System.out.println("Applied resurecting");
 					}
+					par1ItemStack.stackTagCompound.setInteger("Resurrecting", player.entityId);
 				}
-				par1ItemStack.stackTagCompound.setInteger("HealthBoosting", player.entityId);
 			}
 		}
 		else {
-			int eid = par1ItemStack.stackTagCompound.getInteger("HealthBoosting");
+			int eid = par1ItemStack.stackTagCompound.getInteger("Resurrecting");
 			EntityPlayer player = (EntityPlayer) par2World.getEntityByID(eid);
-			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
+			AttributeInstance atinst = player.getEntityAttribute(ArtifactsAPI.OnDeathAttribute);
 			AttributeModifier mod;
-			mod = new AttributeModifier(healthID,"HealthBoostComponent",5,0);
-			if(atinst.getModifier(healthID) != null)
+			mod = new AttributeModifier(resID,"ResurrectComponent",1,2);
+			if(atinst.getModifier(resID) != null)
 			{
 				atinst.removeModifier(mod);
-				if(player.getHealth() > player.getMaxHealth()) {
-					player.attackEntityFrom(DamageSource.generic, 1);
-				}
 			}	
-		}
+		}*/
 	}
 
 	@Override
@@ -164,17 +159,31 @@ public class ComponentHealth implements IArtifactComponent {
 	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add("Health Boost " + trigger + " " + EnumChatFormatting.BLUE + "+5 Max HP");
+		NBTTagCompound data = par1ItemStack.getTagCompound();
+		int c = data.getInteger("resCooldown_armor");
+		if(c < 1)
+			par3List.add("Restores health " + trigger + " (5 minute cooldown)");
+		else {
+			String m = "";
+			if(c >= 1200) {
+				m = ((c+30)/1200) + " minutes";
+			}
+			else {
+				m = (c/20) + " seconds";
+			}
+			par3List.add("Restores health " + trigger + " (on cooldown: " + m + ")");
+		}
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add("Health Boost when held.");
+		par3List.add("Restores health when the player takes");
+		par3List.add("leathal damage. (1 minute cooldown)");
 	}
 
 	@Override
 	public String getPreAdj(Random rand) {
-		String str = "";
+		/*String str = "";
 		switch(rand.nextInt(3)) {
 			case 0:
 				str = "Hardy";
@@ -185,8 +194,8 @@ public class ComponentHealth implements IArtifactComponent {
 			case 2:
 				str = "Sturdy";
 				break;
-		}
-		return str;
+		}*/
+		return "Regenerative";
 	}
 
 	@Override
@@ -194,10 +203,10 @@ public class ComponentHealth implements IArtifactComponent {
 		String str = "";
 		switch(rand.nextInt(2)) {
 			case 0:
-				str = "of Toughness";
+				str = "of Regeneration";
 				break;
 			case 1:
-				str = "of Health";
+				str = "of Lazarus";
 				break;
 		}
 		return str;
@@ -205,12 +214,12 @@ public class ComponentHealth implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 4957;
+		return 4864;
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
-		return 2082;
+		return 255;
 	}
 
 	@Override
@@ -220,32 +229,29 @@ public class ComponentHealth implements IArtifactComponent {
 
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
-		if(type == "onUpdate") {
-			String uu = entityItem.getEntityItem().stackTagCompound.getString("HealthUUID");
-			UUID healthID;
+		/*if(type == "onUpdate") {
+			String uu = entityItem.getEntityItem().stackTagCompound.getString("ResurrectUUID");
+			UUID resID;
 			if(uu.equals("")) {
-				healthID = UUID.randomUUID();
-				entityItem.getEntityItem().stackTagCompound.setString("HealthUUID", healthID.toString());
+				resID = UUID.randomUUID();
+				entityItem.getEntityItem().stackTagCompound.setString("ResurrectUUID", resID.toString());
 			}
 			else {
-				healthID = UUID.fromString(uu);
+				resID = UUID.fromString(uu);
 			}
-			int eid = entityItem.getEntityItem().stackTagCompound.getInteger("HealthBoosting");
+			int eid = entityItem.getEntityItem().stackTagCompound.getInteger("Resurrecting");
 			Entity ent = entityItem.worldObj.getEntityByID(eid);
 			if(ent instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) ent;
-				AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
+				AttributeInstance atinst = player.getEntityAttribute(ArtifactsAPI.OnDeathAttribute);
 				AttributeModifier mod;
-				mod = new AttributeModifier(healthID,"HealthBoostComponent",0.01F,2);
-				if(atinst.getModifier(healthID) != null)
+				mod = new AttributeModifier(resID,"ResurrectComponent",1F,2);
+				if(atinst.getModifier(resID) != null)
 				{
 					atinst.removeModifier(mod);
-					if(player.getHealth() > player.getMaxHealth()) {
-						player.attackEntityFrom(DamageSource.generic, 1);
-					}
 				}
 			}
-		}
+		}*/
 		return false;
 	}
 
@@ -256,32 +262,43 @@ public class ComponentHealth implements IArtifactComponent {
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
-		if(worn)
+		/*if(worn)
 			onUpdate(itemStack, world, player, 0, true);
 		else {
-			String uu = itemStack.stackTagCompound.getString("HealthUUID");
+			String uu = itemStack.stackTagCompound.getString("ResurrectUUID");
 			if(uu.equals("")) {
 				return;
 			}
-			UUID healthID = UUID.fromString(uu);
-			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
+			UUID resID = UUID.fromString(uu);
+			AttributeInstance atinst = player.getEntityAttribute(ArtifactsAPI.OnDeathAttribute);
 			AttributeModifier mod;
-			mod = new AttributeModifier(healthID,"HealthBoostComponent",0.05F,2);
+			mod = new AttributeModifier(resID,"ResurrectComponent",1F,2);
 			if(player.capabilities.isCreativeMode && player.openContainer != null && player.openContainer == player.inventoryContainer) {
-				if(atinst.getModifier(healthID) != null)
+				if(atinst.getModifier(resID) != null)
 				{
 					atinst.removeModifier(mod);
-					if(player.getHealth() > player.getMaxHealth()) {
-						player.attackEntityFrom(DamageSource.generic, 1);
-					}
 				}
 			}
-		}
+		}*/
 	}
 
 	@Override
 	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
 
 	@Override
-	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
+	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {
+		System.out.println("ABORTING DEATH");
+		if(isWornArmor && !event.isCanceled()) {
+			EntityPlayer player = (EntityPlayer)event.entity;
+			NBTTagCompound data = itemStack.getTagCompound();
+			//System.out.println("Cooldown: " + data.getInteger("resCooldown"));
+			if(data.getInteger("resCooldown_armor") <= 0) {
+				event.setCanceled(true);
+				player.setHealth(20);
+				data.setInteger("resCooldown_armor", 6000);
+				itemStack.damageItem(5, player);
+				return;
+			}
+		}
+	}
 }

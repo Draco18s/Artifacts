@@ -39,9 +39,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class ComponentSpeed implements IArtifactComponent {
-	private UUID speedID = UUID.fromString("B9766B59-9566-4402-BC1F-2EE2A276D836");
+	//private UUID speedID = UUID.fromString("B9766B59-9566-4402-BC1F-2EE2A276D836");
 
 	public ComponentSpeed() {
 	}
@@ -64,7 +66,7 @@ public class ComponentSpeed implements IArtifactComponent {
 	}
 
 	@Override
-	public ItemStack attached(ItemStack i, Random rand) {
+	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
 		NBTTagCompound inbt = i.stackTagCompound;
 		NBTTagCompound nnbt = new NBTTagCompound();
 		NBTTagList nnbtl = new NBTTagList();
@@ -125,21 +127,27 @@ public class ComponentSpeed implements IArtifactComponent {
 	//works great
 	@Override
 	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
+		String uu = par1ItemStack.stackTagCompound.getString("SpeedUUID");
+		UUID speedID;
+		if(uu.equals("")) {
+			speedID = UUID.randomUUID();
+			par1ItemStack.stackTagCompound.setString("SpeedUUID", speedID.toString());
+		}
+		else {
+			speedID = UUID.fromString(uu);
+		}
 		if(par3Entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer)par3Entity;
+			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
+			AttributeModifier mod;
+			mod = new AttributeModifier(speedID,"SpeedBoostComponent",0.05F,2);
 			if(player.openContainer != null && player.openContainer != player.inventoryContainer || player.capabilities.isCreativeMode) {
-				AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
-				AttributeModifier mod;
-				mod = new AttributeModifier(speedID,"SpeedBoostComponent",0.05F,2);
 				if(atinst.getModifier(speedID) != null)
 				{
 					atinst.removeModifier(mod);
 				}
 			}
 			else {
-				AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
-				AttributeModifier mod;
-				mod = new AttributeModifier(speedID,"SpeedBoostComponent",0.01F,2);
 				if(atinst.getModifier(speedID) == null)
 				{
 					atinst.applyModifier(mod);
@@ -152,14 +160,14 @@ public class ComponentSpeed implements IArtifactComponent {
 			EntityPlayer player = (EntityPlayer) par2World.getEntityByID(eid);
 			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
 			AttributeModifier mod;
-			mod = new AttributeModifier(speedID,"SpeedBoostComponent",0.05F,2);
+			mod = new AttributeModifier(speedID,"SpeedBoostComponent",5,0);
 			if(atinst.getModifier(speedID) != null)
 			{
 				atinst.removeModifier(mod);
-			}
+			}	
 		}
 	}
-
+	
 	@Override
 	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
 		return EnumAction.none;
@@ -172,22 +180,6 @@ public class ComponentSpeed implements IArtifactComponent {
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		par3List.add("Speed Boost " + trigger + " " + EnumChatFormatting.BLUE + "+5% Speed");
-		//par2EntityPlayer.inventory.getStackInSlot(0);
-		/*boolean inSlot = false;
-		for(int i = 0; i < 36 && !inSlot; i++) {
-			if(ItemStack.areItemStackTagsEqual(par1ItemStack, par2EntityPlayer.inventory.getStackInSlot(i))) {
-				inSlot = true;
-			}
-		}
-		if(!inSlot) {
-			AttributeInstance atinst = par2EntityPlayer.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
-			AttributeModifier mod;
-			mod = new AttributeModifier(speedID,"SpeedBoostComponent",0.01F,2);
-			if(atinst.getModifier(speedID) != null)
-			{
-				atinst.removeModifier(mod);
-			}
-		}*/
 	}
 
 	@Override
@@ -240,10 +232,19 @@ public class ComponentSpeed implements IArtifactComponent {
 	public boolean onEntityItemUpdate(EntityItem entityItem) {
 		return false;
 	}
-
+	
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
 		if(type == "onUpdate") {
+			String uu = entityItem.getEntityItem().stackTagCompound.getString("SpeedUUID");
+			UUID speedID;
+			if(uu.equals("")) {
+				speedID = UUID.randomUUID();
+				entityItem.getEntityItem().stackTagCompound.setString("SpeedUUID", speedID.toString());
+			}
+			else {
+				speedID = UUID.fromString(uu);
+			}
 			int eid = entityItem.getEntityItem().stackTagCompound.getInteger("SpeedBoosting");
 			Entity ent = entityItem.worldObj.getEntityByID(eid);
 			if(ent instanceof EntityPlayer) {
@@ -264,19 +265,32 @@ public class ComponentSpeed implements IArtifactComponent {
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
 		
 	}
-
+	
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
 		if(worn)
 			onUpdate(itemStack, world, player, 0, true);
 		else {
+			String uu = itemStack.stackTagCompound.getString("SpeedUUID");
+			if(uu.equals("")) {
+				return;
+			}
+			UUID speedID = UUID.fromString(uu);
 			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
 			AttributeModifier mod;
 			mod = new AttributeModifier(speedID,"SpeedBoostComponent",0.05F,2);
-			if(atinst.getModifier(speedID) != null)
-			{
-				atinst.removeModifier(mod);
+			if(player.capabilities.isCreativeMode && player.openContainer != null && player.openContainer == player.inventoryContainer) {
+				if(atinst.getModifier(speedID) != null)
+				{
+					atinst.removeModifier(mod);
+				}
 			}
 		}
 	}
+
+	@Override
+	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
+
+	@Override
+	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
 }

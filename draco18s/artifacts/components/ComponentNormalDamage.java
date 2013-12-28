@@ -35,6 +35,8 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class ComponentNormalDamage implements IArtifactComponent {
 
@@ -47,11 +49,12 @@ public class ComponentNormalDamage implements IArtifactComponent {
 	
 	@Override
 	public String getRandomTrigger(Random rand, boolean isArmor) {
+		if(isArmor) return "";
 		return "onHeld";
 	}
 
 	@Override
-	public ItemStack attached(ItemStack i, Random rand) {
+	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
 		NBTTagCompound inbt = i.stackTagCompound;
 		NBTTagCompound nnbt = new NBTTagCompound();
 		NBTTagList nnbtl = new NBTTagList();
@@ -216,4 +219,10 @@ public class ComponentNormalDamage implements IArtifactComponent {
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
+
+	@Override
+	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
+
+	@Override
+	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
 }

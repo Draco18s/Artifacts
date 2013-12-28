@@ -37,6 +37,8 @@ import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class ComponentCashout implements IArtifactComponent {
 
@@ -48,7 +50,16 @@ public class ComponentCashout implements IArtifactComponent {
 	}
 
 	@Override
-	public ItemStack attached(ItemStack i, Random rand) {
+	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
+		/*if(eff.length == 1) {
+			i.stackSize = 10;
+		}*/
+		int bonus = eff.length*5;
+		if(1 == eff.length) {
+			bonus = 0;
+			i.stackSize = 10;
+		}
+		i.stackTagCompound.setInteger("cashBonus", bonus);
 		i.stackTagCompound.setInteger("droppedDelay", 60);
 		return i;
 	}
@@ -191,4 +202,10 @@ public class ComponentCashout implements IArtifactComponent {
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
+
+	@Override
+	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
+
+	@Override
+	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
 }

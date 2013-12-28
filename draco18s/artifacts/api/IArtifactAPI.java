@@ -1,6 +1,7 @@
 package draco18s.artifacts.api;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import draco18s.artifacts.api.interfaces.IArtifactComponent;
@@ -8,6 +9,11 @@ import draco18s.artifacts.api.interfaces.IArtifactComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
+/**
+ * API for getting, setting, referencing, and registering artifact effects.
+ * @author Draco18s
+ *
+ */
 public interface IArtifactAPI {
 	/**
 	 * Returns the implemented effect Component from its ID value.  Returns null if no effect at that ID.
@@ -72,4 +78,27 @@ public interface IArtifactAPI {
 	 * @param rarity
 	 */
 	public void setTreasureGeneration(String treasureString, int rarity);
+	
+	/**
+	 * Some effects may require some kind of delay; e.g. any right-click trigger has a built-in
+	 * delay preventing the effect from being spammed, drop effects has a delay before activating,
+	 * and so on.<br/><br/>In the event you need such a timer, register the NBT tag keyname you want
+	 * to use here.<br/>The NBT tag must be an Integer.<br/>Every tick, if the value is greater
+	 * than 0, then 1 will be subtracted and saved back to the NBT data.<br/>If you need a timer
+	 * that ticks when the item is an entity, append "_dropped" to your key usage.<br/>
+	 * If you wish to use it for equipped armor, append "_armor" instead.<br/><br/>
+	 * Existing strings:<br/>
+	 * "onItemRightClickDelay" (used to delay right-click effects)<br/>
+	 * "droppedDelay" (used to delay drop effects, called for onEntityItemUpdate)<br/>
+	 * "resCooldown" (a cooldown for Resurrection effect)<br/>
+	 * "orePingDelay" (used by ore finder effect)<br/>
+	 * @param key
+	 */
+	public void registerUpdateNBTKey(String key);
+	
+	/**
+	 * Returns a clone of the keys list
+	 * @return
+	 */
+	public ArrayList<String> getNBTKeys();
 }

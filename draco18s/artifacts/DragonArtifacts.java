@@ -26,6 +26,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
@@ -45,7 +46,7 @@ import draco18s.artifacts.network.PacketHandlerClient;
 import draco18s.artifacts.network.PacketHandlerServer;
 import draco18s.artifacts.worldgen.PlaceTraps;
 
-@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "0.8.0")
+@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "0.8.1")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false,
 	clientPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerClient.class),
 	serverPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerServer.class))
@@ -191,6 +192,12 @@ public class DragonArtifacts {
         ArtifactsAPI.itemicons = new FactoryItemIcons();
         ArtifactsAPI.traps = new FactoryTrapBehaviors();
 		ItemArtifact.instance = new ItemArtifact(artifactID);
+
+		ArtifactsAPI.artifacts.registerUpdateNBTKey("orePingDelay");
+		ArtifactsAPI.artifacts.registerUpdateNBTKey("resCooldown");
+		ArtifactsAPI.artifacts.registerUpdateNBTKey("medkitDelay");
+		ArtifactsAPI.artifacts.registerUpdateNBTKey("adrenDelay");
+		
 		ItemArtifactArmor.hcloth = new ItemArtifactArmor(armorIDh1, EnumArmorMaterial.CLOTH, 0, 2, 0);
 		ItemArtifactArmor.hchain = new ItemArtifactArmor(armorIDh2, EnumArmorMaterial.CHAIN, 1, 2, 0);
 		ItemArtifactArmor.hiron = new ItemArtifactArmor(armorIDh3, EnumArmorMaterial.IRON, 2, 2, 0);
@@ -248,7 +255,7 @@ public class DragonArtifacts {
 		LanguageRegistry.addName(BlockWallPlate.obsidian, "Wall Obsidiplate");
 		
 		
-        GameRegistry.registerItem(ItemArtifact.instance, "Artifact");
+        /*GameRegistry.registerItem(ItemArtifact.instance, "Artifact");
         GameRegistry.registerItem(ItemArtifactArmor.hcloth, "Artifact Leather Helm");
         GameRegistry.registerItem(ItemArtifactArmor.hchain, "Artifact Chain Helm");
         GameRegistry.registerItem(ItemArtifactArmor.hiron, "Artifact Iron Helm");
@@ -271,7 +278,7 @@ public class DragonArtifacts {
         GameRegistry.registerItem(ItemArtifactArmor.bchain, "Artifact Chain Boots");
         GameRegistry.registerItem(ItemArtifactArmor.biron, "Artifact Iron Boots");
         GameRegistry.registerItem(ItemArtifactArmor.bgold, "Artifact Gold Boots");
-        GameRegistry.registerItem(ItemArtifactArmor.bdiamond, "Artifact Diamond Boots");
+        GameRegistry.registerItem(ItemArtifactArmor.bdiamond, "Artifact Diamond Boots");*/
         
         GameRegistry.registerBlock(BlockPedestal.instance, "Display Pedestal");
 		GameRegistry.registerBlock(BlockIllusionary.instance, "Illusionary Block");
@@ -348,6 +355,44 @@ public class DragonArtifacts {
         ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(new WeightedRandomArtifact(ItemArtifact.instance.itemID, 0, 1, 1, villRare));
         ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(new WeightedRandomArtifact(ItemArtifact.instance.itemID, 0, 1, 1, mineRare));
         ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomArtifact(ItemArtifact.instance.itemID, 0, 1, 1, dungRare));
+
+        ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomArtifact(ItemArtifactArmor.hcloth.itemID, 0, 1, 1, Math.max(6, wizRare)));
+        ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomArtifact(ItemArtifactArmor.ccloth.itemID, 0, 1, 1, Math.max(6, wizRare)));
+        ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomArtifact(ItemArtifactArmor.lcloth.itemID, 0, 1, 1, Math.max(6, wizRare)));
+        ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomArtifact(ItemArtifactArmor.bcloth.itemID, 0, 1, 1, Math.max(6, wizRare)));
+
+        ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomArtifact(ItemArtifactArmor.hchain.itemID, 0, 1, 1, dungRare));
+        ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomArtifact(ItemArtifactArmor.cchain.itemID, 0, 1, 1, dungRare));
+        ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomArtifact(ItemArtifactArmor.lchain.itemID, 0, 1, 1, dungRare));
+        ChestGenHooks.getInfo(ChestGenHooks.DUNGEON_CHEST).addItem(new WeightedRandomArtifact(ItemArtifactArmor.bchain.itemID, 0, 1, 1, dungRare));
+
+        ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(new WeightedRandomArtifact(ItemArtifactArmor.hiron.itemID, 0, 1, 1, villRare));
+        ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(new WeightedRandomArtifact(ItemArtifactArmor.ciron.itemID, 0, 1, 1, villRare));
+        ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(new WeightedRandomArtifact(ItemArtifactArmor.liron.itemID, 0, 1, 1, villRare));
+        ChestGenHooks.getInfo(ChestGenHooks.VILLAGE_BLACKSMITH).addItem(new WeightedRandomArtifact(ItemArtifactArmor.biron.itemID, 0, 1, 1, villRare));
+
+        ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST).addItem(new WeightedRandomArtifact(ItemArtifactArmor.hgold.itemID, 0, 1, 1, pyrRare));
+        ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST).addItem(new WeightedRandomArtifact(ItemArtifactArmor.cgold.itemID, 0, 1, 1, pyrRare));
+        ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST).addItem(new WeightedRandomArtifact(ItemArtifactArmor.lgold.itemID, 0, 1, 1, pyrRare));
+        ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST).addItem(new WeightedRandomArtifact(ItemArtifactArmor.bgold.itemID, 0, 1, 1, pyrRare));
+
+        ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING).addItem(new WeightedRandomArtifact(ItemArtifactArmor.hdiamond.itemID, 0, 1, 1, strong2Rare));
+        ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING).addItem(new WeightedRandomArtifact(ItemArtifactArmor.cdiamond.itemID, 0, 1, 1, strong2Rare));
+        ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING).addItem(new WeightedRandomArtifact(ItemArtifactArmor.ldiamond.itemID, 0, 1, 1, strong2Rare));
+        ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CROSSING).addItem(new WeightedRandomArtifact(ItemArtifactArmor.bdiamond.itemID, 0, 1, 1, strong2Rare));
+
+        ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR).addItem(new WeightedRandomArtifact(ItemArtifactArmor.hdiamond.itemID, 0, 1, 1, strong3Rare));
+        ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR).addItem(new WeightedRandomArtifact(ItemArtifactArmor.cdiamond.itemID, 0, 1, 1, strong3Rare));
+        ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR).addItem(new WeightedRandomArtifact(ItemArtifactArmor.ldiamond.itemID, 0, 1, 1, strong3Rare));
+        ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_CORRIDOR).addItem(new WeightedRandomArtifact(ItemArtifactArmor.bdiamond.itemID, 0, 1, 1, strong3Rare));
+
+        ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(new WeightedRandomArtifact(ItemArtifactArmor.ccloth.itemID, 0, 1, 1, mineRare));
+        ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(new WeightedRandomArtifact(ItemArtifactArmor.hiron.itemID, 0, 1, 1, mineRare));
+        ChestGenHooks.getInfo(ChestGenHooks.MINESHAFT_CORRIDOR).addItem(new WeightedRandomArtifact(ItemArtifactArmor.hchain.itemID, 0, 1, 1, mineRare));
+
+        ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST).addItem(new WeightedRandomArtifact(ItemArtifactArmor.cdiamond.itemID, 0, 1, 1, tempRare));
+        ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST).addItem(new WeightedRandomArtifact(ItemArtifactArmor.cgold.itemID, 0, 1, 1, tempRare));
+        ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST).addItem(new WeightedRandomArtifact(ItemArtifactArmor.ciron.itemID, 0, 1, 1, tempRare));
         
         //DungeonHooks.addDungeonLoot(new ItemStack(ItemArtifact.instance.itemID), 25,1,1);
         
@@ -362,6 +407,12 @@ public class DragonArtifacts {
 		GameRegistry.addShapedRecipe(new ItemStack(BlockWallPlate.instance, 2), "s", "s", "s", 's', stone);
 		GameRegistry.addShapedRecipe(new ItemStack(BlockWallPlate.obsidian, 2), "s", "s", "s", 's', new ItemStack(Block.obsidian));
 		MinecraftForge.setToolClass(ItemArtifact.instance, "pickaxe", 3);
+    }
+	
+	@EventHandler
+    public void load(FMLInitializationEvent event)
+    {
+		MinecraftForge.EVENT_BUS.register(new ArtifactEventHandler());
     }
 	
 	@EventHandler

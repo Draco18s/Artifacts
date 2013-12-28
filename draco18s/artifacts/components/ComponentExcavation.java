@@ -18,6 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import draco18s.artifacts.api.interfaces.IArtifactComponent;
 
 public class ComponentExcavation implements IArtifactComponent {
@@ -27,17 +29,18 @@ public class ComponentExcavation implements IArtifactComponent {
 
 	@Override
 	public String getRandomTrigger(Random rand, boolean isArmor) {
+		if(isArmor) return "";
 		return "onBlockDestroyed";
 	}
 
 	@Override
-	public ItemStack attached(ItemStack i, Random rand) {
+	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
 		return null;
 	}
 
 	@Override
 	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -85,6 +88,7 @@ public class ComponentExcavation implements IArtifactComponent {
 	public boolean onBlockDestroyed(ItemStack par1ItemStack, World world, int par1, int x, int y, int z, EntityLivingBase player) {
 		//System.out.println("Test (" + x + "," + y + "," + z + ")");
 		//player.getLookVec();
+		int numBlocks = 0;
 		for(int i=-1;i<=1;i++) {
 			for(int j=-1;j<=1;j++) {
 				for(int k=-1;k<=1;k++) {
@@ -97,12 +101,13 @@ public class ComponentExcavation implements IArtifactComponent {
 							int par6 = EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, par1ItemStack);
 							block.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x+i, y+j, z+k), par6);
 							world.setBlockToAir(x+i, y+j, z+k);
+							numBlocks++;
 						}
 					}
 				}
 			}
 		}
-		par1ItemStack.damageItem(1, player);
+		par1ItemStack.damageItem(numBlocks/2, player);
 		//Block block = Block.blocksList[l]
 		return false;
 	}
@@ -195,5 +200,11 @@ public class ComponentExcavation implements IArtifactComponent {
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
+
+	@Override
+	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
+
+	@Override
+	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
 
 }

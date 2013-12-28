@@ -37,6 +37,8 @@ import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.Icon;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class ComponentAirWalk implements IArtifactComponent {
 
@@ -53,7 +55,7 @@ public class ComponentAirWalk implements IArtifactComponent {
 	}
 
 	@Override
-	public ItemStack attached(ItemStack i, Random rand) {
+	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
 		return i;
 	}
 
@@ -172,7 +174,7 @@ public class ComponentAirWalk implements IArtifactComponent {
 
 	@Override
 	public void onHeld(ItemStack par1ItemStack, World world,Entity par3Entity, int par4, boolean par5) {
-		if(par3Entity.isSneaking()) {
+		if(!par3Entity.isSneaking()) {
 			return;
 		}
 		double xx = par3Entity.posX;
@@ -192,6 +194,13 @@ public class ComponentAirWalk implements IArtifactComponent {
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
-		onHeld(itemStack, world, player, 0, true);
+		if(worn)
+			onHeld(itemStack, world, player, 0, true);
 	}
+
+	@Override
+	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
+
+	@Override
+	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
 }

@@ -35,6 +35,8 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class ComponentRepair implements IArtifactComponent {
 
@@ -67,7 +69,7 @@ public class ComponentRepair implements IArtifactComponent {
 	}
 
 	@Override
-	public ItemStack attached(ItemStack i, Random rand) {
+	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
 		return i;
 	}
 
@@ -137,6 +139,9 @@ public class ComponentRepair implements IArtifactComponent {
 	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
+		if(trigger.equals("when equipped.")) {
+			trigger = "when not equipped.";
+		}
 		par3List.add("Slowly repairs itself " + trigger);
 	}
 
@@ -203,6 +208,13 @@ public class ComponentRepair implements IArtifactComponent {
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
-		onUpdate(itemStack, world, player, 0, true);
+		if(!worn)
+			onUpdate(itemStack, world, player, 0, true);
 	}
+
+	@Override
+	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
+
+	@Override
+	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
 }

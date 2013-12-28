@@ -10,6 +10,7 @@ import com.google.common.collect.Multimap;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import draco18s.artifacts.api.ArtifactsAPI;
 import draco18s.artifacts.api.interfaces.IArtifactComponent;
 
 import net.minecraft.block.Block;
@@ -41,6 +42,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class ComponentExplosive implements IArtifactComponent {
 
@@ -48,6 +51,7 @@ public class ComponentExplosive implements IArtifactComponent {
 	}
 	
 	public String getRandomTrigger(Random rand, boolean isArmor) {
+		if(isArmor) return "";
 		String str = "";
 		switch(rand.nextInt(5)) {
 			case 0:
@@ -70,7 +74,11 @@ public class ComponentExplosive implements IArtifactComponent {
 	}
 
 	@Override
-	public ItemStack attached(ItemStack i, Random rand) {
+	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
+		int e = i.stackTagCompound.getInteger("onDropped");
+		if(eff.length == 1 && e > 0 && ArtifactsAPI.artifacts.getComponent(e) == this) {
+			i.stackSize = 10;
+		}
 		i.stackTagCompound.setInteger("droppedDelay", 240);
 		return i;
 	}
@@ -326,4 +334,10 @@ public class ComponentExplosive implements IArtifactComponent {
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
+
+	@Override
+	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
+
+	@Override
+	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
 }

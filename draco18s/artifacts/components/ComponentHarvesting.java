@@ -36,6 +36,8 @@ import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.Icon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class ComponentHarvesting implements IArtifactComponent {
 
@@ -44,11 +46,12 @@ public class ComponentHarvesting implements IArtifactComponent {
 	
 	@Override
 	public String getRandomTrigger(Random rand, boolean isArmor) {
+		if(isArmor) return "";
 		return "onBlockDestroyed";
 	}
 
 	@Override
-	public ItemStack attached(ItemStack i, Random rand) {
+	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
 		return i;
 	}
 
@@ -92,10 +95,11 @@ public class ComponentHarvesting implements IArtifactComponent {
         }
 		else if(world.rand.nextInt(4) == 0) {
 			//drop another
-			ItemStack is = new ItemStack(Block.blocksList[blockID], 1);
+			/*ItemStack is = new ItemStack(Block.blocksList[blockID], 1);
 			EntityItem ei = new EntityItem(world, x, y, z, is);
 			world.spawnEntityInWorld(ei);
-			par1ItemStack.damageItem(1, player);
+			par1ItemStack.damageItem(1, player);*/
+			Block.blocksList[blockID].dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
 		}
 		return true;
 	}
@@ -179,4 +183,10 @@ public class ComponentHarvesting implements IArtifactComponent {
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
+
+	@Override
+	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
+
+	@Override
+	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
 }

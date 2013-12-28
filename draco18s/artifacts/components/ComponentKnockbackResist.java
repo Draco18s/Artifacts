@@ -19,6 +19,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import draco18s.artifacts.api.interfaces.IArtifactComponent;
 
 public class ComponentKnockbackResist implements IArtifactComponent {
@@ -36,15 +38,14 @@ public class ComponentKnockbackResist implements IArtifactComponent {
 	}
 
 	@Override
-	public ItemStack attached(ItemStack i, Random rand) {
+	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
 		
 		return i;
 	}
 
 	@Override
 	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
-		
-		return false;
+		return true;
 	}
 
 	@Override
@@ -223,4 +224,10 @@ public class ComponentKnockbackResist implements IArtifactComponent {
 			}
 		}
 	}
+
+	@Override
+	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
+
+	@Override
+	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
 }

@@ -2,6 +2,7 @@ package draco18s.artifacts.factory;
 
 import java.awt.Color;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Vector;
@@ -42,6 +43,7 @@ public class FactoryArtifact implements IArtifactAPI {
 	private int Helm;        //2048
 	private int Leggings;    //4096
 	private final IArtifactComponent baseDamage = new ComponentNormalDamage();
+	private ArrayList<String> nbtkeys = new ArrayList<String>();
 
 	public FactoryArtifact() {
 		Configuration config = new Configuration(new File("./config", "ArtifactEffects.cfg"));
@@ -64,7 +66,7 @@ public class FactoryArtifact implements IArtifactAPI {
 			registerComponent(new ComponentLight());
 		if(config.get("Effects", "Value", true).getBoolean(true))
 			registerComponent(new ComponentCashout());
-		if(config.get("Effects", "Resistance", true).getBoolean(true))
+		if(config.get("Effects", "Resistance", true).getBoolean(true)) //#10
 			registerComponent(new ComponentResistance());
 		if(config.get("Effects", "JumpBoost", true).getBoolean(true))
 			registerComponent(new ComponentJumping());
@@ -84,10 +86,18 @@ public class FactoryArtifact implements IArtifactAPI {
 			registerComponent(new ComponentMassWeb());
 		if(config.get("Effects", "AirWalking", true).getBoolean(true))
 			registerComponent(new ComponentAirWalk());
-		if(config.get("Effects", "Excavation", true).getBoolean(true))
+		if(config.get("Effects", "Excavation", true).getBoolean(true)) //#20
 			registerComponent(new ComponentExcavation());
 		if(config.get("Effects", "KnockbackResist", true).getBoolean(true))
 			registerComponent(new ComponentKnockbackResist());
+		if(config.get("Effects", "Resurrection", true).getBoolean(true))
+			registerComponent(new ComponentResurrect());
+		if(config.get("Effects", "OreFinder", true).getBoolean(true))
+			registerComponent(new ComponentOreRadar());
+		if(config.get("Effects", "FirstAidKit", true).getBoolean(true))
+			registerComponent(new ComponentMedkit());
+		if(config.get("Effects", "AdrenalinePump", true).getBoolean(true))
+			registerComponent(new ComponentAdrenaline());
 		config.save();
 	}
 	
@@ -140,27 +150,31 @@ public class FactoryArtifact implements IArtifactAPI {
 		Vector effectsOnItem = new Vector();
 		IArtifactComponent c;
 		int count = 0, a[];
-		int numEff = rand.nextInt(5)+1;
+		int numEff = 1;//rand.nextInt(5)+1;
 		a = new int[numEff];
 		for(; numEff > 0; numEff--) {
-			effID = rand.nextInt(effects.size())+1;
-			if(effID == 17 && a.length < 3) {
-				numEff++;
-				a = new int[numEff];
-			}
+			effID = 7;//rand.nextInt(effects.size())+1;
 			c = getComponent(effID);
+			if(c instanceof ComponentRepair && a.length < 3) {
+				numEff++;
+				int[]b = a.clone();
+				a = new int[numEff];
+				for(int bb = 0; bb < b.length; bb++) {
+					a[bb] = b[bb];
+				}
+			}
 			if(effectsOnItem.contains(c)) {
 				numEff++;
 				continue;
 			}
 			String trigName = c.getRandomTrigger(rand, false);
-			if(artifact.stackTagCompound.hasKey(trigName)) {
+			if(artifact.stackTagCompound.hasKey(trigName) || trigName.equals("")) {
 				//make NBTTagLists to remove this condition;
 				numEff++;
 				continue;
 			}
 			effectsOnItem.add(c);
-			if(effID == 9) {
+			/*if(effID == 9) {
 				int bonus = a.length*5;
 				if(numEff == a.length) {
 					numEff = 1;
@@ -176,12 +190,11 @@ public class FactoryArtifact implements IArtifactAPI {
 						artifact.stackSize = 10;
 					}
 				}
-			}
+			}*/
 			//System.out.println(c.getName());
 			artifact.stackTagCompound.setInteger(trigName, effID);
-			if(trigName == "onHeld") {
-				artifact = c.attached(artifact, rand);
-			}
+			//if(trigName.equals("onHeld") || trigName.equals("onDropped")) {
+				artifact = c.attached(artifact, rand, a);
 			a[numEff-1] = effID;
 			flags = c.getTextureBitflags();
 			Amulet += flags % 2;
@@ -270,7 +283,7 @@ public class FactoryArtifact implements IArtifactAPI {
 				iconType = "Dagger";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberDaggers;
 				if(!effectsOnItem.contains(2)) {
-					artifact = baseDamage.attached(artifact, rand);
+					artifact = baseDamage.attached(artifact, rand, a);
 				}
 			}
 			else if((r -= Figurine) < 0) {
@@ -289,7 +302,7 @@ public class FactoryArtifact implements IArtifactAPI {
 				iconType = "Sword";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberSwords;
 				if(!effectsOnItem.contains(2)) {
-					artifact = baseDamage.attached(artifact, rand);
+					artifact = baseDamage.attached(artifact, rand, a);
 				}
 			}
 			else if((r -= Trinket) < 0) {
@@ -414,15 +427,20 @@ public class FactoryArtifact implements IArtifactAPI {
 				continue;
 			}
 			String trigName = c.getRandomTrigger(rand, true);
-			if(artifact.stackTagCompound.hasKey(trigName)) {
+			if(artifact.stackTagCompound.hasKey(trigName) || trigName.equals("")) {
 				//make NBTTagLists to remove this condition;
-				numEff++;
-				if(rand.nextInt(8) == 0) {
-					numEff--;
-					if(numEff > 0)
-						a[numEff-1] = 0;
+				if(trigName.equals("onArmorTickUpdate") && !artifact.stackTagCompound.hasKey("onArmorTickUpdate2")) {
+					trigName = "onArmorTickUpdate2";
 				}
-				continue;
+				else {
+					numEff++;
+					if(rand.nextInt(8) == 0) {
+						numEff--;
+						if(numEff > 0)
+							a[numEff-1] = 0;
+					}
+					continue;
+				}
 			}
 			
 			flags = c.getNegTextureBitflags();
@@ -452,6 +470,9 @@ public class FactoryArtifact implements IArtifactAPI {
 				}
 			}*/
 			artifact.stackTagCompound.setInteger(trigName, effID);
+			//if(trigName.equals("onHeld")) {
+				artifact = c.attached(artifact, rand, a);
+			//}
 			flags = c.getTextureBitflags();
 			flags >>= 9;
 			Boots += flags % 2;
@@ -594,7 +615,7 @@ public class FactoryArtifact implements IArtifactAPI {
 		
 		artifact.stackTagCompound.setIntArray("allComponents", a);
 		if(rand.nextInt(8) == 0) {
-			artifact = enchantArtifact(artifact, effectsOnItem, (iconType == "Sword" || iconType == "Dagger"));
+			artifact = enchantArtifactArmor(artifact, effectsOnItem, iconType);
 		}
 		
 		ItemArtifactArmor aa = (ItemArtifactArmor)artifact.getItem();
@@ -625,6 +646,155 @@ public class FactoryArtifact implements IArtifactAPI {
 			artifact.itemID = newid;
 		}
 		
+		return artifact;
+	}
+
+	private ItemStack enchantArtifactArmor(ItemStack artifact, Vector effectsOnItem, String iconType) {
+		Item item = Item.pickaxeWood;
+		int level = 6;
+		do {
+			level += 2;
+		} while(level < 40 && rand.nextInt(8) != 0);
+		switch(artifact.stackTagCompound.getInteger("material")) {
+			case 0:
+				if(iconType.equals("helm")) {
+					item = Item.helmetLeather;
+				}
+				else if(iconType.equals("boots")) {
+					item = Item.bootsLeather;
+				}
+				else if(iconType.equals("leggings")) {
+					item = Item.legsLeather;
+				}
+				else {
+					item = Item.plateLeather;
+				}
+				break;
+			case 1:
+				if(iconType.equals("helm")) {
+					item = Item.helmetChain;
+				}
+				else if(iconType.equals("boots")) {
+					item = Item.bootsChain;
+				}
+				else if(iconType.equals("leggings")) {
+					item = Item.legsChain;
+				}
+				else {
+					item = Item.plateChain;
+				}
+				break;
+			case 2:
+				if(iconType.equals("helm")) {
+					item = Item.helmetIron;
+				}
+				else if(iconType.equals("boots")) {
+					item = Item.bootsIron;
+				}
+				else if(iconType.equals("leggings")) {
+					item = Item.legsIron;
+				}
+				else {
+					item = Item.plateIron;
+				}
+				break;
+			case 3:
+				if(iconType.equals("helm")) {
+					item = Item.helmetGold;
+				}
+				else if(iconType.equals("boots")) {
+					item = Item.bootsGold;
+				}
+				else if(iconType.equals("leggings")) {
+					item = Item.legsGold;
+				}
+				else {
+					item = Item.plateGold;
+				}
+				break;
+			case 4:
+				if(iconType.equals("helm")) {
+					item = Item.helmetDiamond;
+				}
+				else if(iconType.equals("boots")) {
+					item = Item.bootsDiamond;
+				}
+				else if(iconType.equals("leggings")) {
+					item = Item.legsDiamond;
+				}
+				else {
+					item = Item.plateDiamond;
+				}
+				break;
+		}
+		ItemStack stack = new ItemStack(item);
+		stack = EnchantmentHelper.addRandomEnchantment(rand, stack, level);
+		if(stack.stackTagCompound != null) {
+			artifact.stackTagCompound.setTag("ench", stack.stackTagCompound.getTag("ench").copy());
+			NBTTagList tags = artifact.getEnchantmentTagList();
+			int firstID = ((NBTTagCompound)tags.tagAt(0)).getShort("id");
+			String enchName;
+			switch(firstID) {
+				case 0:
+					enchName = "Protecting ";
+					break;
+				case 1:
+					enchName = "Fireproof ";
+					break;
+				case 2:
+					enchName = "Floating ";
+					break;
+				case 3:
+					enchName = "Blast Protecting ";
+					break;
+				case 4:
+					enchName = "Anti-Arrow ";
+					break;
+				case 5:
+					enchName = "Breathing ";
+					break;
+				case 6:
+					enchName = "Underwater ";
+					break;
+				case 7:
+					enchName = "Thorny ";
+					break;
+				case 16:
+					enchName = "Sharp ";
+					break;
+				case 17:
+					enchName = "Smiting ";
+					break;
+				case 18:
+					enchName = "Spider-Crushing ";
+					break;
+				case 19:
+					enchName = "Forcefull ";
+					break;
+				case 20:
+					enchName = "Firey";
+					break;
+				case 21:
+					enchName = "Looting ";
+					break;
+				case 32:
+					enchName = "Efficient ";
+					break;
+				case 33:
+					enchName = "Gentle ";
+					break;
+				case 34:
+					enchName = "Unbreaking ";
+					break;
+				case 35:
+					enchName = "Fortuitous ";
+					break;
+				default:
+					enchName = "";
+			}
+			artifact.stackTagCompound.setString("enchName", enchName);
+			artifact.stackTagCompound.setString("name", enchName + artifact.stackTagCompound.getString("name"));
+		}
 		return artifact;
 	}
 
@@ -819,5 +989,14 @@ public class FactoryArtifact implements IArtifactAPI {
 	@Override
 	public void setTreasureGeneration(String treasureString, int rarity) {
 		ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifact.instance.itemID, 0, 1, 1, rarity));
+	}
+
+	@Override
+	public void registerUpdateNBTKey(String key) {
+		nbtkeys.add(key);
+	}
+	
+	public ArrayList<String> getNBTKeys() {
+		return (ArrayList<String>)nbtkeys.clone();
 	}
 }
