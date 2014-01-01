@@ -35,7 +35,7 @@ public class ComponentExcavation implements IArtifactComponent {
 
 	@Override
 	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
-		return null;
+		return i;
 	}
 
 	@Override

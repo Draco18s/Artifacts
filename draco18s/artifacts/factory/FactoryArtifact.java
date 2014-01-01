@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Vector;
+import java.util.logging.Level;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -150,10 +153,10 @@ public class FactoryArtifact implements IArtifactAPI {
 		Vector effectsOnItem = new Vector();
 		IArtifactComponent c;
 		int count = 0, a[];
-		int numEff = 1;//rand.nextInt(5)+1;
+		int numEff = rand.nextInt(5)+1;
 		a = new int[numEff];
 		for(; numEff > 0; numEff--) {
-			effID = 7;//rand.nextInt(effects.size())+1;
+			effID = rand.nextInt(effects.size())+1;
 			c = getComponent(effID);
 			if(c instanceof ComponentRepair && a.length < 3) {
 				numEff++;
@@ -195,6 +198,13 @@ public class FactoryArtifact implements IArtifactAPI {
 			artifact.stackTagCompound.setInteger(trigName, effID);
 			//if(trigName.equals("onHeld") || trigName.equals("onDropped")) {
 				artifact = c.attached(artifact, rand, a);
+			if(artifact == null) {
+				try {
+					throw new ErrorNullAttachment(c.getClass() + " returned a null item from attached(ItemStack, Random, int[]).  It should return the item stack.");
+				} catch (ErrorNullAttachment e) {
+					e.printStackTrace();
+				}
+			}
 			a[numEff-1] = effID;
 			flags = c.getTextureBitflags();
 			Amulet += flags % 2;
@@ -412,8 +422,14 @@ public class FactoryArtifact implements IArtifactAPI {
 		Vector effectsOnItem = new Vector();
 		IArtifactComponent c;
 		int count = 0, a[];
-		int numEff = rand.nextInt(3)+1;
+		int numEff = rand.nextInt(3);
+		if(numEff < 0) {
+			FMLCommonHandler.instance().getFMLLogger().log(Level.WARNING, "[Artifacts] What the hell, man?  Why was a random number [0-2] less than 0? " + numEff);
+			numEff = 0;
+		}
+		numEff++;
 		a = new int[numEff];
+		ItemStack clone = artifact.copy();
 		for(; numEff > 0; numEff--) {
 			effID = rand.nextInt(effects.size())+1;
 			c = getComponent(effID);
@@ -473,6 +489,13 @@ public class FactoryArtifact implements IArtifactAPI {
 			//if(trigName.equals("onHeld")) {
 				artifact = c.attached(artifact, rand, a);
 			//}
+			if(artifact == null) {
+				try {
+					throw new ErrorNullAttachment(c.getClass() + " returned a null item from attached(ItemStack, Random, int[]).  It should return the item stack.");
+				} catch (ErrorNullAttachment e) {
+					e.printStackTrace();
+				}
+			}
 			flags = c.getTextureBitflags();
 			flags >>= 9;
 			Boots += flags % 2;
@@ -509,7 +532,7 @@ public class FactoryArtifact implements IArtifactAPI {
 		//end loop
 		int t = Boots + Chestplate + Helm + Leggings;
 		int r = 0;
-		String iconType;
+		String iconType = "";
 		if(t > 0) {
 			r = rand.nextInt(t);
 			if((r -= Boots) < 0) {

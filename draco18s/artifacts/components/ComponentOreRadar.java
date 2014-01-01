@@ -48,7 +48,7 @@ public class ComponentOreRadar implements IArtifactComponent {
 
 	@Override
 	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
-		return null;
+		return i;
 	}
 
 	@Override
