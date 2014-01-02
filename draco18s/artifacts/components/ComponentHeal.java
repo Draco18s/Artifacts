@@ -27,6 +27,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -171,12 +172,12 @@ public class ComponentHeal implements IArtifactComponent {
 	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add("Heals the Player " + trigger);
+		par3List.add(StatCollector.translateToLocal("effect.Heals the Player") + " " + StatCollector.translateToLocal("tool."+trigger));
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add("Heals the Player");
+		par3List.add(StatCollector.translateToLocal("effect.Heals the Player"));
 	}
 
 	@Override

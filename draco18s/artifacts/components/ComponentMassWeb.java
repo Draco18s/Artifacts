@@ -37,6 +37,7 @@ import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -115,12 +116,12 @@ public class ComponentMassWeb implements IArtifactComponent {
 	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add("Slows down all mobs " + trigger);
+		par3List.add(StatCollector.translateToLocal("effect.Slows down all mobs") + " " + StatCollector.translateToLocal("tool."+trigger));
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add("Slows down all mobs");
+		par3List.add(StatCollector.translateToLocal("effect.Slows down all mobs"));
 	}
 
 	@Override

@@ -147,12 +147,12 @@ public class ComponentDamage implements IArtifactComponent {
 	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add("Weapon damage");
+		//par3List.add("Weapon damage");
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add("Weapon damage");
+		//par3List.add("Weapon damage");
 	}
 
 	@Override

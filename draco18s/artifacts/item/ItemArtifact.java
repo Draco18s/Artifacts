@@ -45,7 +45,7 @@ public class ItemArtifact extends Item {
 		weaponDamage = 0.0F;
 		setMaxDamage(128);
 		setCreativeTab(CreativeTabs.tabCombat);
-		setUnlocalizedName("Artifact");
+		setUnlocalizedName("artifact");
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -302,7 +302,7 @@ public class ItemArtifact extends Item {
 				effectID = data.getInteger("onDropped");
 				if(effectID != 0) {
 					int del = data.getInteger("droppedDelay");
-					System.out.println("Dropped: " + del + "<=" + entityItem.age);
+					//System.out.println("Dropped: " + del + "<=" + entityItem.age);
 					if(del <= entityItem.age) {
 						IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
 						c.onEntityItemUpdate(entityItem,"onDropped");
@@ -443,36 +443,37 @@ public class ItemArtifact extends Item {
 				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when held.", advTooltip);
 			}
 		}
+		else {
+			par3List.add(StatCollector.translateToLocal("tool.All tools, swords, etc."));
+		}
     }
 
     public String getItemDisplayName(ItemStack par1ItemStack)
     {
     	String n = "";
     	if(par1ItemStack.stackTagCompound != null) {
-    		if(doEnchName && doMatName && doAdjName) {
-	    		n = par1ItemStack.stackTagCompound.getString("name");
-    		}
-    		else {
-    			if(doEnchName) {
-    				n += par1ItemStack.stackTagCompound.getString("enchName") + " ";
-    			}
-    			if(doAdjName) {
-    				n += par1ItemStack.stackTagCompound.getString("preadj") + " ";
-    			}
-    			if(doMatName) {
-    				n += par1ItemStack.stackTagCompound.getString("matName") + " ";
-    			}
-    			if(!(doEnchName || doMatName || doAdjName)) {
-    				n += "Artifact ";
-    			}
-    			n += par1ItemStack.stackTagCompound.getString("iconName");
-    			if(doAdjName) {
-    				n += " " + par1ItemStack.stackTagCompound.getString("postadj");
-    			}
-    		}
+    		if(doEnchName) {
+    			if(par1ItemStack.stackTagCompound.getString("enchName").length() > 0)
+					n += StatCollector.translateToLocal(par1ItemStack.stackTagCompound.getString("enchName")) + " ";
+			}
+			if(doAdjName) {
+				if(par1ItemStack.stackTagCompound.getString("preadj").length() > 0)
+					n += StatCollector.translateToLocal("pre."+par1ItemStack.stackTagCompound.getString("preadj")) + " ";
+			}
+			if(doMatName) {
+				n += StatCollector.translateToLocal("mat."+par1ItemStack.stackTagCompound.getString("matName")) + " ";
+			}
+			if(!(doEnchName || doMatName || doAdjName)) {
+				n += StatCollector.translateToLocal("type.Artifact") + " ";
+			}
+			n += StatCollector.translateToLocal("type."+par1ItemStack.stackTagCompound.getString("iconName"));
+			if(doAdjName) {
+				if(par1ItemStack.stackTagCompound.getString("postadj").length() > 0)
+					n += " " + StatCollector.translateToLocal("post."+par1ItemStack.stackTagCompound.getString("postadj"));
+			}
     	}
 		if(n.length() < 1) {
-			n = "Artifact";
+			n = StatCollector.translateToLocal("type.Artifact");
 		}
         return n;//("" + StatCollector.translateToLocal(this.getUnlocalizedNameInefficiently(par1ItemStack) + ".name")).trim();
     }

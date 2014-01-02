@@ -36,6 +36,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -121,15 +122,15 @@ public class ComponentCashout implements IArtifactComponent {
 	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add("Converts to emeralds " + trigger);
+		par3List.add(StatCollector.translateToLocal("effect.Converts to emeralds") + " " + StatCollector.translateToLocal("tool."+trigger));
 		if(trigger == "when dropped") {
-			par3List.add(EnumChatFormatting.YELLOW + "  2 second fuse");
+			par3List.add(EnumChatFormatting.YELLOW + "  2" + StatCollector.translateToLocal("time.second") + " " + StatCollector.translateToLocal("time.fuse"));
 		}
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add("Converts to emeralds");
+		par3List.add(StatCollector.translateToLocal("effect.Converts to emeralds"));
 	}
 
 	@Override

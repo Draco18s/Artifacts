@@ -11,6 +11,7 @@ import com.google.common.collect.Multimap;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import draco18s.artifacts.api.ArtifactsAPI;
 import draco18s.artifacts.api.interfaces.IArtifactComponent;
 
 import net.minecraft.block.Block;
@@ -38,6 +39,7 @@ import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -62,30 +64,33 @@ public class ComponentSpeed implements IArtifactComponent {
 				str = "onUpdate";
 				break;
 		}
-		return str;
+		return "onHeld";
 	}
 
 	@Override
 	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
-		NBTTagCompound inbt = i.stackTagCompound;
-		NBTTagCompound nnbt = new NBTTagCompound();
-		NBTTagList nnbtl = new NBTTagList();
-		AttributeModifier att = new AttributeModifier("generic.movementSpeed", 0.01D + rand.nextInt(5)/200D + rand.nextInt(5)/200D, 2);
-		nnbt.setLong("UUIDMost", att.getID().getMostSignificantBits());
-		nnbt.setLong("UUIDLeast", att.getID().getLeastSignificantBits());
-		nnbt.setString("Name", att.getName());
-		nnbt.setDouble("Amount", att.getAmount());
-		nnbt.setInteger("Operation", att.getOperation());
-		nnbt.setString("AttributeName", att.getName());
-		nnbtl.appendTag(nnbt);
-		inbt.setTag("AttributeModifiers", nnbtl);
-		//i.addEnchantment(Enchantment.sharpness, rand.nextInt(5)+1);
+		int q = i.stackTagCompound.getInteger("onHeld");
+		IArtifactComponent a = ArtifactsAPI.artifacts.getComponent(q);
+		if(a == this) {
+			NBTTagCompound inbt = i.stackTagCompound;
+			NBTTagCompound nnbt = new NBTTagCompound();
+			NBTTagList nnbtl = new NBTTagList();
+			AttributeModifier att = new AttributeModifier("generic.movementSpeed", 0.01D + rand.nextInt(5)/200D + rand.nextInt(5)/200D, 2);
+			nnbt.setLong("UUIDMost", att.getID().getMostSignificantBits());
+			nnbt.setLong("UUIDLeast", att.getID().getLeastSignificantBits());
+			nnbt.setString("Name", att.getName());
+			nnbt.setDouble("Amount", att.getAmount());
+			nnbt.setInteger("Operation", att.getOperation());
+			nnbt.setString("AttributeName", att.getName());
+			nnbtl.appendTag(nnbt);
+			inbt.setTag("AttributeModifiers", nnbtl);
+		}
+			//i.addEnchantment(Enchantment.sharpness, rand.nextInt(5)+1);
 		return i;
 	}
 
 	@Override
 	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
-		System.out.println("Dropped");
 		return true;
 	}
 
@@ -141,7 +146,7 @@ public class ComponentSpeed implements IArtifactComponent {
 			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
 			AttributeModifier mod;
 			mod = new AttributeModifier(speedID,"SpeedBoostComponent",0.05F,2);
-			if(player.openContainer != null && player.openContainer != player.inventoryContainer || player.capabilities.isCreativeMode) {
+			if(player.openContainer != null && (player.openContainer != player.inventoryContainer || player.capabilities.isCreativeMode)) {
 				if(atinst.getModifier(speedID) != null)
 				{
 					atinst.removeModifier(mod);
@@ -179,12 +184,16 @@ public class ComponentSpeed implements IArtifactComponent {
 	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add("Speed Boost " + trigger + " " + EnumChatFormatting.BLUE + "+5% Speed");
+		//NBTTagCompound nbt = (NBTTagCompound) par1ItemStack.stackTagCompound.getTag("AttributeModifiers");
+		//System.out.println(nbt.getDouble("Amount"));
+		if(trigger.equals("when held.")) {
+			par3List.add(StatCollector.translateToLocal("effect.Speed Boost") + " " + StatCollector.translateToLocal("tool."+trigger) + " " + EnumChatFormatting.BLUE + "+5% Speed");
+		}
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add("Speed Boost when held.");
+		par3List.add(StatCollector.translateToLocal("effect.Speed Boost"));
 	}
 
 	@Override
@@ -279,11 +288,9 @@ public class ComponentSpeed implements IArtifactComponent {
 			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
 			AttributeModifier mod;
 			mod = new AttributeModifier(speedID,"SpeedBoostComponent",0.05F,2);
-			if(player.capabilities.isCreativeMode && player.openContainer != null && player.openContainer == player.inventoryContainer) {
-				if(atinst.getModifier(speedID) != null)
-				{
-					atinst.removeModifier(mod);
-				}
+			if(atinst.getModifier(speedID) != null)
+			{
+				atinst.removeModifier(mod);
 			}
 		}
 	}

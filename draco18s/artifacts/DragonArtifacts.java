@@ -46,7 +46,7 @@ import draco18s.artifacts.network.PacketHandlerClient;
 import draco18s.artifacts.network.PacketHandlerServer;
 import draco18s.artifacts.worldgen.PlaceTraps;
 
-@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "0.8.2")
+@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "0.8.3")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false,
 	clientPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerClient.class),
 	serverPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerServer.class))
@@ -167,8 +167,10 @@ public class DragonArtifacts {
     		int pseudoATID = config.getBlock("ArrowTrapItemBlock", 4008).getInt();
     		int pseudoCPID = config.getBlock("CoverPlateItemBlock", 4013).getInt();
     		int pseudoFBID = config.getBlock("FakeBlockItemBlock", 4014).getInt();
-    		int wallplateID = config.getBlock("WallPressurePlate", 4009).getInt();//obsidian 2010
-    		int invisppID = config.getBlock("InvisPressurePlate", 4011).getInt();//obsidian 2012
+    		int wallplateID = config.getBlock("WallPressurePlate", 4009).getInt();
+    		int owallplateID = config.getBlock("ObsWallPressurePlate", 4010).getInt();
+    		int invisppID = config.getBlock("InvisPressurePlate", 4011).getInt();
+    		int oinvisppID = config.getBlock("ObsInvisPressurePlate", 4012).getInt();
     		int fakeID = config.getBlock("FakeBlock", 4013).getInt();
     		int invisID = config.getBlock("InvisBlock", 4014).getInt();
     		int teSwordID = config.getBlock("FakeTileEntity", 4015).getInt();
@@ -233,13 +235,13 @@ public class DragonArtifacts {
 		BlockInvisibleBlock.instance = new BlockInvisibleBlock(invisID);
 		BlockInvisibleBedrock.instance = new BlockInvisibleBedrock(invis2ID);
 		BlockInvisiblePressurePlate.instance = new BlockInvisiblePressurePlate(invisppID, "Invisible Pressure Plate", Material.rock, EnumMobType.mobs).setUnlocalizedName("Invisible Pressure Plate");
-		BlockInvisiblePressurePlate.obsidian = new BlockInvisiblePressurePlate(invisppID+1, "Invisible Obsidiplate", Material.rock, EnumMobType.players).setUnlocalizedName("Invisible Obsidiplate");
+		BlockInvisiblePressurePlate.obsidian = new BlockInvisiblePressurePlate(oinvisppID, "Invisible Obsidiplate", Material.rock, EnumMobType.players).setUnlocalizedName("Invisible Obsidiplate");
 		BlockSpikes.instance = new BlockSpikes(spikesID);
 		BlockTrap.instance = new BlockTrap(arrowSlotID);
 		BlockCoverPlate.instance = new BlockCoverPlate(coverplateID);
 		BlockQuickSand.instance = new BlockQuickSand(quickID);
 		BlockWallPlate.instance = new BlockWallPlate(wallplateID, "Wallplate", Material.rock, EnumMobType.mobs).setUnlocalizedName("Wallplate");
-		BlockWallPlate.obsidian = new BlockWallPlate(wallplateID+1, "Wall Obsidiplate", Material.rock, EnumMobType.players).setUnlocalizedName("Wall Obsidiplate");
+		BlockWallPlate.obsidian = new BlockWallPlate(owallplateID, "Wall Obsidiplate", Material.rock, EnumMobType.players).setUnlocalizedName("Wall Obsidiplate");
 		PseudoBlockTrap.instance = new PseudoBlockTrap(pseudoATID);
 		PseudoCoverplate.instance = new PseudoCoverplate(pseudoCPID);
 		PseudoBlockIllusionary.instance = new PseudoBlockIllusionary(pseudoFBID);
@@ -249,10 +251,10 @@ public class DragonArtifacts {
 		BlockStoneBrickMovable.instance = new BlockStoneBrickMovable(ignoreID);
 		
 		GameRegistry.registerBlock(BlockWallPlate.instance, "Wallplate");
-		LanguageRegistry.addName(BlockWallPlate.instance, "Wallplate");
+		//LanguageRegistry.addName(BlockWallPlate.instance, "Wallplate");
 
 		GameRegistry.registerBlock(BlockWallPlate.obsidian, "Wall Obsidiplate");
-		LanguageRegistry.addName(BlockWallPlate.obsidian, "Wall Obsidiplate");
+		//LanguageRegistry.addName(BlockWallPlate.obsidian, "Wall Obsidiplate");
 		
 		
         /*GameRegistry.registerItem(ItemArtifact.instance, "Artifact");
@@ -294,7 +296,7 @@ public class DragonArtifacts {
 		GameRegistry.registerBlock(BlockAntibuilder.instance, "Anti-Builder");
 		GameRegistry.registerBlock(BlockStoneBrickMovable.instance, "Anti Anti-Builder Stone");
         
-        LanguageRegistry.addName(ItemArtifact.instance, "Artifact");
+        /*LanguageRegistry.addName(ItemArtifact.instance, "Artifact");
         LanguageRegistry.addName(ItemArtifactArmor.hcloth, "Artifact Leather Helm");
         LanguageRegistry.addName(ItemArtifactArmor.hchain, "Artifact Chain Helm");
         LanguageRegistry.addName(ItemArtifactArmor.hiron, "Artifact Iron Helm");
@@ -327,9 +329,9 @@ public class DragonArtifacts {
 		LanguageRegistry.addName(BlockQuickSand.instance, "Quicksand");
 		LanguageRegistry.addName(BlockSolidAir.instance, "Floating Block");
 		LanguageRegistry.addName(BlockAntibuilder.instance, "Anti-Builder");
-		LanguageRegistry.addName(BlockStoneBrickMovable.instance, "Anti Anti-Builder Stone");
+		LanguageRegistry.addName(BlockStoneBrickMovable.instance, "Anti Anti-Builder Stone");*/
 		
-		LanguageRegistry.instance().addStringLocalization("itemGroup.tabTraps", "en_US", "Traps");
+		//LanguageRegistry.instance().addStringLocalization("itemGroup.tabTraps", "en_US", "Traps");
         
         GameRegistry.registerTileEntity(TileEntityDisplayPedestal.class, "artifacts.pedestal");
 		GameRegistry.registerTileEntity(TileEntitySword.class, "artifacts.tesword");

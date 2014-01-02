@@ -35,6 +35,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -116,12 +117,12 @@ public class ComponentAirWalk implements IArtifactComponent {
 	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add("Allows sneaking on air " + trigger);
+		par3List.add(StatCollector.translateToLocal("effect.Allows sneaking on air") + " " + StatCollector.translateToLocal("tool."+trigger));
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add("Allows walking on air while sneaking.");
+		par3List.add(StatCollector.translateToLocal("effect.Allows sneaking on air"));
 	}
 
 	@Override

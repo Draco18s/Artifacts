@@ -41,6 +41,7 @@ import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -161,24 +162,27 @@ public class ComponentResurrect implements IArtifactComponent {
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		NBTTagCompound data = par1ItemStack.getTagCompound();
 		int c = data.getInteger("resCooldown_armor");
-		if(c < 1)
-			par3List.add("Restores health " + trigger + " (5 minute cooldown)");
+		if(c < 1) {
+			par3List.add(StatCollector.translateToLocal("effect.Restores health") + " " + StatCollector.translateToLocal("tool."+trigger));
+			par3List.add("   (5 " + StatCollector.translateToLocal("time.minute") + " " + StatCollector.translateToLocal("time.cooldown") + ")");
+		}
 		else {
 			String m = "";
 			if(c >= 1200) {
-				m = ((c+30)/1200) + " minutes";
+				m = ((c+30)/1200) + " "+StatCollector.translateToLocal("time.minutes");
 			}
 			else {
-				m = (c/20) + " seconds";
+				m = (c/20) + " "+StatCollector.translateToLocal("time.seconds");
 			}
-			par3List.add("Restores health " + trigger + " (on cooldown: " + m + ")");
+			par3List.add(StatCollector.translateToLocal("effect.Restores health") + " " + StatCollector.translateToLocal("tool."+trigger));
+			par3List.add("   (" + StatCollector.translateToLocal("time.on") + " " + StatCollector.translateToLocal("time.cooldown") + ": " + m + ")");
 		}
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
 		par3List.add("Restores health when the player takes");
-		par3List.add("leathal damage. (1 minute cooldown)");
+		par3List.add("leathal damage. (5 minute cooldown)");
 	}
 
 	@Override

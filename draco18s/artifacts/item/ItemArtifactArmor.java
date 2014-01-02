@@ -25,6 +25,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class ItemArtifactArmor extends ItemArmor {
@@ -62,7 +63,7 @@ public class ItemArtifactArmor extends ItemArmor {
 
 	public ItemArtifactArmor(int par1, EnumArmorMaterial par2EnumArmorMaterial, int renderID, int iconNum, int damageIndex) {
 		super(par1, par2EnumArmorMaterial, renderID, damageIndex);
-		setUnlocalizedName("ArtifactArmor"+par2EnumArmorMaterial.ordinal());
+		setUnlocalizedName("artifact.armor"+par2EnumArmorMaterial.name());
 		iconn = iconNum;
 		if(iconNum != 2) {
 	        this.setCreativeTab(null);
@@ -423,9 +424,14 @@ public class ItemArtifactArmor extends ItemArmor {
 				c = ArtifactsAPI.artifacts.getComponent(effectID);
 				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "after taking lethal damage.", advTooltip);
 			}
+			effectID = data.getInteger("onHeld");
+			if(effectID != 0) {
+				c = ArtifactsAPI.artifacts.getComponent(effectID);
+				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when held.", advTooltip);
+			}
 		}
 		else {
-			par3List.add(this.getArmorMaterial().name());
+			par3List.add(StatCollector.translateToLocal("tool.Helms, boots, etc."));
 		}
 		//par3List.add(this.getMaxDamage() + " Durability");
     }
@@ -434,30 +440,28 @@ public class ItemArtifactArmor extends ItemArmor {
     {
     	String n = "";
     	if(par1ItemStack.stackTagCompound != null) {
-    		if(doEnchName && doMatName && doAdjName) {
-	    		n = par1ItemStack.stackTagCompound.getString("name");
-    		}
-    		else {
-    			if(doEnchName) {
-    				n += par1ItemStack.stackTagCompound.getString("enchName") + " ";
-    			}
-    			if(doAdjName) {
-    				n += par1ItemStack.stackTagCompound.getString("preadj") + " ";
-    			}
-    			if(doMatName) {
-    				n += par1ItemStack.stackTagCompound.getString("matName") + " ";
-    			}
-    			if(!(doEnchName || doMatName || doAdjName)) {
-    				n += "Artifact ";
-    			}
-    			n += par1ItemStack.stackTagCompound.getString("iconName");
-    			if(doAdjName) {
-    				n += " " + par1ItemStack.stackTagCompound.getString("postadj");
-    			}
-    		}
+    		if(doEnchName) {
+    			if(par1ItemStack.stackTagCompound.getString("enchName").length() > 0)
+					n += StatCollector.translateToLocal(par1ItemStack.stackTagCompound.getString("enchName")) + " ";
+			}
+			if(doAdjName) {
+				if(par1ItemStack.stackTagCompound.getString("preadj").length() > 0)
+					n += StatCollector.translateToLocal("pre."+par1ItemStack.stackTagCompound.getString("preadj")) + " ";
+			}
+			if(doMatName) {
+				n += StatCollector.translateToLocal("mat."+par1ItemStack.stackTagCompound.getString("matName")) + " ";
+			}
+			if(!(doEnchName || doMatName || doAdjName)) {
+				n += StatCollector.translateToLocal("type.Artifact") + " ";
+			}
+			n += StatCollector.translateToLocal("type."+par1ItemStack.stackTagCompound.getString("iconName"));
+			if(doAdjName) {
+				if(par1ItemStack.stackTagCompound.getString("postadj").length() > 0)
+					n += " " + StatCollector.translateToLocal("post."+par1ItemStack.stackTagCompound.getString("postadj"));
+			}
     	}
 		if(n.length() < 1) {
-			n = "Artifact";
+			n = (StatCollector.translateToLocal(this.getUnlocalizedNameInefficiently(par1ItemStack) + ".name")).trim();
 		}
         return n;//("" + StatCollector.translateToLocal(this.getUnlocalizedNameInefficiently(par1ItemStack) + ".name")).trim();
     }

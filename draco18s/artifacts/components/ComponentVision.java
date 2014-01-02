@@ -35,6 +35,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -146,21 +147,21 @@ public class ComponentVision implements IArtifactComponent {
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		if(trigger == "passively.") {
-			par3List.add(EnumChatFormatting.AQUA + "Night Vision");
+			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Night Vision"));
 		}
 		else {
 			int time = 0;
 			if(trigger == "when used.") {
 				time = 2;
 			}
-			par3List.add(EnumChatFormatting.AQUA + "Night Vision");
-			par3List.add(EnumChatFormatting.AQUA + trigger + " (" + time + "minutes)");
+			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Night Vision"));
+			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + StatCollector.translateToLocal("time.minutes")+ ")");
 		}
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add(EnumChatFormatting.AQUA + "Night vision");
+		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Night vision"));
 	}
 
 	@Override

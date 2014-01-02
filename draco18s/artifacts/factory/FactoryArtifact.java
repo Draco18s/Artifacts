@@ -285,41 +285,41 @@ public class FactoryArtifact implements IArtifactAPI {
 		artifact.stackTagCompound.setInteger("armorType", -1);
 		if(t > 0) {
 			r = rand.nextInt(t);
-			if((r -= Amulet) < 0) {
+			if((r -= Amulet) <= 0) {
 				iconType = "Amulet";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberAmulets;
 			}
-			else if((r -= Dagger) < 0) {
+			else if((r -= Dagger) <= 0) {
 				iconType = "Dagger";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberDaggers;
 				if(!effectsOnItem.contains(2)) {
 					artifact = baseDamage.attached(artifact, rand, a);
 				}
 			}
-			else if((r -= Figurine) < 0) {
+			else if((r -= Figurine) <= 0) {
 				iconType = "Figurine";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberFigurines;
 			}
-			else if((r -= Ring) < 0) {
+			else if((r -= Ring) <= 0) {
 				iconType = "Ring";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberRings;
 			}
-			else if((r -= Staff) < 0) {
+			else if((r -= Staff) <= 0) {
 				iconType = "Staff";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberStaffs;
 			}
-			else if((r -= Sword) < 0) {
+			else if((r -= Sword) <= 0) {
 				iconType = "Sword";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberSwords;
 				if(!effectsOnItem.contains(2)) {
 					artifact = baseDamage.attached(artifact, rand, a);
 				}
 			}
-			else if((r -= Trinket) < 0) {
+			else if((r -= Trinket) <= 0) {
 				iconType = "Trinket";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberTrinkets;
 			}
-			else if((r -= Wand) < 0) {
+			else if((r -= Wand) <= 0) {
 				iconType = "Wand";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberWands;
 			}
@@ -535,28 +535,30 @@ public class FactoryArtifact implements IArtifactAPI {
 		String iconType = "";
 		if(t > 0) {
 			r = rand.nextInt(t);
-			if((r -= Boots) < 0) {
+			if((r -= Boots) <= 0) {
 				iconType = "Boots";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberBoots;
 				artifact.stackTagCompound.setInteger("armorType", 3);
 			}
-			else if((r -= Chestplate) < 0) {
+			else if((r -= Chestplate) <= 0) {
 				iconType = "Chestplate";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberChestplates;
 				artifact.stackTagCompound.setInteger("armorType", 1);
 			}
-			else if((r -= Helm) < 0) {
+			else if((r -= Helm) <= 0) {
 				iconType = "Helm";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberHelms;
 				artifact.stackTagCompound.setInteger("armorType", 0);
 			}
-			else if((r -= Leggings) < 0) {
+			else if((r -= Leggings) <= 0) {
 				iconType = "Leggings";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberLeggings;
 				artifact.stackTagCompound.setInteger("armorType", 2);
 			}
 			else {
 				iconType = "Artifact";
+				System.out.println((Boots + Chestplate + Helm + Leggings));
+				System.out.println(r);
 				t = 1;
 			}
 		}
@@ -756,8 +758,8 @@ public class FactoryArtifact implements IArtifactAPI {
 			artifact.stackTagCompound.setTag("ench", stack.stackTagCompound.getTag("ench").copy());
 			NBTTagList tags = artifact.getEnchantmentTagList();
 			int firstID = ((NBTTagCompound)tags.tagAt(0)).getShort("id");
-			String enchName;
-			switch(firstID) {
+			String enchName = Enchantment.enchantmentsList[firstID].getName();;
+			/*switch(firstID) {
 				case 0:
 					enchName = "Protecting ";
 					break;
@@ -814,7 +816,7 @@ public class FactoryArtifact implements IArtifactAPI {
 					break;
 				default:
 					enchName = "";
-			}
+			}*/
 			artifact.stackTagCompound.setString("enchName", enchName);
 			artifact.stackTagCompound.setString("name", enchName + artifact.stackTagCompound.getString("name"));
 		}
@@ -884,7 +886,7 @@ public class FactoryArtifact implements IArtifactAPI {
 		else {
 			int r2 = (int) Math.min(Math.ceil(level / 7D), 3);
 			artifact.addEnchantment(Enchantment.unbreaking, r2);
-			artifact.stackTagCompound.setString("name", "Unbreaking " + artifact.stackTagCompound.getString("name"));
+			artifact.stackTagCompound.setString("name", Enchantment.unbreaking.getName());
 			return artifact;
 		}
 		//System.out.println(level + " levels to play with.");
@@ -894,8 +896,9 @@ public class FactoryArtifact implements IArtifactAPI {
 			artifact.stackTagCompound.setTag("ench", stack.stackTagCompound.getTag("ench").copy());
 			NBTTagList tags = artifact.getEnchantmentTagList();
 			int firstID = ((NBTTagCompound)tags.tagAt(0)).getShort("id");
-			String enchName;
-			switch(firstID) {
+			String enchName = Enchantment.enchantmentsList[firstID].getName();
+			//System.out.println("Enchanted with: " + firstID + ":" + enchName);
+			/*switch(firstID) {
 				case 0:
 					enchName = "Protecting ";
 					break;
@@ -952,7 +955,7 @@ public class FactoryArtifact implements IArtifactAPI {
 					break;
 				default:
 					enchName = "";
-			}
+			}*/
 			artifact.stackTagCompound.setString("enchName", enchName);
 			artifact.stackTagCompound.setString("name", enchName + artifact.stackTagCompound.getString("name"));
 		}

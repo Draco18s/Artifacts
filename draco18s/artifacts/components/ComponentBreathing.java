@@ -35,6 +35,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -174,8 +175,8 @@ public class ComponentBreathing implements IArtifactComponent {
 		else if(trigger == "when used.") {
 			time = 60;
 		}
-		par3List.add(EnumChatFormatting.AQUA + "Water Breathing");
-		par3List.add(EnumChatFormatting.AQUA + trigger + " (" + time + "seconds)");
+		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("Water Breathing"));
+		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + StatCollector.translateToLocal("time.seconds") + ")");
 	}
 
 	@Override

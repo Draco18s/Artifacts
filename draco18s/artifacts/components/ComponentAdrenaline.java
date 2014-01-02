@@ -18,6 +18,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -163,7 +164,8 @@ public class ComponentAdrenaline implements IArtifactComponent {
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add("Activates several potion effects " + trigger);
+		par3List.add(StatCollector.translateToLocal("effect.Activates several potion effects"));
+		par3List.add("   " + StatCollector.translateToLocal("tool."+trigger));
 	}
 
 	@Override
