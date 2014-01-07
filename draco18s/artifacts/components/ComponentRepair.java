@@ -34,6 +34,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -142,12 +143,12 @@ public class ComponentRepair implements IArtifactComponent {
 		if(trigger.equals("when equipped.")) {
 			trigger = "when not equipped.";
 		}
-		par3List.add("Slowly repairs itself " + trigger);
+		par3List.add(StatCollector.translateToLocal("effect.Slowly repairs itself") + " " + StatCollector.translateToLocal("tool."+trigger));
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add("Slowly repairs itself");
+		par3List.add(StatCollector.translateToLocal("effect.Slowly repairs itself"));
 	}
 
 	@Override

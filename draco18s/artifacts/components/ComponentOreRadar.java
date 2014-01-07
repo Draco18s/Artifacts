@@ -22,6 +22,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -217,12 +218,12 @@ public class ComponentOreRadar implements IArtifactComponent {
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add("Senses nearby ores.");
+		par3List.add(StatCollector.translateToLocal("effect.Senses nearby ores"));
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add("Senses nearby ores " + trigger);
+		par3List.add(StatCollector.translateToLocal("effect.Senses nearby ores") + " " + StatCollector.translateToLocal("tool."+trigger));
 	}
 
 	@Override

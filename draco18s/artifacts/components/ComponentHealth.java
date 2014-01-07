@@ -38,6 +38,7 @@ import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -116,13 +117,14 @@ public class ComponentHealth implements IArtifactComponent {
 			EntityPlayer player = (EntityPlayer)par3Entity;
 			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
 			AttributeModifier mod;
-			mod = new AttributeModifier(healthID,"HealthBoostComponent",0.05F,2);
-			if(player.openContainer != null && player.openContainer != player.inventoryContainer || player.capabilities.isCreativeMode) {
+			mod = new AttributeModifier(healthID,"HealthBoostComponent",2.5F,0);
+			if(player.openContainer != null && (player.openContainer != player.inventoryContainer || player.capabilities.isCreativeMode)) {
 				if(atinst.getModifier(healthID) != null)
 				{
 					atinst.removeModifier(mod);
 					if(player.getHealth() > player.getMaxHealth()) {
-						player.attackEntityFrom(DamageSource.generic, 1);
+						player.setHealth(player.getMaxHealth());
+						//player.attackEntityFrom(DamageSource.generic, 1);
 					}
 				}
 			}
@@ -142,12 +144,13 @@ public class ComponentHealth implements IArtifactComponent {
 			EntityPlayer player = (EntityPlayer) par2World.getEntityByID(eid);
 			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
 			AttributeModifier mod;
-			mod = new AttributeModifier(healthID,"HealthBoostComponent",5,0);
+			mod = new AttributeModifier(healthID,"HealthBoostComponent",2.5F,0);
 			if(atinst.getModifier(healthID) != null)
 			{
 				atinst.removeModifier(mod);
 				if(player.getHealth() > player.getMaxHealth()) {
-					player.attackEntityFrom(DamageSource.generic, 1);
+					player.setHealth(player.getMaxHealth());
+					//player.attackEntityFrom(DamageSource.generic, 1);
 				}
 			}	
 		}
@@ -164,12 +167,12 @@ public class ComponentHealth implements IArtifactComponent {
 	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add("Health Boost " + trigger + " " + EnumChatFormatting.BLUE + "+5 Max HP");
+		par3List.add(StatCollector.translateToLocal("effect.Health Boost") + " " + StatCollector.translateToLocal("tool."+trigger) + " " + EnumChatFormatting.BLUE + "+5 Max HP");
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add("Health Boost when held.");
+		par3List.add(StatCollector.translateToLocal("effect.Health Boost"));
 	}
 
 	@Override
@@ -236,12 +239,12 @@ public class ComponentHealth implements IArtifactComponent {
 				EntityPlayer player = (EntityPlayer) ent;
 				AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
 				AttributeModifier mod;
-				mod = new AttributeModifier(healthID,"HealthBoostComponent",0.01F,2);
+				mod = new AttributeModifier(healthID,"HealthBoostComponent",2.5F,0);
 				if(atinst.getModifier(healthID) != null)
 				{
 					atinst.removeModifier(mod);
 					if(player.getHealth() > player.getMaxHealth()) {
-						player.attackEntityFrom(DamageSource.generic, 1);
+						player.setHealth(player.getMaxHealth());
 					}
 				}
 			}
@@ -256,8 +259,9 @@ public class ComponentHealth implements IArtifactComponent {
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
-		if(worn)
+		if(worn) {
 			onUpdate(itemStack, world, player, 0, true);
+		}
 		else {
 			String uu = itemStack.stackTagCompound.getString("HealthUUID");
 			if(uu.equals("")) {
@@ -266,14 +270,13 @@ public class ComponentHealth implements IArtifactComponent {
 			UUID healthID = UUID.fromString(uu);
 			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
 			AttributeModifier mod;
-			mod = new AttributeModifier(healthID,"HealthBoostComponent",0.05F,2);
-			if(player.capabilities.isCreativeMode && player.openContainer != null && player.openContainer == player.inventoryContainer) {
-				if(atinst.getModifier(healthID) != null)
-				{
-					atinst.removeModifier(mod);
-					if(player.getHealth() > player.getMaxHealth()) {
-						player.attackEntityFrom(DamageSource.generic, 1);
-					}
+			mod = new AttributeModifier(healthID,"HealthBoostComponent",2.5F,0);
+			if(atinst.getModifier(healthID) != null)
+			{
+				atinst.removeModifier(mod);
+				if(player.getHealth() > player.getMaxHealth()) {
+					player.setHealth(player.getMaxHealth());
+					//player.attackEntityFrom(DamageSource.generic, 1);
 				}
 			}
 		}

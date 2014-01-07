@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -173,12 +174,12 @@ public class ComponentKnockbackResist implements IArtifactComponent {
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add("Knockback Resistance");
+		par3List.add(StatCollector.translateToLocal("effect.Knockback Resistance"));
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add("Knockback Resistance");
+		par3List.add(StatCollector.translateToLocal("effect.Knockback Resistance") + StatCollector.translateToLocal("tool." + trigger));
 	}
 
 	@Override

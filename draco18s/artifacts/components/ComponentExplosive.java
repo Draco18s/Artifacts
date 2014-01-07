@@ -40,6 +40,7 @@ import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -280,9 +281,9 @@ public class ComponentExplosive implements IArtifactComponent {
 	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add("Explodes " + trigger);
+		par3List.add(StatCollector.translateToLocal("effect.Explodes") + " " + StatCollector.translateToLocal("tool."+trigger));
 		if(trigger == "when dropped") {
-			par3List.add(EnumChatFormatting.YELLOW + "  8 second fuse");
+			par3List.add(EnumChatFormatting.YELLOW + "  8" + StatCollector.translateToLocal("time.second") + " " + StatCollector.translateToLocal("time.fuse"));
 		}
 	}
 

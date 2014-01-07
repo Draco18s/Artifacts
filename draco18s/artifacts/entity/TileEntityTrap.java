@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Random;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -32,7 +33,7 @@ import net.minecraft.world.World;
 public class TileEntityTrap extends TileEntityDispenser
 {
     private ItemStack[] dispenserContents = new ItemStack[9];
-    private Vec3[] antibuilders = new Vec3[6];
+    private ArrayList<Vec3> antibuilders = new ArrayList<Vec3>();
     private int numab = 0;
 
     /**
@@ -50,7 +51,7 @@ public class TileEntityTrap extends TileEntityDispenser
     }
     
     public void setAntibuilder(int x, int y, int z) {
-    	antibuilders[numab] = Vec3.createVectorHelper(x, y, z);
+    	antibuilders.add(Vec3.createVectorHelper(x, y, z));
     	numab++;
     }
 
@@ -255,7 +256,7 @@ public class TileEntityTrap extends TileEntityDispenser
     {
     	if(numab > 0) {
     		for(int a = numab-1; a >=0; a--) {
-    			Vec3 v = antibuilders[a];
+    			Vec3 v = antibuilders.get(a);
     			int wid = worldObj.getBlockId((int)v.xCoord, (int)v.yCoord, (int)v.zCoord);
     			if(wid == BlockAntibuilder.instance.blockID) {
     				return false;

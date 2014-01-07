@@ -35,6 +35,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -168,13 +169,13 @@ public class ComponentFoodie implements IArtifactComponent {
 		else if(trigger == "when used.") {
 			time = 1;
 		}
-		par3List.add(EnumChatFormatting.AQUA + "Food Saturation");
-		par3List.add(EnumChatFormatting.AQUA + trigger + " (" + time + "seconds)");
+		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Food Saturation"));
+		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + StatCollector.translateToLocal("time.seconds") + ")");
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add(EnumChatFormatting.AQUA + "Food Saturation");
+		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Food Saturation"));
 	}
 
 	@Override
