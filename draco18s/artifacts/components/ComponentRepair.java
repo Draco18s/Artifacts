@@ -43,28 +43,28 @@ public class ComponentRepair implements IArtifactComponent {
 
 	public ComponentRepair() {
 	}
-	
+
 	@Override
 	public String getRandomTrigger(Random rand, boolean isArmor) {
 		String str = "";
 		if(isArmor) {
 			switch(rand.nextInt(2)) {
-				case 0:
-					str = "onArmorTickUpdate";
-					break;
-				case 1:
-					str = "onHeld";
-					break;
-			}
-			return str;
-		}
-		switch(rand.nextInt(2)) {
 			case 0:
-				str = "onUpdate";
+				str = "onArmorTickUpdate";
 				break;
 			case 1:
 				str = "onHeld";
 				break;
+			}
+			return str;
+		}
+		switch(rand.nextInt(2)) {
+		case 0:
+			str = "onUpdate";
+			break;
+		case 1:
+			str = "onHeld";
+			break;
 		}
 		return str;
 	}
@@ -122,23 +122,15 @@ public class ComponentRepair implements IArtifactComponent {
 			--del;
 		}
 		else if(par1ItemStack.getItemDamage() > 0) {
-			
-				par1ItemStack.setItemDamage(par1ItemStack.getItemDamage() + 1);
+			par1ItemStack.setItemDamage(par1ItemStack.getItemDamage() - 1);
+			if(par5)
+				del = 200;
+			else
 				del = 1200;
 		}
 		par1ItemStack.stackTagCompound.setInteger("repairDelay", del);
 	}
 
-	@Override
-	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		return EnumAction.none;
-	}
-
-	@Override
-	public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4) {
-		
-	}
-	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		if(trigger.equals("when equipped.")) {
 			trigger = "when not equipped.";
@@ -155,15 +147,15 @@ public class ComponentRepair implements IArtifactComponent {
 	public String getPreAdj(Random rand) {
 		String str = "";
 		switch(rand.nextInt(3)) {
-			case 0:
-				str = "Recharging";
-				break;
-			case 1:
-				str = "Repairing";
-				break;
-			case 2:
-				str = "Refreshing";
-				break;
+		case 0:
+			str = "Recharging";
+			break;
+		case 1:
+			str = "Repairing";
+			break;
+		case 2:
+			str = "Refreshing";
+			break;
 		}
 		return str;
 	}
@@ -172,12 +164,12 @@ public class ComponentRepair implements IArtifactComponent {
 	public String getPostAdj(Random rand) {
 		String str = "";
 		switch(rand.nextInt(2)) {
-			case 0:
-				str = "of Repair";
-				break;
-			case 1:
-				str = "of Renew";
-				break;
+		case 0:
+			str = "of Repair";
+			break;
+		case 1:
+			str = "of Renew";
+			break;
 		}
 		return str;
 	}
@@ -193,11 +185,6 @@ public class ComponentRepair implements IArtifactComponent {
 	}
 
 	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem) {
-		return false;
-	}
-
-	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
 		return false;
 	}
@@ -210,7 +197,7 @@ public class ComponentRepair implements IArtifactComponent {
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
 		if(!worn)
-			onUpdate(itemStack, world, player, 0, true);
+			onUpdate(itemStack, world, player, 0, false);
 	}
 
 	@Override

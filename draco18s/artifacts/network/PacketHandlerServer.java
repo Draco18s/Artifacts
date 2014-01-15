@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityLargeFireball;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -22,6 +23,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
+import draco18s.artifacts.entity.ArrowEffect;
+import draco18s.artifacts.entity.EntitySpecialArrow;
 
 public class PacketHandlerServer implements IPacketHandler{
 	@Override
@@ -39,6 +42,7 @@ public class PacketHandlerServer implements IPacketHandler{
         EntityPlayer p = (EntityPlayer) player;
         World world = p.worldObj;
         DataInputStream dis = new DataInputStream(new ByteArrayInputStream(packet.data));
+        ItemStack is;
         //System.out.println("Packet get");
         try
         {
@@ -54,7 +58,7 @@ public class PacketHandlerServer implements IPacketHandler{
             		if(dis.readInt() == p.entityId) {
                         Vec3 vec3 = p.getLook(1.0F);
                         double d8 = 4.0D;
-                        System.out.println(vec3);
+                        //System.out.println(vec3);
             			//EntityLargeFireball entitylargefireball = new EntityLargeFireball(world, p.posX + vec3.xCoord * d8, p.posY, p.posZ + vec3.zCoord * d8, vec3.xCoord, vec3.yCoord, vec3.zCoord);
                         EntityLargeFireball entitylargefireball = new EntityLargeFireball(world, p, vec3.xCoord, vec3.yCoord, vec3.zCoord);
                         entitylargefireball.posX += vec3.xCoord * d8;
@@ -68,9 +72,9 @@ public class PacketHandlerServer implements IPacketHandler{
                         entitylargefireball.posZ = p.posZ;// + vec3.zCoord * d8;*/
                         //System.out.println(entitylargefireball.posX + "," + entitylargefireball.posY + "," + entitylargefireball.posZ);
                         world.spawnEntityInWorld(entitylargefireball);
-                        ItemStack is = p.inventory.getStackInSlot(dis.readInt());
+                        is = p.inventory.getStackInSlot(dis.readInt());
                         is.damageItem(1, p);
-                        System.out.println(is.getItemDamage());
+                        //System.out.println(is.getItemDamage());
             		}
             		else {
             			System.out.println("Oh god, what player! D:");
@@ -125,8 +129,8 @@ public class PacketHandlerServer implements IPacketHandler{
                             world.addWeatherEffect(entityLightningBolt);
                         }
                         if (movingobjectposition.typeOfHit == EnumMovingObjectType.ENTITY) {
-                        	System.out.println("Hit entity");
-                        	System.out.println(movingobjectposition.hitVec);
+                        	//System.out.println("Hit entity");
+                        	//System.out.println(movingobjectposition.hitVec);
                         	double ix = movingobjectposition.hitVec.xCoord;
                         	double iy = movingobjectposition.hitVec.yCoord;
                         	double iz = movingobjectposition.hitVec.zCoord;
@@ -137,26 +141,26 @@ public class PacketHandlerServer implements IPacketHandler{
             		else {
             			System.out.println("Oh god, what player! D:");
             		}
-            		ItemStack is = p.inventory.getStackInSlot(dis.readInt());
+            		is = p.inventory.getStackInSlot(dis.readInt());
                     is.damageItem(1, p);
             		break;
             	case 7:
             		int id = dis.readInt();
             		if(id >= 0) {
-            			System.out.println("Reading entity position");
+            			//System.out.println("Reading entity position");
 	            		Entity ent = world.getEntityByID(id);
 	            		world.newExplosion(p, ent.posX, ent.posY, ent.posZ, 3F, false, true);
             		}
             		else {
-            			System.out.println("Reading block position");
+            			//System.out.println("Reading block position");
             			int px = dis.readInt();
             			int py = dis.readInt();
             			int pz = dis.readInt();
-            			System.out.println(px+","+py+","+pz);
+            			//System.out.println(px+","+py+","+pz);
             			world.newExplosion(p, px, py, pz, 3F, false, true);
             		}
-            		ItemStack is2 = p.inventory.getStackInSlot(dis.readInt());
-                    is2.damageItem(3, p);
+            		is = p.inventory.getStackInSlot(dis.readInt());
+                    is.damageItem(3, p);
             		break;
             	case 10:
             		//all potions
@@ -167,6 +171,22 @@ public class PacketHandlerServer implements IPacketHandler{
             		if(ent instanceof EntityLivingBase) {
             			EntityLivingBase living = (EntityLivingBase) ent;
             			living.addPotionEffect(new PotionEffect(pid, dur, aug));
+            		}
+            		break;
+            	case 27:
+            		//Exploding Arrows
+            		if(dis.readInt() == p.entityId) {
+                        //Vec3 vec3 = p.getLook(1.0F);
+                        //double d8 = 4.0D;
+                        EntitySpecialArrow arrow = new EntitySpecialArrow(world, p, 2, 2, ArrowEffect.EXPLOSIVE);
+                        world.spawnEntityInWorld(arrow);
+                        is = p.inventory.getStackInSlot(dis.readInt());
+                        is.damageItem(1, p);
+                        world.playSoundAtEntity((Entity) player, "random.bow", 1.0F, 1.2F);
+                        //System.out.println(is.getItemDamage());
+            		}
+            		else {
+            			System.out.println("Oh god, what player! D:");
             		}
             		break;
             }

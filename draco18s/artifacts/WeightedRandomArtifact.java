@@ -10,8 +10,8 @@ import draco18s.artifacts.api.ArtifactsAPI;
 
 public class WeightedRandomArtifact extends WeightedRandomChestContent {
 
-	public WeightedRandomArtifact(int itemID, int count, int minNumberPerStack, int maxNumberPerStack, int probability) {
-		super(itemID, count, minNumberPerStack, maxNumberPerStack, probability);
+	public WeightedRandomArtifact(int itemID, int metadata, int minNumberPerStack, int maxNumberPerStack, int probability) {
+		super(itemID, metadata, minNumberPerStack, maxNumberPerStack, probability);
 	}
 
 	public WeightedRandomArtifact(ItemStack par1ItemStack, int minNumberPerStack, int maxNumberPerStack, int probability) {

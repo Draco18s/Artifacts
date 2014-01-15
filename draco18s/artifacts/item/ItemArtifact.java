@@ -103,7 +103,7 @@ public class ItemArtifact extends Item {
 		if(stack.stackTagCompound != null) {
 			base = (stack.stackTagCompound.getInteger("material") / 2);
 			if(base == 2) {
-				base += 3;
+				base += 5;
 			}
 			else {
 				base += 7.5;
@@ -326,7 +326,7 @@ public class ItemArtifact extends Item {
 	}
     
     public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
-    	NBTTagCompound data = par1ItemStack.getTagCompound();
+    	NBTTagCompound data = par1ItemStack.stackTagCompound;
 		int effectID = 0;
 		if(data != null) {
 			if(!par2World.isRemote) {
@@ -340,28 +340,29 @@ public class ItemArtifact extends Item {
 					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
 					c.onHeld(par1ItemStack, par2World, par3Entity, par4, par5);
 				}
+				//
 			}
 			else {
-				NBTTagCompound nbt = par1ItemStack.stackTagCompound;
-				int d = nbt.getInteger("onItemRightClickDelay");
+				int d = data.getInteger("onItemRightClickDelay");
 				if(d > 0)
 					d--;
 				else
 					d = 0;
-				nbt.setInteger("onItemRightClickDelay",d);
+				data.setInteger("onItemRightClickDelay",d);
 				ArrayList<String> keys = ArtifactsAPI.artifacts.getNBTKeys();
 				String kk = "";
 				int n = 0;
 				for(int k = keys.size() - 1; k >= 0; k--) {
 					kk = keys.get(k);
-					if(nbt.hasKey(kk)) {
-						n = nbt.getInteger(kk);
+					if(data.hasKey(kk)) {
+						n = data.getInteger(kk);
 						if(n > 0)
 							n--;
-						nbt.setInteger(kk,n);
+						data.setInteger(kk,n);
 					}
 				}
 			}
+			
 		}
 		else if(!par2World.isRemote) {
 			par1ItemStack = ArtifactsAPI.artifacts.applyRandomEffects(par1ItemStack);
@@ -476,5 +477,20 @@ public class ItemArtifact extends Item {
 			n = StatCollector.translateToLocal("type.Artifact");
 		}
         return n;//("" + StatCollector.translateToLocal(this.getUnlocalizedNameInefficiently(par1ItemStack) + ".name")).trim();
+    }
+    
+    @Override
+    public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack) {
+    	if(par1ItemStack.itemID == par2ItemStack.itemID) {
+    		return false;
+    	}
+    	else if (par2ItemStack.getItem() instanceof ItemOrichalcumDust) {
+    		if(par2ItemStack.getItemDamage()-1 == par1ItemStack.stackTagCompound.getInteger("material"))
+    			return true;
+    		return false;
+    	}
+    	else {
+    		return false;
+    	}
     }
 }

@@ -120,6 +120,7 @@ public class ComponentFoodie implements IArtifactComponent {
 					EntityPlayer player = (EntityPlayer)par3EntityLivingBase;
 					Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
 					PacketDispatcher.sendPacketToServer(packet);
+					par1ItemStack.damageItem(1, par3EntityLivingBase);
 				}
 				catch (IOException ex)
 				{
@@ -148,16 +149,6 @@ public class ComponentFoodie implements IArtifactComponent {
 	//works great
 	@Override
 	public void onUpdate(ItemStack par1ItemStack, World world, Entity par3Entity, int par4, boolean par5) {
-		
-	}
-
-	@Override
-	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		return EnumAction.none;
-	}
-
-	@Override
-	public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4) {
 		
 	}
 	
@@ -220,11 +211,6 @@ public class ComponentFoodie implements IArtifactComponent {
 	}
 
 	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem) {
-		return false;
-	}
-
-	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
 		return false;
 	}
@@ -233,17 +219,21 @@ public class ComponentFoodie implements IArtifactComponent {
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
 		//onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
 		if(!par2World.isRemote) {
-			if(par3Entity instanceof EntityLivingBase) {
-				EntityLivingBase ent = (EntityLivingBase) par3Entity;
-				ent.addPotionEffect(new PotionEffect(23, 10, 1));
+			if(par3Entity instanceof EntityPlayer) {
+				EntityPlayer ent = (EntityPlayer) par3Entity;
+				if(ent.getFoodStats().getFoodLevel() < 9) {
+					ent.addPotionEffect(new PotionEffect(23, 10, 0));
+					par1ItemStack.damageItem(1, ent);
+				}
 			}
 		}
 	}
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
-		if(worn)
+		if(worn) {
 			onHeld(itemStack, world, player, 0, true);
+		}
 	}
 
 	@Override

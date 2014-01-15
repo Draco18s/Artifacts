@@ -11,6 +11,7 @@ tile.Invisible Pressure Plate.name=Invisible Pressure Plate
 tile.Invisible Obsidiplate.name=Invisible Obsidiplate
 tile.Anti-Builder.name=Anti-Builder
 tile.Anti Anti-Builder Stone.name=Anti Anti-Builder Block
+tile.Display Pedestal.name=Display Pedestal
 
 #These names appear in the creative inventory
 item.artifact.armorCLOTH.name=Leather Armor
@@ -18,6 +19,7 @@ item.artifact.armorCHAIN.name=Chain Armor
 item.artifact.armorIRON.name=Iron Armor
 item.artifact.armorGOLD.name=Gold Armor
 item.artifact.armorDIAMOND.name=Diamond Armor
+item.orichalcum_dust=Manaesence
 
 #Material names (mirror vanilla)
 mat.Wood=Wood
@@ -27,6 +29,8 @@ mat.Stone=Stone
 mat.Iron=Iron
 mat.Gold=Gold
 mat.Diamond=Diamond
+mat.Raw=Raw
+mat.infused=infused
 
 #Item types (reflects the icon)
 type.Amulet=Amulet
@@ -65,9 +69,10 @@ pre.Shanked=Shanked
 pre.Porky=Porky
 pre.Harvesting=Harvesting
 pre.Healing=Healing
-pre.Rejuvenating=Rejuvenating	
+pre.Rejuvenating=Rejuvenating
 pre.Holy=Holy
 pre.Hardy=Hardy
+pre.Heavy=Heavy
 pre.Bulky=Bulky
 pre.Sturdy=Sturdy
 pre.Jumpy=Jumpy
@@ -94,6 +99,8 @@ pre.Swift=Swift
 pre.Quick=Quick
 pre.Sensing=Sensing
 pre.Sighted=Sighted
+pre.Reinvigorating=Reinvigorating
+pre.Sniping=Sniping
 
 #Postpended adjective names (i.e. "SWORD [of borgles]")
 post.of Rage=of Rage
@@ -142,11 +149,14 @@ post.of Movement=of Movement
 post.of Speed=of Speed
 post.of Seeing=of Seeing
 post.of Darkvision=of Darkvision
+post.of Wrath=of Wrath
+post.of Fireworks=of Fireworks
 
 #Tooltip triggers
 tool.All tools, swords, etc.=All tools, swords, etc.
 tool.Helms, boots, etc.=Helms, boots, etc.
 tool.when equipped.=when equipped.
+tool.when not equipped.=when not equipped.
 tool.passively.=passively.
 tool.after taking damage.=after taking damage.
 tool.after taking lethal damage.=after taking lethal damage.
@@ -156,6 +166,7 @@ tool.when inflicting damage.=when inflicting damage.
 tool.when destroying blocks.=when destroying blocks.
 tool.when interacting with entities.=when interacting with entities.
 tool.when dropped.=when dropped.
+tool.after taking drowning damage.=after taking drowning damage.
 
 #Tooltip duration units and associated grammar
 #"5 minute cooldown", "on cooldown: 36 seconds", "8 second fuse" etc.
@@ -183,11 +194,17 @@ effect.Slows down all mobs=Slows down all mobs
 effect.Causes lightning=Causes lightning
 effect.Provides illumination=Provides illumination
 effect.Knockback Resistance=Knockback Resistance
+effect.Damage Resistance=Damage Resistance
 effect.Jump boost=Jump boost
 effect.Health Boost=Health Boost
 effect.Heals the Player=Heals the Player
-effect.Extra drops from ore=Extra drops from ore
+effect.Extra drops from ores=Extra drops from ores
 effect.Food Saturation=Food Saturation
 effect.Shoots fireballs=Shoots fireballs
 effect.Explodes=Explodes
 effect.Digs big holes=Digs big holes
+effect.Repairs other items=Repairs other items
+effect.Water Breathing=Water Breathing
+#{H} here will use a UTF heart symbol
+effect.Hearts={H}
+effect.Shoots exploding arrows=Shoots exploding arrows

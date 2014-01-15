@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Random;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -18,6 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
+import draco18s.artifacts.client.RadarParticle;
 import draco18s.artifacts.entity.TileEntityDisplayPedestal;
 import draco18s.artifacts.entity.TileEntityTrap;
 
@@ -50,7 +52,10 @@ public class PacketHandlerClient implements IPacketHandler{
 	        		int y = dis.readInt();
 	        		int z = dis.readInt();
 	        		//if(rand.nextBoolean() && rand.nextBoolean())
-	        			drawParticleLine(p.worldObj, x+.5, y+.5, z+.5, p.posX, p.posY+.3, p.posZ);
+	        		if(y >= p.posY)
+	        			drawParticleLine(p.worldObj, x+.5, y+.5, z+.5, p.posX, p.posY+.25, p.posZ);
+	        		else
+	        			drawParticleLine(p.worldObj, x+.5, y+.5, z+.5, p.posX, p.posY-.3, p.posZ);
 	        		//System.out.println("Server particles");
 	        		break;
             	case 256:
@@ -83,14 +88,15 @@ public class PacketHandlerClient implements IPacketHandler{
     
     protected void drawParticleLine(World worldObj, double srcX, double srcY, double srcZ, double destX, double destY, double destZ)
     {
-    	int particles = 8;
-    	for (int i = 0; i < particles; i++)
+    	int particles = 2;
+    	for (int i = 0; i < particles-1; i++)
     	{
     		double trailFactor = i / (particles - 1.0D);
     		double tx = srcX + (destX - srcX) * trailFactor;// + rand.nextFloat() * 0.005D;
     		double ty = srcY + (destY - srcY) * trailFactor;// + rand.nextFloat() * 0.005D;
     		double tz = srcZ + (destZ - srcZ) * trailFactor;// + rand.nextFloat() * 0.005D;
-    		worldObj.spawnParticle("reddust", tx, ty, tz, 1.0D, 1.0D, 1.0D);
+    		//worldObj.spawnParticle("reddust", tx, ty, tz, 1.0D, 1.0D, 1.0D);
+    		Minecraft.getMinecraft().effectRenderer.addEffect(new RadarParticle(worldObj, tx, ty, tz, 3, 20));
     	}
     }
 }

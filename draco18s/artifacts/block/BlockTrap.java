@@ -23,6 +23,7 @@ import draco18s.artifacts.arrowtrapbehaviors.BehaviorDefaultDispenseItem;
 import draco18s.artifacts.arrowtrapbehaviors.IRegistry;
 import draco18s.artifacts.arrowtrapbehaviors.PositionImpl;
 import draco18s.artifacts.arrowtrapbehaviors.RegistryDefaulted;
+import draco18s.artifacts.entity.EntitySpecialArrow;
 import draco18s.artifacts.entity.TileEntityTrap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -271,7 +272,7 @@ public class BlockTrap extends BlockContainer
     		if(te instanceof TileEntityDispenser) {
     			dis = ((TileEntityDispenser) te);
 	    		AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(par2-0.2, par3-0.2, par4-0.2, par2+1.2, par3+1.2, par4+1.2);
-	    		List<EntityArrow> arrs = par1World.getEntitiesWithinAABB(EntityArrow.class, aabb);
+	    		List<EntitySpecialArrow> arrs = par1World.getEntitiesWithinAABB(EntitySpecialArrow.class, aabb);
 	    		for(int a = arrs.size()-1; a>=0; a--) {
 	    			EntityArrow arr = arrs.get(a);
 	    			for(int s=0; s<9; s++) {

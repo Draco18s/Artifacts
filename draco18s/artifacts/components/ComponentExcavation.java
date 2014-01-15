@@ -108,7 +108,7 @@ public class ComponentExcavation implements IArtifactComponent {
 				}
 			}
 		}
-		par1ItemStack.damageItem(numBlocks/2, player);
+		par1ItemStack.damageItem(numBlocks/3, player);
 		//Block block = Block.blocksList[l]
 		return false;
 	}
@@ -141,11 +141,6 @@ public class ComponentExcavation implements IArtifactComponent {
 	}
 
 	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem) {
-		return false;
-	}
-
-	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
 		return false;
 	}
@@ -160,16 +155,6 @@ public class ComponentExcavation implements IArtifactComponent {
 
 	}
 
-	@Override
-	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		return EnumAction.none;
-	}
-
-	@Override
-	public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4) {
-
-	}
-
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		par3List.add(StatCollector.translateToLocal("effect.Digs big holes"));
 	}
@@ -181,7 +166,16 @@ public class ComponentExcavation implements IArtifactComponent {
 
 	@Override
 	public String getPreAdj(Random rand) {
-		return "Excavator's";
+		String str = "";
+		switch(rand.nextInt(2)) {
+			case 0:
+				str = "Excavator's";
+				break;
+			case 1:
+				str = "Digger's";
+				break;
+		}
+		return str;
 	}
 
 	@Override

@@ -172,11 +172,6 @@ public interface IArtifactComponent {
      */
     public boolean itemInteractionForEntity(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase);
     /**
-     * Use #onEntityItemUpdate(EntityItem, String)
-     */
-    @Deprecated
-    public boolean onEntityItemUpdate(EntityItem entityItem);
-    /**
      * Called by the default implemetation of EntityItem's onUpdate method, allowing for cleaner 
      * control over the update of the item without having to write a subclass.
      * 
@@ -187,10 +182,20 @@ public interface IArtifactComponent {
     public boolean onEntityItemUpdate(EntityItem entityItem, String type);
     /**
      * Called each tick as long the item is in a player inventory.
+     * @param the item stack
+     * @param the world
+     * @param the player
+     * @param the inventory slot number
+     * @param true if the item is held (use {@link #onHeld(ItemStack, World, Entity, int, boolean)} for onHeld effects)
      */
     public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5);
     /**
      * Called each tick as long the item is the player's active item.
+     * @param the item stack
+     * @param the world
+     * @param the player
+     * @param the inventory slot number
+     * @param will always pass true
      */
     public void onHeld(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5);
     /**
@@ -198,16 +203,6 @@ public interface IArtifactComponent {
 	 * If it is not equipped, @param worn will be false (to disable 'permanent' effects).
      */
     public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn);
-    /**
-     * Not used.
-     */
-    @Deprecated
-    public EnumAction getItemUseAction(ItemStack par1ItemStack);
-    /**
-     * Not used
-     */
-    @Deprecated
-    public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4);
     /**
      * Allows items to add custom lines of information to the mouseover description.  Used for triggers that
      * don't have or need a string description.  Such as the "effective pickaxe" effect.

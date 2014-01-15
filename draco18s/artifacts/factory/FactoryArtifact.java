@@ -101,6 +101,10 @@ public class FactoryArtifact implements IArtifactAPI {
 			registerComponent(new ComponentMedkit());
 		if(config.get("Effects", "AdrenalinePump", true).getBoolean(true))
 			registerComponent(new ComponentAdrenaline());
+		if(config.get("Effects", "RepairOther", true).getBoolean(true))
+			registerComponent(new ComponentRepairOther());
+		if(config.get("Effects", "ExplodingArrows", true).getBoolean(true))
+			registerComponent(new ComponentExplodingArrows());
 		config.save();
 	}
 	
@@ -332,7 +336,7 @@ public class FactoryArtifact implements IArtifactAPI {
 			iconType = "Artifact";
 			t = 1;
 		}
-		int r2=-1,r3=-1,r4 = rand.nextInt(10);
+		int r2=-1,r3=-1,r4 = rand.nextInt(11);
 		String matName = "[Material]";
 		switch(r4) {
 			case 0:
@@ -344,7 +348,7 @@ public class FactoryArtifact implements IArtifactAPI {
 				r4 = 1;
 				matName = "Stone";
 				break;
-			case 2:
+			case 2://
 			case 7:
 			case 9:
 				r4 = 2;
@@ -422,17 +426,21 @@ public class FactoryArtifact implements IArtifactAPI {
 		Vector effectsOnItem = new Vector();
 		IArtifactComponent c;
 		int count = 0, a[];
-		int numEff = rand.nextInt(3);
-		if(numEff < 0) {
-			FMLCommonHandler.instance().getFMLLogger().log(Level.WARNING, "[Artifacts] What the hell, man?  Why was a random number [0-2] less than 0? " + numEff);
-			numEff = 0;
-		}
-		numEff++;
+		int numEff = rand.nextInt(3)+1;
 		a = new int[numEff];
 		ItemStack clone = artifact.copy();
 		for(; numEff > 0; numEff--) {
 			effID = rand.nextInt(effects.size())+1;
 			c = getComponent(effID);
+			
+			flags = c.getNegTextureBitflags();
+			//flags >>= 8;
+			
+			if((flags & 256) > 0) {
+				numEff++;
+				continue;
+			}
+			
 			if(effectsOnItem.contains(c)) {
 				numEff++;
 				if(rand.nextInt(8) == 0) {
@@ -442,6 +450,7 @@ public class FactoryArtifact implements IArtifactAPI {
 				}
 				continue;
 			}
+			
 			String trigName = c.getRandomTrigger(rand, true);
 			if(artifact.stackTagCompound.hasKey(trigName) || trigName.equals("")) {
 				//make NBTTagLists to remove this condition;
@@ -450,21 +459,13 @@ public class FactoryArtifact implements IArtifactAPI {
 				}
 				else {
 					numEff++;
-					if(rand.nextInt(8) == 0) {
+					if(effectsOnItem.size() > 0 && rand.nextInt(8) == 0) {
 						numEff--;
 						if(numEff > 0)
 							a[numEff-1] = 0;
 					}
 					continue;
 				}
-			}
-			
-			flags = c.getNegTextureBitflags();
-			//flags >>= 8;
-			
-			if((flags & 256) > 0) {
-				numEff++;
-				continue;
 			}
 			//System.out.println(effID);
 			effectsOnItem.add(c);
@@ -584,11 +585,11 @@ public class FactoryArtifact implements IArtifactAPI {
 		}
 		if(ar.getArmorMaterial().equals(EnumArmorMaterial.GOLD)) {
 			matName = "Gold";
-			r4 = 3;
+			r4 = 4;
 		}
 		if(ar.getArmorMaterial().equals(EnumArmorMaterial.DIAMOND)) {
 			matName = "Diamond";
-			r4 = 4;
+			r4 = 3;
 		}
 
 		String nameChunk = "";
@@ -832,6 +833,9 @@ public class FactoryArtifact implements IArtifactAPI {
 		int col = Color.HSBtoRGB((float)(rand.nextInt(360) / 360F), .8f, 1);
 		nbt.setLong("overlay_color", col);
 		nbt.setIntArray("allComponents", new int[] {0,0,0,0,0});
+		//does setting the name fix repair costs to some value?
+		//nbt.setCompoundTag("display", new NBTTagCompound());
+		//nbt.getCompoundTag("display").setString("Name", "Artifact");
 		return nbt;
 	}
 	

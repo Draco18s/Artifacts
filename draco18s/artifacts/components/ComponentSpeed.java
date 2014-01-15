@@ -3,6 +3,8 @@ package draco18s.artifacts.components;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -49,7 +51,7 @@ public class ComponentSpeed implements IArtifactComponent {
 
 	public ComponentSpeed() {
 	}
-	
+
 	@Override
 	public String getRandomTrigger(Random rand, boolean isArmor) {
 		if(isArmor) {
@@ -57,12 +59,12 @@ public class ComponentSpeed implements IArtifactComponent {
 		}
 		String str = "";
 		switch(rand.nextInt(2)) {
-			case 0:
-				str = "onHeld";
-				break;
-			case 1:
-				str = "onUpdate";
-				break;
+		case 0:
+			str = "onHeld";
+			break;
+		case 1:
+			str = "onUpdate";
+			break;
 		}
 		return "onHeld";
 	}
@@ -75,7 +77,9 @@ public class ComponentSpeed implements IArtifactComponent {
 			NBTTagCompound inbt = i.stackTagCompound;
 			NBTTagCompound nnbt = new NBTTagCompound();
 			NBTTagList nnbtl = new NBTTagList();
-			AttributeModifier att = new AttributeModifier("generic.movementSpeed", 0.01D + rand.nextInt(5)/200D + rand.nextInt(5)/200D, 2);
+			double amount = 0.05D + rand.nextInt(5)/200D + rand.nextInt(5)/200D;
+			i.stackTagCompound.setDouble("boostAmount",amount);
+			AttributeModifier att = new AttributeModifier("generic.movementSpeed", amount, 2);
 			nnbt.setLong("UUIDMost", att.getID().getMostSignificantBits());
 			nnbt.setLong("UUIDLeast", att.getID().getLeastSignificantBits());
 			nnbt.setString("Name", att.getName());
@@ -85,7 +89,7 @@ public class ComponentSpeed implements IArtifactComponent {
 			nnbtl.appendTag(nnbt);
 			inbt.setTag("AttributeModifiers", nnbtl);
 		}
-			//i.addEnchantment(Enchantment.sharpness, rand.nextInt(5)+1);
+		//i.addEnchantment(Enchantment.sharpness, rand.nextInt(5)+1);
 		return i;
 	}
 
@@ -172,21 +176,14 @@ public class ComponentSpeed implements IArtifactComponent {
 			}	
 		}
 	}
-	
-	@Override
-	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		return EnumAction.none;
-	}
 
-	@Override
-	public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4) {
-		
-	}
-	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		//NBTTagCompound nbt = (NBTTagCompound) par1ItemStack.stackTagCompound.getTag("AttributeModifiers");
 		//System.out.println(nbt.getDouble("Amount"));
-		if(trigger.equals("when held.")) {
+		if(!trigger.equals("when held.")) {
+			/*double amount = par1ItemStack.stackTagCompound.getDouble("boostAmount");
+			DecimalFormat myFormatter = new DecimalFormat("#.#");
+			String output = myFormatter.format(amount*100);*/
 			par3List.add(StatCollector.translateToLocal("effect.Speed Boost") + " " + StatCollector.translateToLocal("tool."+trigger) + " " + EnumChatFormatting.BLUE + "+5% Speed");
 		}
 	}
@@ -200,12 +197,12 @@ public class ComponentSpeed implements IArtifactComponent {
 	public String getPreAdj(Random rand) {
 		String str = "";
 		switch(rand.nextInt(2)) {
-			case 0:
-				str = "Swift";
-				break;
-			case 1:
-				str = "Quick";
-				break;
+		case 0:
+			str = "Swift";
+			break;
+		case 1:
+			str = "Quick";
+			break;
 		}
 		return str;
 	}
@@ -214,15 +211,15 @@ public class ComponentSpeed implements IArtifactComponent {
 	public String getPostAdj(Random rand) {
 		String str = "";
 		switch(rand.nextInt(3)) {
-			case 0:
-				str = "of Swiftness";
-				break;
-			case 1:
-				str = "of Movement";
-				break;
-			case 2:
-				str = "of Speed";
-				break;
+		case 0:
+			str = "of Swiftness";
+			break;
+		case 1:
+			str = "of Movement";
+			break;
+		case 2:
+			str = "of Speed";
+			break;
 		}
 		return str;
 	}
@@ -237,11 +234,6 @@ public class ComponentSpeed implements IArtifactComponent {
 		return 3106;
 	}
 
-	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem) {
-		return false;
-	}
-	
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
 		if(type == "onUpdate") {
@@ -272,9 +264,9 @@ public class ComponentSpeed implements IArtifactComponent {
 
 	@Override
 	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
-		
+
 	}
-	
+
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
 		if(worn)

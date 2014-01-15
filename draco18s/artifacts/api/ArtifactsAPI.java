@@ -49,42 +49,46 @@ public class ArtifactsAPI {
 	 * In this case, this would cause the {@link draco18s.artifacts.api.interfaces.IArtifactComponent#onDeath} function to trigger.<br/>
 	 * 
 	 * public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
-	 *     String uu = par1ItemStack.stackTagCompound.getString("ResurrectUUID");
-	 *     UUID resID;
+	 *     String uu = par1ItemStack.stackTagCompound.getString("HealthUUID");
+	 *     UUID hpID;
 	 *     if(uu.equals("")) {
-	 *         resID = UUID.randomUUID();
-	 *         par1ItemStack.stackTagCompound.setString("ResurrectUUID", resID.toString());
+	 *         hpID = UUID.randomUUID();
+	 *         par1ItemStack.stackTagCompound.setString("HealthUUID", hpID.toString());
 	 *     }
 	 *     else {
-	 *         resID = UUID.fromString(uu);
+	 *         hpID = UUID.fromString(uu);
 	 *     }
 	 *     if(par3Entity instanceof EntityPlayer) {
 	 *         EntityPlayer player = (EntityPlayer)par3Entity;
 	 *         AttributeInstance atinst = player.getEntityAttribute(ArtifactsAPI.OnDeathAttribute);
-	 *         AttributeModifier mod = new AttributeModifier(resID,"ResurrectComponent",1F,2);
+	 *         AttributeModifier mod = new AttributeModifier(hpID,"MaxHealthComponent",1F,2);
 	 *         //because items can be deleted from the creative inventory without any functions firing, we need to remove the attribute
 	 *         //any time the creative inventory is open.  Likewise other inventories can remove the item from the player without an event firing
 	 *         if(player.openContainer != null && player.openContainer != player.inventoryContainer || player.capabilities.isCreativeMode) {
-	 *             if(atinst.getModifier(resID) != null) {
+	 *             if(atinst.getModifier(hpID) != null) {
 	 *                 atinst.removeModifier(mod);
+	 *                 //set player's health back to normal maximum
+     *             	   if(player.getHealth() > player.getMaxHealth()) {
+     *                     player.setHealth(player.getMaxHealth());
+     *                 }
 	 *             }
 	 *         }
 	 *         else {
-	 *             if(atinst.getModifier(resID) == null) {
+	 *             if(atinst.getModifier(hpID) == null) {
 	 *                 atinst.applyModifier(mod);
 	 *             }
-	 *             par1ItemStack.stackTagCompound.setInteger("Resurrecting", player.entityId);
+	 *             par1ItemStack.stackTagCompound.setInteger("MaxHealth", player.entityId);
 	 *         }
      *     }
      *     else {
-     *         int eid = par1ItemStack.stackTagCompound.getInteger("Resurrecting");
+     *         int eid = par1ItemStack.stackTagCompound.getInteger("MaxHealth");
      *         EntityPlayer player = (EntityPlayer) par2World.getEntityByID(eid);
      *         AttributeInstance atinst = player.getEntityAttribute(ArtifactsAPI.OnDeathAttribute);
-     *         AttributeModifier mod = new AttributeModifier(resID,"ResurrectComponent",1,2);
-     *         if(atinst.getModifier(resID) != null) {
+     *         AttributeModifier mod = new AttributeModifier(hpID,"MaxHealthComponent",1,2);
+     *         if(atinst.getModifier(hpID) != null) {
      *             atinst.removeModifier(mod);
      *             if(player.getHealth() > player.getMaxHealth()) {
-     *                 player.attackEntityFrom(DamageSource.generic, 1);
+     *                 player.setHealth(player.getMaxHealth());
      *             }
      *         }
      *     }

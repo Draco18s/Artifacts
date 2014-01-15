@@ -1,13 +1,16 @@
 package draco18s.artifacts;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.ai.attributes.AttributeInstance;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import draco18s.artifacts.api.ArtifactsAPI;
 import draco18s.artifacts.api.interfaces.IArtifactComponent;
@@ -100,9 +103,20 @@ public class ArtifactEventHandler {
 	}
 	
 	@ForgeSubscribe
-	public void entityAttacked(OreDictionary.OreRegisterEvent event) {
+	public void oreRegisterEvent(OreDictionary.OreRegisterEvent event) {
 		if(event.Name.indexOf("ore") >= 0 || event.Name.indexOf("gem") >= 0) {
 			ComponentOreRadar.addOre(event.Ore);
+		}
+	}
+	
+	@ForgeSubscribe
+	public void interactEvent(PlayerInteractEvent event) {
+		World world = event.entityPlayer.worldObj;
+		if(!world.isRemote) {
+			int id = world.getBlockId(event.x, event.y, event.z);
+			if(id == Block.enchantmentTable.blockID) {
+				ArtifactTickHandler.instance.readyTickHandler(world, event.entityPlayer);
+			}
 		}
 	}
 }

@@ -134,16 +134,6 @@ public class ComponentVision implements IArtifactComponent {
 			}
 		}
 	}
-
-	@Override
-	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		return EnumAction.none;
-	}
-
-	@Override
-	public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4) {
-		
-	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		if(trigger == "passively.") {
@@ -200,11 +190,6 @@ public class ComponentVision implements IArtifactComponent {
 	@Override
 	public int getNegTextureBitflags() {
 		return 4738;
-	}
-
-	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem) {
-		return false;
 	}
 
 	@Override

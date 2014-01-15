@@ -6,6 +6,7 @@ import java.util.HashMap;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.util.Icon;
 import draco18s.artifacts.api.IItemIconAPI;
+import draco18s.artifacts.client.RadarParticle;
 
 public class FactoryItemIcons implements IItemIconAPI {
 	public int numberAmulets = 0;
@@ -224,6 +225,7 @@ public class FactoryItemIcons implements IItemIconAPI {
 			ico = iconReg.registerIcon(a.icon);
 			icons.put(a.type, ico);
 		}
+		icons.put("radar",iconReg.registerIcon("artifacts:radarparticle"));
 		return defaultIcon;
 	}
 	

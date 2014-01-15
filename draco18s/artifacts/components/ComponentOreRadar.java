@@ -93,11 +93,6 @@ public class ComponentOreRadar implements IArtifactComponent {
 	}
 
 	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem) {
-		return false;
-	}
-
-	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
 		return false;
 	}
@@ -121,15 +116,15 @@ public class ComponentOreRadar implements IArtifactComponent {
 			//System.out.println(itemStack.stackTagCompound.getInteger("orePingDelay"));
 			return;
 		}
-		itemStack.stackTagCompound.setInteger("orePingDelay_armor", 4);
+		itemStack.stackTagCompound.setInteger("orePingDelay_armor", 9);
 		int x = (int)player.posX;
 		int y = (int)player.posY;
 		int z = (int)player.posZ;
 		//+/- 4
 		boolean found = false;
-		for(int xx = x - 4; xx <= x + 4; ++xx) {
-			for(int zz = z - 4; zz <= z + 4; ++zz) {
-				for(int yy = y - 2; yy <= y + 3; ++yy) {
+		for(int yy = y - 2; yy <= y + 3; ++yy) {
+			for(int xx = x - 4; xx <= x + 4; ++xx) {
+				for(int zz = z - 4; zz <= z + 4; ++zz) {
 					boolean already = false;
 					for(int b = detectedBlocks.size()-1; b >= 0; b--) {
 						Vec3 s = detectedBlocks.get(b);
@@ -203,17 +198,6 @@ public class ComponentOreRadar implements IArtifactComponent {
 			}
 		}
 		/**/
-	}
-
-	@Override
-	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		
-		return EnumAction.none;
-	}
-
-	@Override
-	public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4) {
-		
 	}
 
 	@Override

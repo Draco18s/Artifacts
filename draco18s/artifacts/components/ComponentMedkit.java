@@ -103,12 +103,6 @@ public class ComponentMedkit implements IArtifactComponent {
 	}
 
 	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem) {
-		
-		return false;
-	}
-
-	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
 		
 		return false;
@@ -152,18 +146,6 @@ public class ComponentMedkit implements IArtifactComponent {
 	}
 
 	@Override
-	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		
-		return null;
-	}
-
-	@Override
-	public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4) {
-		
-
-	}
-
-	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
 		//par3List.add("Heals for a half-heart ten seconds after taking damage");
 	}
@@ -176,12 +158,36 @@ public class ComponentMedkit implements IArtifactComponent {
 
 	@Override
 	public String getPreAdj(Random rand) {
-		return "Staunching";
+		String str = "";
+		switch(rand.nextInt(2)) {
+			case 0:
+				str = "Healing";
+				break;
+			case 1:
+				str = "Reinvigorating";
+				break;
+			case 2:
+				str = "Staunching";
+				break;
+		}
+		return str;
 	}
 
 	@Override
 	public String getPostAdj(Random rand) {
-		return "of First Aid";
+		String str = "";
+		switch(rand.nextInt(2)) {
+			case 0:
+				str = "of Healing";
+				break;
+			case 1:
+				str = "of Rejuvenation";
+				break;
+			case 2:
+				str = "of First Aid";
+				break;
+		}
+		return str;
 	}
 
 	@Override

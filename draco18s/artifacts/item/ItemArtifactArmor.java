@@ -68,7 +68,7 @@ public class ItemArtifactArmor extends ItemArmor {
 		if(iconNum != 2) {
 	        this.setCreativeTab(null);
 		}
-		this.setMaxDamage(par2EnumArmorMaterial.getDurability(damageIndex)*3);
+		this.setMaxDamage(par2EnumArmorMaterial.getDurability(damageIndex)*2);
 	}
 	
 	public static void setupArrays() {
@@ -145,22 +145,6 @@ public class ItemArtifactArmor extends ItemArmor {
 			return 255;
 		}
     }
-	
-	/*@Override
-	public int getMaxDamage(ItemStack stack)
-    {
-		float base = 1;
-		if(stack.stackTagCompound != null) {
-			base = (stack.stackTagCompound.getInteger("material") / 2);
-			if(base == 2) {
-				base += 3;
-			}
-			else {
-				base += 7.5;
-			}		
-		}
-		return (int) (Math.pow(2, base)-1);
-    }*/
 
 	@Override
 	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
@@ -185,11 +169,6 @@ public class ItemArtifactArmor extends ItemArmor {
 		}
 		return true;
 	}
-	
-	/*public boolean isValidArmor(ItemStack stack, int armorType, Entity entity)
-    {
-        return armorType == stack.stackTagCompound.getInteger("armorType");
-    }*/
 	
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack)
     {
@@ -387,9 +366,6 @@ public class ItemArtifactArmor extends ItemArmor {
     
     public Multimap getItemAttributeModifiers()
     {
-    	/*Multimap multimap = super.getItemAttributeModifiers();
-        multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", (double)this.weaponDamage, 0));
-        return multimap;*/
     	return super.getItemAttributeModifiers();
     }
     
@@ -433,7 +409,6 @@ public class ItemArtifactArmor extends ItemArmor {
 		else {
 			par3List.add(StatCollector.translateToLocal("tool.Helms, boots, etc."));
 		}
-		//par3List.add(this.getMaxDamage() + " Durability");
     }
 
     public String getItemDisplayName(ItemStack par1ItemStack)
@@ -463,7 +438,7 @@ public class ItemArtifactArmor extends ItemArmor {
 		if(n.length() < 1) {
 			n = (StatCollector.translateToLocal(this.getUnlocalizedNameInefficiently(par1ItemStack) + ".name")).trim();
 		}
-        return n;//("" + StatCollector.translateToLocal(this.getUnlocalizedNameInefficiently(par1ItemStack) + ".name")).trim();
+        return n;
     }
     
     @Override
@@ -485,5 +460,27 @@ public class ItemArtifactArmor extends ItemArmor {
     {
     	par1ItemStack.stackTagCompound.setLong("overlay_color", par2);
     	super.func_82813_b(par1ItemStack, par2);
+    }
+    
+    @Override
+    public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack) {
+    	if(par1ItemStack.itemID == par2ItemStack.itemID) {
+    		return false;
+    	}
+    	else if (par2ItemStack.getItem() instanceof ItemOrichalcumDust) {
+    		int dam = par2ItemStack.getItemDamage();//kit
+    		--dam;
+    		int mat = par1ItemStack.stackTagCompound.getInteger("material"); //armor
+    		if(mat == 1)
+    			mat = 2;
+    		if(mat == 0)
+    			mat = 5;
+    		if(dam == mat)
+    			return true;
+    		return false;
+    	}
+    	else {
+    		return false;
+    	}
     }
 }

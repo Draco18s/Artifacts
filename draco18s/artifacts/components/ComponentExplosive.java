@@ -208,6 +208,10 @@ public class ComponentExplosive implements IArtifactComponent {
 
 	@Override
 	public boolean onBlockDestroyed(ItemStack par1ItemStack, World world, int block, int x, int y, int z, EntityLivingBase par7EntityLivingBase) {
+		int i = world.getBlockId(x, y, z);
+		int m = world.getBlockMetadata(x, y, z);
+		Block.blocksList[i].dropBlockAsItem(world, x, y, z, m, 0);
+		world.setBlockToAir(x, y, z);
 		world.newExplosion(par7EntityLivingBase, x, y, z, 3F, false, true);
 		par1ItemStack.damageItem(3, par7EntityLivingBase);
 		/*ByteArrayOutputStream bt = new ByteArrayOutputStream();
@@ -269,16 +273,6 @@ public class ComponentExplosive implements IArtifactComponent {
 	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
 		
 	}
-
-	@Override
-	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		return EnumAction.none;
-	}
-
-	@Override
-	public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4) {
-		
-	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		par3List.add(StatCollector.translateToLocal("effect.Explodes") + " " + StatCollector.translateToLocal("tool."+trigger));
@@ -310,11 +304,6 @@ public class ComponentExplosive implements IArtifactComponent {
 	@Override
 	public int getNegTextureBitflags() {
 		return 261;
-	}
-
-	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem) {
-		return false;
 	}
 
 	@Override

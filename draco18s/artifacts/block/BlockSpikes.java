@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 
 public class BlockSpikes extends BlockContainer {
 	public static Block instance;
@@ -36,7 +37,8 @@ public class BlockSpikes extends BlockContainer {
 	
 	public boolean canBlockStay(World par1World, int par2, int par3, int par4)
     {
-		return par1World.isBlockNormalCube(par2, par3-1, par4);
+		return par1World.isBlockSolidOnSide(par2, par3-1, par4, ForgeDirection.UP);
+		//return par1World.isBlockNormalCube(par2, par3-1, par4);
     }
 	
 	public void onNeighborBlockChange(World par1World, int par2, int par3, int par4, int par5)

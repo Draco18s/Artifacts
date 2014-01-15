@@ -33,6 +33,7 @@ import net.minecraft.network.packet.*;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
@@ -44,12 +45,13 @@ public class ComponentBreathing implements IArtifactComponent {
 
 	public String getRandomTrigger(Random rand, boolean isArmor) {
 		if(isArmor) {
-			switch(rand.nextInt(3)) {
+			switch(rand.nextInt(2)) {
 				case 0:
 					return "onArmorTickUpdate";
-				default:
-					return "";
+				case 1:
+					return "onTakeDamage";
 			}
+			return "";
 		}
 		String str = "";
 		switch(rand.nextInt(5)) {
@@ -156,26 +158,20 @@ public class ComponentBreathing implements IArtifactComponent {
 	public void onUpdate(ItemStack par1ItemStack, World world, Entity par3Entity, int par4, boolean par5) {
 		
 	}
-
-	@Override
-	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		return EnumAction.none;
-	}
-
-	@Override
-	public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4) {
-		
-	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		int time = 0;
-		if(trigger == "when inflicting damage.") {
+		if(trigger.equals("when inflicting damage.")) {
 			time = 15;
 		}
-		else if(trigger == "when used.") {
+		else if(trigger.equals("when used.")) {
 			time = 60;
 		}
-		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("Water Breathing"));
+		else if(trigger.equals("after taking damage.")) {
+			trigger = "after taking drowning damage.";
+			time = 2;
+		}
+		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Water Breathing"));
 		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + StatCollector.translateToLocal("time.seconds") + ")");
 	}
 
@@ -226,11 +222,6 @@ public class ComponentBreathing implements IArtifactComponent {
 	}
 
 	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem) {
-		return false;
-	}
-
-	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
 		return false;
 	}
@@ -253,7 +244,11 @@ public class ComponentBreathing implements IArtifactComponent {
 	}
 
 	@Override
-	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
+	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {
+		if(isWornArmor && event.source == DamageSource.drown) {
+			event.entityLiving.addPotionEffect(new PotionEffect(13, 40, 0));
+		}
+	}
 
 	@Override
 	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}

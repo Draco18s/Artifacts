@@ -103,12 +103,6 @@ public class ComponentAdrenaline implements IArtifactComponent {
 	}
 
 	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem) {
-		
-		return false;
-	}
-
-	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
 		
 		return false;
@@ -143,18 +137,6 @@ public class ComponentAdrenaline implements IArtifactComponent {
 				}
 			}
 		}
-	}
-
-	@Override
-	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		
-		return null;
-	}
-
-	@Override
-	public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4) {
-		
-
 	}
 
 	@Override

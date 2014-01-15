@@ -19,6 +19,8 @@ import net.minecraftforge.common.ConfigCategory;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -35,6 +37,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 import draco18s.artifacts.api.ArtifactsAPI;
 import draco18s.artifacts.arrowtrapbehaviors.DispenserBehaviors;
 import draco18s.artifacts.block.*;
@@ -46,7 +50,7 @@ import draco18s.artifacts.network.PacketHandlerClient;
 import draco18s.artifacts.network.PacketHandlerServer;
 import draco18s.artifacts.worldgen.PlaceTraps;
 
-@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "0.8.3")
+@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "0.10.0")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false,
 	clientPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerClient.class),
 	serverPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerServer.class))
@@ -103,6 +107,7 @@ public class DragonArtifacts {
 			int tb5 = config.getItem("trapblade_diamond", 4005).getInt();
 			int lightID = config.getBlock("lightblock", 4000).getInt();
 			int pedID = config.getBlock("pedestal", 4001).getInt();
+    		int repkitID = config.getItem("repairkit", 4020).getInt();
 			
 			ConfigCategory worldGenConf = config.getCategory("worldgen");
 			worldGenConf.setComment("By default this mod alters worldgen slightly, adding more and different traps to\npyramids, temples, and strongholds as well as quicksand 'lakes'.\nThese may be disabled individually.");
@@ -118,8 +123,10 @@ public class DragonArtifacts {
 			conf.comment = "Enables the blacklist for worldgen.  If enabled, world gen objects will never generate in blacklisted dimensions.\nBlacklist will override whitelist.  -1 and 1 (Nether and End) are always blacklisted.";
 			boolean useblack = conf.getBoolean(false);
 			
-			int[] white = config.get("WorldGen","dimensionWhitelistList", new int[] {0}).getIntList();
-			int[] black = config.get("WorldGen","dimensionBlacklistList", new int[] {-1,1}).getIntList();
+			Property cw = config.get("WorldGen","dimensionWhitelistList", new int[] {0});
+			Property cb = config.get("WorldGen","dimensionBlacklistList", new int[] {-1,1});
+			int[] white = cw.getIntList();
+			int[] black = cb.getIntList();
 			
 			Arrays.sort(white);
 			Arrays.sort(black);
@@ -129,8 +136,8 @@ public class DragonArtifacts {
 			String b=Arrays.toString(black);
 			String blackstring[]=b.substring(1,b.length()-1).split(", ");
 
-			config.get("WorldGen","dimensionWhitelistList", new int[] {0}).set(whitestring);
-			config.get("WorldGen","dimensionBlacklistList", new int[] {-1,1}).set(blackstring);
+			cw.set(whitestring);
+			cb.set(blackstring);
 			
 			ConfigCategory longNames = config.getCategory("general");
 			longNames.setComment("These settings dictate how item names are displayed.");
@@ -179,7 +186,7 @@ public class DragonArtifacts {
     		int ignoreID = config.getBlock("Antianti", 4018).getInt();
     		
     		ConfigCategory spawnConf = config.getCategory("spawning");
-    		spawnConf.setComment("These settings alter the spawning rarity of artifacts in the various chests.\nLower is rarer, higher is more common.  By default pyramids and temples generate ~2 total.");
+    		spawnConf.setComment("These settings alter the spawning rarity of artifacts in the various chests.\nLower is rarer, higher is more common.  By default pyramids and temples generate ~2 total.\nCross-Mod Treasure String ('ProceeduralGeneration') is for inter-mod treasure gen.");
     		int dungRare = config.get("spawning","Dungeons",0).getInt(0);
     		int pyrRare = config.get("spawning","Pyramids",4).getInt(4);
     		int tempRare = config.get("spawning","Temples",8).getInt(8);
@@ -189,6 +196,7 @@ public class DragonArtifacts {
     		int mineRare = config.get("spawning","Mineshafts",0).getInt(0);
     		int villRare = config.get("spawning","Blacksmith",1).getInt(1);
     		int wizRare = config.get("spawning","WizTowers",10).getInt(10);
+    		int procRare = config.get("spawning","crossModTreasureString_ProceeduralGeneration",5).getInt(5);
 		config.save();
         ArtifactsAPI.artifacts = new FactoryArtifact();
         ArtifactsAPI.itemicons = new FactoryItemIcons();
@@ -229,6 +237,9 @@ public class DragonArtifacts {
 		ItemArtifactArmor.doEnchName = ItemArtifact.doEnchName = enchName.getBoolean(true);
 		ItemArtifactArmor.doMatName = ItemArtifact.doMatName = matName.getBoolean(true);
 		ItemArtifactArmor.doAdjName = ItemArtifact.doAdjName = adjName.getBoolean(true);
+		
+		ItemOrichalcumDust.instance = new ItemOrichalcumDust(repkitID);
+		
 		BlockLight.instance = new BlockLight(lightID);
 		BlockPedestal.instance = new BlockPedestal(pedID);
 		BlockIllusionary.instance = new BlockIllusionary(fakeID);
@@ -251,37 +262,7 @@ public class DragonArtifacts {
 		BlockStoneBrickMovable.instance = new BlockStoneBrickMovable(ignoreID);
 		
 		GameRegistry.registerBlock(BlockWallPlate.instance, "Wallplate");
-		//LanguageRegistry.addName(BlockWallPlate.instance, "Wallplate");
-
 		GameRegistry.registerBlock(BlockWallPlate.obsidian, "Wall Obsidiplate");
-		//LanguageRegistry.addName(BlockWallPlate.obsidian, "Wall Obsidiplate");
-		
-		
-        /*GameRegistry.registerItem(ItemArtifact.instance, "Artifact");
-        GameRegistry.registerItem(ItemArtifactArmor.hcloth, "Artifact Leather Helm");
-        GameRegistry.registerItem(ItemArtifactArmor.hchain, "Artifact Chain Helm");
-        GameRegistry.registerItem(ItemArtifactArmor.hiron, "Artifact Iron Helm");
-        GameRegistry.registerItem(ItemArtifactArmor.hgold, "Artifact Gold Helm");
-        GameRegistry.registerItem(ItemArtifactArmor.hdiamond, "Artifact Diamond Helm");
-        
-        GameRegistry.registerItem(ItemArtifactArmor.ccloth, "Artifact Leather Chestplate");
-        GameRegistry.registerItem(ItemArtifactArmor.cchain, "Artifact Chain Chestplate");
-        GameRegistry.registerItem(ItemArtifactArmor.ciron, "Artifact Iron Chestplate");
-        GameRegistry.registerItem(ItemArtifactArmor.cgold, "Artifact Gold Chestplate");
-        GameRegistry.registerItem(ItemArtifactArmor.cdiamond, "Artifact Diamond Chestplate");
-
-        GameRegistry.registerItem(ItemArtifactArmor.lcloth, "Artifact Leather Leggings");
-        GameRegistry.registerItem(ItemArtifactArmor.lchain, "Artifact Chain Leggings");
-        GameRegistry.registerItem(ItemArtifactArmor.liron, "Artifact Iron Leggings");
-        GameRegistry.registerItem(ItemArtifactArmor.lgold, "Artifact Gold Leggings");
-        GameRegistry.registerItem(ItemArtifactArmor.ldiamond, "Artifact Diamond Leggings");
-        
-        GameRegistry.registerItem(ItemArtifactArmor.bcloth, "Artifact Leather Boots");
-        GameRegistry.registerItem(ItemArtifactArmor.bchain, "Artifact Chain Boots");
-        GameRegistry.registerItem(ItemArtifactArmor.biron, "Artifact Iron Boots");
-        GameRegistry.registerItem(ItemArtifactArmor.bgold, "Artifact Gold Boots");
-        GameRegistry.registerItem(ItemArtifactArmor.bdiamond, "Artifact Diamond Boots");*/
-        
         GameRegistry.registerBlock(BlockPedestal.instance, "Display Pedestal");
 		GameRegistry.registerBlock(BlockIllusionary.instance, "Illusionary Block");
 		GameRegistry.registerBlock(BlockInvisibleBlock.instance, "Invisible Block");
@@ -296,49 +277,13 @@ public class DragonArtifacts {
 		GameRegistry.registerBlock(BlockAntibuilder.instance, "Anti-Builder");
 		GameRegistry.registerBlock(BlockStoneBrickMovable.instance, "Anti Anti-Builder Stone");
         
-        /*LanguageRegistry.addName(ItemArtifact.instance, "Artifact");
-        LanguageRegistry.addName(ItemArtifactArmor.hcloth, "Artifact Leather Helm");
-        LanguageRegistry.addName(ItemArtifactArmor.hchain, "Artifact Chain Helm");
-        LanguageRegistry.addName(ItemArtifactArmor.hiron, "Artifact Iron Helm");
-        LanguageRegistry.addName(ItemArtifactArmor.hgold, "Artifact Gold Helm");
-        LanguageRegistry.addName(ItemArtifactArmor.hdiamond, "Artifact Diamond Helm");
-        LanguageRegistry.addName(ItemArtifactArmor.ccloth, "Artifact Leather Chestplate");
-        LanguageRegistry.addName(ItemArtifactArmor.cchain, "Artifact Chain Chestplate");
-        LanguageRegistry.addName(ItemArtifactArmor.ciron, "Artifact Iron Chestplate");
-        LanguageRegistry.addName(ItemArtifactArmor.cgold, "Artifact Gold Chestplate");
-        LanguageRegistry.addName(ItemArtifactArmor.cdiamond, "Artifact Diamond Chestplate");
-        LanguageRegistry.addName(ItemArtifactArmor.lcloth, "Artifact Leather Leggings");
-        LanguageRegistry.addName(ItemArtifactArmor.lchain, "Artifact Chain Leggings");
-        LanguageRegistry.addName(ItemArtifactArmor.liron, "Artifact Iron Leggings");
-        LanguageRegistry.addName(ItemArtifactArmor.lgold, "Artifact Gold Leggings");
-        LanguageRegistry.addName(ItemArtifactArmor.ldiamond, "Artifact Diamond Leggings");
-        LanguageRegistry.addName(ItemArtifactArmor.bcloth, "Artifact Leather Boots");
-        LanguageRegistry.addName(ItemArtifactArmor.bchain, "Artifact Chain Boots");
-        LanguageRegistry.addName(ItemArtifactArmor.biron, "Artifact Iron Boots");
-        LanguageRegistry.addName(ItemArtifactArmor.bgold, "Artifact Gold Boots");
-        LanguageRegistry.addName(ItemArtifactArmor.bdiamond, "Artifact Diamond Boots");
-        LanguageRegistry.addName(BlockPedestal.instance, "Display Pedestal");
-		LanguageRegistry.addName(BlockIllusionary.instance, "Illusionary Block");
-		LanguageRegistry.addName(BlockInvisibleBlock.instance, "Invisible Block");
-		LanguageRegistry.addName(BlockInvisibleBedrock.instance, "Invisible Bedrock");
-		LanguageRegistry.addName(BlockInvisiblePressurePlate.instance, "Invisible Pressure Plate");
-		LanguageRegistry.addName(BlockInvisiblePressurePlate.obsidian, "Invisible Obsidiplate");
-		LanguageRegistry.addName(BlockSpikes.instance, "Upright Spikes");
-		LanguageRegistry.addName(BlockTrap.instance, "Arrow Trap");
-		LanguageRegistry.addName(BlockCoverPlate.instance, "Cover Plate");
-		LanguageRegistry.addName(BlockQuickSand.instance, "Quicksand");
-		LanguageRegistry.addName(BlockSolidAir.instance, "Floating Block");
-		LanguageRegistry.addName(BlockAntibuilder.instance, "Anti-Builder");
-		LanguageRegistry.addName(BlockStoneBrickMovable.instance, "Anti Anti-Builder Stone");*/
-		
-		//LanguageRegistry.instance().addStringLocalization("itemGroup.tabTraps", "en_US", "Traps");
-        
         GameRegistry.registerTileEntity(TileEntityDisplayPedestal.class, "artifacts.pedestal");
 		GameRegistry.registerTileEntity(TileEntitySword.class, "artifacts.tesword");
 		GameRegistry.registerTileEntity(TileEntityTrap.class, "artifacts.arrowtrap");
 		GameRegistry.registerTileEntity(EntitySpikes.class, "artifacts.spiketrap");
 		GameRegistry.registerTileEntity(TileEntityAntibuilder.class, "artifacts.antibuilder");
         EntityRegistry.registerModEntity(EntityClayGolem.class, "EntClayGolem", 0, this, 350, 5, false);
+        EntityRegistry.registerModEntity(EntitySpecialArrow.class, "SpecialArrow", 1, this, 64, 20, true);
         EntityList.addMapping(EntityClayGolem.class, "Clay Golem", 3, 13347172, 7033635);//13347172 is pale
 		
         worldGen = new PlaceTraps(pyrm, temp, strn, quik, towers, usewhite, useblack, white, black);
@@ -349,6 +294,36 @@ public class DragonArtifacts {
         ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomChestContent(Item.enchantedBook.itemID, 0, 1, 1, 5));
         ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomChestContent(Item.diamond.itemID, 0, 2, 5, 3));
         ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomChestContent(Item.goldNugget.itemID, 0, 3, 7, 5));
+        ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomChestContent(ItemOrichalcumDust.instance.itemID, 0, 1, 1, 3));
+        ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomChestContent(ItemOrichalcumDust.instance.itemID, 1, 1, 1, 3));
+        ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomChestContent(ItemOrichalcumDust.instance.itemID, 2, 1, 1, 3));
+        ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomChestContent(ItemOrichalcumDust.instance.itemID, 3, 1, 1, 3));
+        ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomChestContent(ItemOrichalcumDust.instance.itemID, 4, 1, 1, 3));
+        ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomChestContent(Item.expBottle.itemID, 0, 1, 1, 2));
+        ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomChestContent(ItemOrichalcumDust.instance.itemID, 0, 4, 12, 2));
+        
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifact.instance.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.hcloth.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.ccloth.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.lcloth.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.bcloth.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.hchain.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.cchain.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.lchain.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.bchain.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.hiron.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.ciron.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.liron.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.biron.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.hgold.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.cgold.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.lgold.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.bgold.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.hdiamond.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.cdiamond.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.ldiamond.itemID, 0, 1, 1, procRare));
+        ChestGenHooks.getInfo("ProceeduralGeneration").addItem(new WeightedRandomArtifact(ItemArtifactArmor.bdiamond.itemID, 0, 1, 1, procRare));
+        
         ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_DESERT_CHEST).addItem(new WeightedRandomArtifact(ItemArtifact.instance.itemID, 0, 1, 1, pyrRare));
         ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST).addItem(new WeightedRandomArtifact(ItemArtifact.instance.itemID, 0, 1, 1, tempRare));
         ChestGenHooks.getInfo(ChestGenHooks.STRONGHOLD_LIBRARY).addItem(new WeightedRandomArtifact(ItemArtifact.instance.itemID, 0, 1, 1, strong1Rare));
@@ -396,18 +371,39 @@ public class DragonArtifacts {
         ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST).addItem(new WeightedRandomArtifact(ItemArtifactArmor.cgold.itemID, 0, 1, 1, tempRare));
         ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST).addItem(new WeightedRandomArtifact(ItemArtifactArmor.ciron.itemID, 0, 1, 1, tempRare));
         
-        //DungeonHooks.addDungeonLoot(new ItemStack(ItemArtifact.instance.itemID), 25,1,1);
-        
-    	ItemStack stone = new ItemStack(Block.stone);
-    	//ItemStack painting = new ItemStack(Item.painting);
-        
-        GameRegistry.addShapedRecipe(new ItemStack(BlockPedestal.instance,2), "ggg","g g","sss",'g', new ItemStack(Block.thinGlass), 's', stone);
-		//GameRegistry.addShapelessRecipe(new ItemStack(FakeBlock.instance), painting, stone);
-		GameRegistry.addShapedRecipe(new ItemStack(BlockSpikes.instance), "i i","sss", 'i', new ItemStack(Item.ingotIron), 's', new ItemStack(Block.stoneSingleSlab));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockPedestal.instance,2), "ggg","g g","sss",'g', new ItemStack(Block.thinGlass), 's', "stone"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockSpikes.instance, 2), "i i","sss", 'i', "ingotIron", 's', new ItemStack(Block.stoneSingleSlab)));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockTrap.instance), new ItemStack(Item.painting), new ItemStack(Block.dispenser));
-		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt));
-		GameRegistry.addShapedRecipe(new ItemStack(BlockWallPlate.instance, 2), "s", "s", "s", 's', stone);
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockWallPlate.instance, 2), "s", "s", "s", 's', "stone"));
 		GameRegistry.addShapedRecipe(new ItemStack(BlockWallPlate.obsidian, 2), "s", "s", "s", 's', new ItemStack(Block.obsidian));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemOrichalcumDust.instance, 2, 1), "logWood", new ItemStack(ItemOrichalcumDust.instance, 1, 0), Item.goldNugget));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemOrichalcumDust.instance, 2, 2), "cobblestone", new ItemStack(ItemOrichalcumDust.instance, 1, 0), Item.goldNugget));
+		//These oredict recipes don't work with vanilla items
+		/*GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemOrichalcumDust.instance, 1, 2), "ingotIron", new ItemStack(ItemOrichalcumDust.instance, 1, 0), Item.goldNugget));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemOrichalcumDust.instance, 1, 3), "gemDiamond", new ItemStack(ItemOrichalcumDust.instance, 1, 0), Item.goldNugget));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemOrichalcumDust.instance, 1, 4), "ingotGold", new ItemStack(ItemOrichalcumDust.instance, 1, 0), Item.goldNugget));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemOrichalcumDust.instance, 1, 5), "leather", new ItemStack(ItemOrichalcumDust.instance, 1, 0), Item.goldNugget));*/
+		GameRegistry.addShapelessRecipe(new ItemStack(ItemOrichalcumDust.instance, 2, 6), new ItemStack(Item.leather), new ItemStack(ItemOrichalcumDust.instance, 1, 0), Item.goldNugget);
+		GameRegistry.addShapelessRecipe(new ItemStack(ItemOrichalcumDust.instance, 2, 3), new ItemStack(Item.ingotIron), new ItemStack(ItemOrichalcumDust.instance, 1, 0), Item.goldNugget);
+		GameRegistry.addShapelessRecipe(new ItemStack(ItemOrichalcumDust.instance, 2, 5), new ItemStack(Item.ingotGold), new ItemStack(ItemOrichalcumDust.instance, 1, 0), Item.goldNugget);
+		GameRegistry.addShapelessRecipe(new ItemStack(ItemOrichalcumDust.instance, 2, 4), new ItemStack(Item.diamond), new ItemStack(ItemOrichalcumDust.instance, 1, 0), Item.goldNugget);
+		GameRegistry.addShapelessRecipe(new ItemStack(ItemOrichalcumDust.instance, 4, 0), new ItemStack(ItemArtifact.instance));
+		
+		for(int i = 0; i < 4; ++i) {
+			GameRegistry.addShapelessRecipe(new ItemStack(ItemOrichalcumDust.instance, 4, 0), new ItemStack(ItemArtifactArmor.clothArray[i]));
+			GameRegistry.addShapelessRecipe(new ItemStack(ItemOrichalcumDust.instance, 4, 0), new ItemStack(ItemArtifactArmor.chainArray[i]));
+			GameRegistry.addShapelessRecipe(new ItemStack(ItemOrichalcumDust.instance, 4, 0), new ItemStack(ItemArtifactArmor.ironArray[i]));
+			GameRegistry.addShapelessRecipe(new ItemStack(ItemOrichalcumDust.instance, 4, 0), new ItemStack(ItemArtifactArmor.goldArray[i]));
+			GameRegistry.addShapelessRecipe(new ItemStack(ItemOrichalcumDust.instance, 4, 0), new ItemStack(ItemArtifactArmor.diamondArray[i]));
+		}
+		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt));
+		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance, 2), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt), new ItemStack(Block.dirt));
+		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance, 3), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt));
+		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance, 4), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt));
+		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance, 5), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt));
+		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance, 6), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt));
+		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance, 7), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt));
+		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance, 8), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt));
 		MinecraftForge.setToolClass(ItemArtifact.instance, "pickaxe", 3);
     }
 	
@@ -421,5 +417,7 @@ public class DragonArtifacts {
 	public void PostInit(FMLPostInitializationEvent event) {
 		proxy.registerRenders();
 		DispenserBehaviors.registerBehaviors();
+		ArtifactTickHandler tickHandler = new ArtifactTickHandler();
+	    TickRegistry.registerTickHandler(tickHandler, Side.SERVER);
 	}
 }

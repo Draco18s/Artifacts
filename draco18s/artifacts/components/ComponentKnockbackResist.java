@@ -35,7 +35,7 @@ public class ComponentKnockbackResist implements IArtifactComponent {
 		if(isArmor)
 			return "onArmorTickUpdate";//onUpdate?
 		else
-			return "onUpdate";
+			return "";
 	}
 
 	@Override
@@ -100,12 +100,6 @@ public class ComponentKnockbackResist implements IArtifactComponent {
 	}
 
 	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem) {
-		
-		return false;
-	}
-
-	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
 		
 		return false;
@@ -160,31 +154,27 @@ public class ComponentKnockbackResist implements IArtifactComponent {
 	}
 
 	@Override
-	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		
-		return EnumAction.none;
-	}
-
-	@Override
-	public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World,
-			EntityPlayer par3EntityPlayer, int par4) {
-		
-
-	}
-
-	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
 		par3List.add(StatCollector.translateToLocal("effect.Knockback Resistance"));
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add(StatCollector.translateToLocal("effect.Knockback Resistance") + StatCollector.translateToLocal("tool." + trigger));
+		par3List.add(StatCollector.translateToLocal("effect.Knockback Resistance") + " " + StatCollector.translateToLocal("tool." + trigger));
 	}
 
 	@Override
 	public String getPreAdj(Random rand) {
-		return "Stable";
+		String str = "";
+		switch(rand.nextInt(2)) {
+			case 0:
+				str = "Stable";
+				break;
+			case 1:
+				str = "Heavy";
+				break;
+		}
+		return str;
 	}
 
 	@Override

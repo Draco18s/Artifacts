@@ -117,7 +117,7 @@ public class ComponentHealth implements IArtifactComponent {
 			EntityPlayer player = (EntityPlayer)par3Entity;
 			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
 			AttributeModifier mod;
-			mod = new AttributeModifier(healthID,"HealthBoostComponent",2.5F,0);
+			mod = new AttributeModifier(healthID,"HealthBoostComponent",5F,0);
 			if(player.openContainer != null && (player.openContainer != player.inventoryContainer || player.capabilities.isCreativeMode)) {
 				if(atinst.getModifier(healthID) != null)
 				{
@@ -144,7 +144,7 @@ public class ComponentHealth implements IArtifactComponent {
 			EntityPlayer player = (EntityPlayer) par2World.getEntityByID(eid);
 			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
 			AttributeModifier mod;
-			mod = new AttributeModifier(healthID,"HealthBoostComponent",2.5F,0);
+			mod = new AttributeModifier(healthID,"HealthBoostComponent",5F,0);
 			if(atinst.getModifier(healthID) != null)
 			{
 				atinst.removeModifier(mod);
@@ -155,19 +155,12 @@ public class ComponentHealth implements IArtifactComponent {
 			}	
 		}
 	}
-
-	@Override
-	public EnumAction getItemUseAction(ItemStack par1ItemStack) {
-		return EnumAction.none;
-	}
-
-	@Override
-	public void onPlayerStoppedUsing(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, int par4) {
-		
-	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add(StatCollector.translateToLocal("effect.Health Boost") + " " + StatCollector.translateToLocal("tool."+trigger) + " " + EnumChatFormatting.BLUE + "+5 Max HP");
+		String heart = StatCollector.translateToLocal("effect.Hearts");
+		if(heart.equals("{H}"))
+			heart = EnumChatFormatting.RED + "♥";
+		par3List.add(StatCollector.translateToLocal("effect.Health Boost") + " " + StatCollector.translateToLocal("tool."+trigger) + " " + EnumChatFormatting.BLUE + "+2.5 " + heart);
 	}
 
 	@Override
@@ -217,11 +210,6 @@ public class ComponentHealth implements IArtifactComponent {
 	}
 
 	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem) {
-		return false;
-	}
-
-	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
 		if(type == "onUpdate") {
 			String uu = entityItem.getEntityItem().stackTagCompound.getString("HealthUUID");
@@ -239,7 +227,7 @@ public class ComponentHealth implements IArtifactComponent {
 				EntityPlayer player = (EntityPlayer) ent;
 				AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
 				AttributeModifier mod;
-				mod = new AttributeModifier(healthID,"HealthBoostComponent",2.5F,0);
+				mod = new AttributeModifier(healthID,"HealthBoostComponent",5F,0);
 				if(atinst.getModifier(healthID) != null)
 				{
 					atinst.removeModifier(mod);
@@ -260,7 +248,39 @@ public class ComponentHealth implements IArtifactComponent {
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
 		if(worn) {
-			onUpdate(itemStack, world, player, 0, true);
+			//onUpdate(itemStack, world, player, 0, true);
+			String uu = itemStack.stackTagCompound.getString("HealthUUID");
+			UUID healthID;
+			if(uu.equals("")) {
+				healthID = UUID.randomUUID();
+				itemStack.stackTagCompound.setString("HealthUUID", healthID.toString());
+			}
+			else {
+				healthID = UUID.fromString(uu);
+			}
+			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
+			AttributeModifier mod;
+			mod = new AttributeModifier(healthID,"HealthBoostComponent",5F,0);
+			if(player.openContainer != null && player.capabilities.isCreativeMode) {
+				if(atinst.getModifier(healthID) != null)
+				{
+					atinst.removeModifier(mod);
+					if(player.getHealth() > player.getMaxHealth()) {
+						player.setHealth(player.getMaxHealth());
+						//player.attackEntityFrom(DamageSource.generic, 1);
+					}
+				}
+			}
+			else {
+				if(atinst.getModifier(healthID) == null)
+				{
+					atinst.applyModifier(mod);
+					if(player.getHealth() < player.getMaxHealth()) {
+						player.heal(5);
+					}
+				}
+				itemStack.stackTagCompound.setInteger("HealthBoosting", player.entityId);
+			}
 		}
 		else {
 			String uu = itemStack.stackTagCompound.getString("HealthUUID");
@@ -270,7 +290,7 @@ public class ComponentHealth implements IArtifactComponent {
 			UUID healthID = UUID.fromString(uu);
 			AttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
 			AttributeModifier mod;
-			mod = new AttributeModifier(healthID,"HealthBoostComponent",2.5F,0);
+			mod = new AttributeModifier(healthID,"HealthBoostComponent",5F,0);
 			if(atinst.getModifier(healthID) != null)
 			{
 				atinst.removeModifier(mod);
