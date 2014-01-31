@@ -159,7 +159,7 @@ public class ComponentHealth implements IArtifactComponent {
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		String heart = StatCollector.translateToLocal("effect.Hearts");
 		if(heart.equals("{H}"))
-			heart = EnumChatFormatting.RED + "♥";
+			heart = EnumChatFormatting.RED + "♥";//&hearts;
 		par3List.add(StatCollector.translateToLocal("effect.Health Boost") + " " + StatCollector.translateToLocal("tool."+trigger) + " " + EnumChatFormatting.BLUE + "+2.5 " + heart);
 	}
 

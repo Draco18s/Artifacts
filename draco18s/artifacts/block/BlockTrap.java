@@ -48,7 +48,8 @@ public class BlockTrap extends BlockContainer
 {
 	public static Block instance;
     /** Registry for all dispense behaviors. */
-    public static final IRegistry dispenseBehaviorRegistry = new RegistryDefaulted(new BehaviorDefaultDispenseItem());
+	private static IBehaviorTrapItem defaultBehavior = new BehaviorDefaultDispenseItem();
+    public static final IRegistry dispenseBehaviorRegistry = new RegistryDefaulted(defaultBehavior);
     protected Random random = new Random();
     @SideOnly(Side.CLIENT)
     protected Icon furnaceTopIcon;
@@ -203,12 +204,19 @@ public class BlockTrap extends BlockContainer
     protected void dispense(World par1World, int par2, int par3, int par4, int i)
     {
         BlockSourceImpl blocksourceimpl = new BlockSourceImpl(par1World, par2, par3, par4, i);
-        TileEntityDispenser tileentitydispenser = (TileEntityDispenser)blocksourceimpl.getBlockTileEntity();
+        TileEntityTrap tileentitydispenser = (TileEntityTrap)blocksourceimpl.getBlockTileEntity();
 
         if (tileentitydispenser != null)
         {
-            int l = tileentitydispenser.getRandomStackFromInventory();
-            
+            int l = -1;
+            int c = 0;
+            do {
+            	l = tileentitydispenser.getRandomStackFromInventory();
+            	if(l > 0 && getBehaviorForItemStack(tileentitydispenser.getStackInSlot(l)) == defaultBehavior) {
+            		l = -5;
+            		c++;
+            	}
+            } while(l < -2 && c < 20);
             if (l < 0)
             {
                 par1World.playAuxSFX(1001, par2, par3, par4, 0);

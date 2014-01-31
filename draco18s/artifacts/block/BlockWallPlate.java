@@ -89,6 +89,7 @@ public class BlockWallPlate extends BlockBasePressurePlate {
         par1World.notifyBlocksOfNeighborChange(par2-1, par3, par4, this.blockID);
         par1World.notifyBlocksOfNeighborChange(par2, par3, par4+1, this.blockID);
         par1World.notifyBlocksOfNeighborChange(par2, par3, par4-1, this.blockID);
+        par1World.notifyBlocksOfNeighborChange(par2, par3, par4, this.blockID);
     }
     
     @Override
@@ -291,7 +292,7 @@ public class BlockWallPlate extends BlockBasePressurePlate {
     }
     
     public int isProvidingStrongPower(IBlockAccess par1IBlockAccess, int par2, int par3, int par4, int par5)
-    {
+    { 
         return this.getPowerSupply(par1IBlockAccess.getBlockMetadata(par2, par3, par4));
     }
 }

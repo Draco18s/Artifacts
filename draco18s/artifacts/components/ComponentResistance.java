@@ -99,6 +99,7 @@ public class ComponentResistance implements IArtifactComponent {
 			Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
 			PacketDispatcher.sendPacketToServer(packet);
 			par1ItemStack.damageItem(1, par3EntityPlayer);
+			par1ItemStack.stackTagCompound.setInteger("onItemRightClickDelay", 200);
 		}
 		catch (IOException ex)
 		{
@@ -172,7 +173,7 @@ public class ComponentResistance implements IArtifactComponent {
 				time = 30;
 			}
 			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Damage resistance"));
-			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + StatCollector.translateToLocal("time.seconds") + ")");
+			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + " " + StatCollector.translateToLocal("time.seconds") + ")");
 		}
 	}
 

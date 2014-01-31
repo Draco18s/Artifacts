@@ -162,11 +162,11 @@ public class BlockPedestal extends BlockContainer {
 			System.out.println(" - " + ted.owner);
 		}*/
 		if(par2World.isRemote) {
-			System.out.println(ted.owner);
+			//System.out.println(ted.owner);
 		}
 		if((par1EntityPlayer.username.equals(ted.owner) || ted.owner.equals(""))) {
-	        if(par2World.isRemote)
-				System.out.println("breaking");
+	        //if(par2World.isRemote)
+				//System.out.println("breaking");
 			float f = this.getBlockHardness(par2World, par3, par4, par5);
 	        return ForgeHooks.blockStrength(this, par1EntityPlayer, par2World, par3, par4, par5);
 		}

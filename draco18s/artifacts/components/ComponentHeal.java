@@ -96,6 +96,7 @@ public class ComponentHeal implements IArtifactComponent {
 			//System.out.println("Sending packet..." + player);
 			PacketDispatcher.sendPacketToServer(packet);
 			par1ItemStack.damageItem(1, par3EntityPlayer);
+			par1ItemStack.stackTagCompound.setInteger("onItemRightClickDelay", 20);
 		}
 		catch (IOException ex)
 		{

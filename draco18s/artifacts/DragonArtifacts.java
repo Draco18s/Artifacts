@@ -50,7 +50,7 @@ import draco18s.artifacts.network.PacketHandlerClient;
 import draco18s.artifacts.network.PacketHandlerServer;
 import draco18s.artifacts.worldgen.PlaceTraps;
 
-@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "0.10.0")
+@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "0.11.4")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false,
 	clientPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerClient.class),
 	serverPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerServer.class))
@@ -139,6 +139,8 @@ public class DragonArtifacts {
 			cw.set(whitestring);
 			cb.set(blackstring);
 			
+    		boolean useAntibuild = config.get("WorldGen","UseAntibuilders",true).getBoolean(true);
+			
 			ConfigCategory longNames = config.getCategory("general");
 			longNames.setComment("These settings dictate how item names are displayed.");
 			Property enchName = config.get("general","Enchantments",true);
@@ -184,6 +186,8 @@ public class DragonArtifacts {
     		int floatID = config.getBlock("FloatingBlock", 4016).getInt();
     		int antiID = config.getBlock("Antibuilder", 4017).getInt();
     		int ignoreID = config.getBlock("Antianti", 4018).getInt();
+    		int laserSourceID = config.getBlock("LaserSource", 4021).getInt();
+    		int laserBeamID = config.getBlock("LaserBeam", 4022).getInt();
     		
     		ConfigCategory spawnConf = config.getCategory("spawning");
     		spawnConf.setComment("These settings alter the spawning rarity of artifacts in the various chests.\nLower is rarer, higher is more common.  By default pyramids and temples generate ~2 total.\nCross-Mod Treasure String ('ProceeduralGeneration') is for inter-mod treasure gen.");
@@ -251,8 +255,8 @@ public class DragonArtifacts {
 		BlockTrap.instance = new BlockTrap(arrowSlotID);
 		BlockCoverPlate.instance = new BlockCoverPlate(coverplateID);
 		BlockQuickSand.instance = new BlockQuickSand(quickID);
-		BlockWallPlate.instance = new BlockWallPlate(wallplateID, "Wallplate", Material.rock, EnumMobType.mobs).setUnlocalizedName("Wallplate");
-		BlockWallPlate.obsidian = new BlockWallPlate(owallplateID, "Wall Obsidiplate", Material.rock, EnumMobType.players).setUnlocalizedName("Wall Obsidiplate");
+		BlockWallPlate.instance = new BlockWallPlate(wallplateID, "Wallplate", Material.circuits, EnumMobType.mobs).setUnlocalizedName("Wallplate");
+		BlockWallPlate.obsidian = new BlockWallPlate(owallplateID, "Wall Obsidiplate", Material.circuits, EnumMobType.players).setUnlocalizedName("Wall Obsidiplate");
 		PseudoBlockTrap.instance = new PseudoBlockTrap(pseudoATID);
 		PseudoCoverplate.instance = new PseudoCoverplate(pseudoCPID);
 		PseudoBlockIllusionary.instance = new PseudoBlockIllusionary(pseudoFBID);
@@ -260,6 +264,8 @@ public class DragonArtifacts {
 		BlockSolidAir.instance = new BlockSolidAir(floatID);
 		BlockAntibuilder.instance = new BlockAntibuilder(antiID);
 		BlockStoneBrickMovable.instance = new BlockStoneBrickMovable(ignoreID);
+		BlockLaserBeamSource.instance = new BlockLaserBeamSource(laserSourceID);
+		BlockLaserBeam.instance = new BlockLaserBeam(laserBeamID);
 		
 		GameRegistry.registerBlock(BlockWallPlate.instance, "Wallplate");
 		GameRegistry.registerBlock(BlockWallPlate.obsidian, "Wall Obsidiplate");
@@ -276,6 +282,8 @@ public class DragonArtifacts {
 		GameRegistry.registerBlock(BlockSolidAir.instance, "Floating Block");
 		GameRegistry.registerBlock(BlockAntibuilder.instance, "Anti-Builder");
 		GameRegistry.registerBlock(BlockStoneBrickMovable.instance, "Anti Anti-Builder Stone");
+		GameRegistry.registerBlock(BlockLaserBeamSource.instance, "Laser Beam Source");
+		GameRegistry.registerBlock(BlockLaserBeam.instance, "Laser Beam");
         
         GameRegistry.registerTileEntity(TileEntityDisplayPedestal.class, "artifacts.pedestal");
 		GameRegistry.registerTileEntity(TileEntitySword.class, "artifacts.tesword");
@@ -286,7 +294,7 @@ public class DragonArtifacts {
         EntityRegistry.registerModEntity(EntitySpecialArrow.class, "SpecialArrow", 1, this, 64, 20, true);
         EntityList.addMapping(EntityClayGolem.class, "Clay Golem", 3, 13347172, 7033635);//13347172 is pale
 		
-        worldGen = new PlaceTraps(pyrm, temp, strn, quik, towers, usewhite, useblack, white, black);
+        worldGen = new PlaceTraps(pyrm, temp, strn, quik, towers, usewhite, useblack, white, black, useAntibuild);
         GameRegistry.registerWorldGenerator(worldGen);
         
         ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomArtifact(ItemArtifact.instance.itemID, 0, 1, 1, Math.max(6, wizRare)));
@@ -371,7 +379,8 @@ public class DragonArtifacts {
         ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST).addItem(new WeightedRandomArtifact(ItemArtifactArmor.cgold.itemID, 0, 1, 1, tempRare));
         ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST).addItem(new WeightedRandomArtifact(ItemArtifactArmor.ciron.itemID, 0, 1, 1, tempRare));
         
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockPedestal.instance,2), "ggg","g g","sss",'g', new ItemStack(Block.thinGlass), 's', "stone"));
+        ItemStack thinglass = new ItemStack(Block.thinGlass);
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockPedestal.instance,2), "ggg","g g","sss",'g', thinglass, 's', "stone"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockSpikes.instance, 2), "i i","sss", 'i', "ingotIron", 's', new ItemStack(Block.stoneSingleSlab)));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockTrap.instance), new ItemStack(Item.painting), new ItemStack(Block.dispenser));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockWallPlate.instance, 2), "s", "s", "s", 's', "stone"));
@@ -404,7 +413,12 @@ public class DragonArtifacts {
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance, 6), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance, 7), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance, 8), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt));
+		
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockLaserBeamSource.instance, 4), "sss", "rog", "sss", 'o', new ItemStack(ItemOrichalcumDust.instance, 4, 0), 'g', thinglass, 's', "stone", 'r', new ItemStack(Item.redstone)));
+		
 		MinecraftForge.setToolClass(ItemArtifact.instance, "pickaxe", 3);
+		
+		DamageSourceSword.instance = new DamageSourceSword("trapsword");
     }
 	
 	@EventHandler

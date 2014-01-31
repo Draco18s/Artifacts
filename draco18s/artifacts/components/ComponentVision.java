@@ -96,6 +96,7 @@ public class ComponentVision implements IArtifactComponent {
 			Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
 			PacketDispatcher.sendPacketToServer(packet);
 			par1ItemStack.damageItem(1, par3EntityPlayer);
+			par1ItemStack.stackTagCompound.setInteger("onItemRightClickDelay", 200);
 		}
 		catch (IOException ex)
 		{
@@ -145,7 +146,7 @@ public class ComponentVision implements IArtifactComponent {
 				time = 2;
 			}
 			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Night Vision"));
-			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + StatCollector.translateToLocal("time.minutes")+ ")");
+			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + " " + StatCollector.translateToLocal("time.minutes")+ ")");
 		}
 	}
 

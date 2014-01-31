@@ -135,7 +135,7 @@ public class ComponentOreRadar implements IArtifactComponent {
 					if(!already) {
 						int id = world.getBlockId(xx, yy,zz);
 						Block block = Block.blocksList[id];
-						if(block == Block.oreDiamond || block == Block.oreIron || block == Block.oreCoal || block == Block.oreRedstone || block == Block.oreRedstoneGlowing || block == Block.oreEmerald || block == Block.oreGold || block == Block.oreLapis){
+						if(block == Block.oreDiamond || block == Block.oreIron || block == Block.oreCoal || block == Block.oreRedstone || block == Block.oreRedstoneGlowing || block == Block.oreEmerald || block == Block.oreGold || block == Block.oreLapis || block == Block.oreNetherQuartz){
 							ByteArrayOutputStream bt = new ByteArrayOutputStream();
 							DataOutputStream out = new DataOutputStream(bt);
 							try

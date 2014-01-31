@@ -94,6 +94,7 @@ public class ComponentMining implements IArtifactComponent {
 
 	@Override
 	public boolean onBlockDestroyed(ItemStack par1ItemStack, World par2World, int par3, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase) {
+		par1ItemStack.damageItem(1, par7EntityLivingBase);
 		return false;
 	}
 

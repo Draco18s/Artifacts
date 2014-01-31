@@ -342,7 +342,7 @@ public class StructureMasterTower extends WorldGenerator
 		world.setBlock(i + 3, j + 2, k + 9, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 3, j + 2, k + 10, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 3, j + 2, k + 11, Block.stoneBrick.blockID, 0, 2);
-		world.setBlock(i + 3, j + 3, k + 3, Block.stoneBrick.blockID, 0, 2);
+		world.setBlock(i + 3, j + 0, k + 3, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 3, j + 3, k + 4, BlockTrap.instance.blockID, 3, 2);
 		te = world.getBlockTileEntity(i + 3, j + 3, k + 4); 
 		TileEntityTrap ted;
@@ -363,7 +363,7 @@ public class StructureMasterTower extends WorldGenerator
 		world.setBlockMetadataWithNotify(i + 3, j + 3, k + 8, 2, 2);
 		world.setBlock(i + 3, j + 3, k + 9, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 3, j + 3, k + 10, Block.stoneBrick.blockID, 0, 2);
-		world.setBlock(i + 3, j + 3, k + 11, Block.stoneBrick.blockID, 0, 2);
+		world.setBlock(i + 3, j + 0, k + 11, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 3, j + 4, k + 3, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 3, j + 4, k + 4, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 3, j + 4, k + 5, 0);
@@ -981,11 +981,11 @@ public class StructureMasterTower extends WorldGenerator
 		world.setBlock(i + 5, j + 20, k + 7, 0);
 		world.setBlock(i + 5, j + 20, k + 8, 0);
 		world.setBlock(i + 5, j + 20, k + 9, Block.stoneBrick.blockID, 0, 2);
-		world.setBlock(i + 5, j + 21, k + 5, Block.stoneBrick.blockID, 0, 2);
-		world.setBlock(i + 5, j + 21, k + 6, Block.stoneBrick.blockID, 0, 2);
-		world.setBlock(i + 5, j + 21, k + 7, Block.stoneBrick.blockID, 0, 2);
-		world.setBlock(i + 5, j + 21, k + 8, Block.stoneBrick.blockID, 0, 2);
-		world.setBlock(i + 5, j + 21, k + 9, Block.stoneBrick.blockID, 0, 2);
+		world.setBlock(i + 5, j + 21, k + 5, Block.stoneBrick.blockID, 0, 2);/*set air?*/
+		world.setBlock(i + 5, j + 21, k + 6, Block.stoneBrick.blockID, 1, 2);/*set air?*/
+		world.setBlock(i + 5, j + 21, k + 7, Block.stoneBrick.blockID, 1, 2);/*set air?*/
+		world.setBlock(i + 5, j + 21, k + 8, Block.stoneBrick.blockID, 1, 2);/*set air?*/
+		world.setBlock(i + 5, j + 21, k + 9, Block.stoneBrick.blockID, 0, 2);/*set air?*/
 		world.setBlock(i + 5, j + 22, k + 6, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 5, j + 22, k + 7, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 5, j + 23, k + 6, Block.stoneBrick.blockID, 0, 2);
@@ -1246,10 +1246,10 @@ public class StructureMasterTower extends WorldGenerator
 		world.setBlock(i + 6, j + 20, k + 6, 0);
 		world.setBlock(i + 6, j + 20, k + 8, 0);
 		world.setBlock(i + 6, j + 20, k + 9, Block.fenceIron.blockID, 0, 2);
-		world.setBlock(i + 6, j + 21, k + 5, Block.stoneBrick.blockID, 0, 2);
-		world.setBlock(i + 6, j + 21, k + 6, Block.stoneBrick.blockID, 0, 2);
-		world.setBlock(i + 6, j + 21, k + 8, Block.stoneBrick.blockID, 0, 2);
-		world.setBlock(i + 6, j + 21, k + 9, Block.stoneBrick.blockID, 0, 2);
+		world.setBlock(i + 6, j + 21, k + 5, Block.stoneBrick.blockID, 0, 2);/*set air?*/
+		world.setBlock(i + 6, j + 21, k + 6, Block.stoneBrick.blockID, 1, 2);/*set air?*/
+		world.setBlock(i + 6, j + 21, k + 8, Block.stoneBrick.blockID, 1, 2);/*set air?*/
+		world.setBlock(i + 6, j + 21, k + 9, Block.stoneBrick.blockID, 0, 2);/*set air?*/
 		world.setBlock(i + 6, j + 22, k + 5, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 6, j + 22, k + 6, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 6, j + 22, k + 8, Block.stoneBrick.blockID, 0, 2);
@@ -1658,6 +1658,7 @@ public class StructureMasterTower extends WorldGenerator
 		world.setBlock(i + 8, j + 11, k + 11, Block.planks.blockID, 0, 2);
 		world.setBlock(i + 8, j + 11, k + 12, Block.stairsWoodOak.blockID, 7, 2);
 		world.setBlock(i + 8, j + 12, k + 4, Block.stoneBrick.blockID, 0, 2);
+		//world.setBlock(i + 9, j + 11, k + 10, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 8, j + 12, k + 5, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 9, j + 13, k + 5, BlockTrap.instance.blockID, 3, 2);
 		world.setBlockMetadataWithNotify(i + 9, j + 13, k + 5, 3, 2);
@@ -1765,7 +1766,7 @@ public class StructureMasterTower extends WorldGenerator
 		world.setBlock(i + 9, j + 2, k + 9, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 9, j + 2, k + 10, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 9, j + 2, k + 11, Block.stoneBrick.blockID, 0, 2);
-		world.setBlock(i + 9, j + 3, k + 3, Block.stoneBrick.blockID, 0, 2);
+		world.setBlock(i + 9, j + 0, k + 3, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 9, j + 3, k + 4, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 9, j + 3, k + 5, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 9, j + 3, k + 6, 0);
@@ -1773,7 +1774,7 @@ public class StructureMasterTower extends WorldGenerator
 		world.setBlock(i + 9, j + 3, k + 8, 0);
 		world.setBlock(i + 9, j + 3, k + 9, 0);
 		world.setBlock(i + 9, j + 3, k + 10, Block.web.blockID, 0, 2);
-		world.setBlock(i + 9, j + 3, k + 11, Block.stoneBrick.blockID, 0, 2);
+		world.setBlock(i + 9, j + 0, k + 11, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 9, j + 4, k + 3, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 9, j + 4, k + 4, Block.stoneBrick.blockID, 0, 2);
 		world.setBlock(i + 9, j + 4, k + 5, Block.stoneBrick.blockID, 0, 2);
@@ -2079,7 +2080,7 @@ public class StructureMasterTower extends WorldGenerator
 		world.setBlock(i + 3, j + 8, k + 8, Block.ladder.blockID, 2, 2);
 		world.setBlock(i + 3, j + 9, k + 8, Block.ladder.blockID, 2, 2);
 		world.setBlock(i + 3, j + 10, k + 8, Block.ladder.blockID, 2, 2);
-		world.setBlock(i + 3, j + 11, k + 8, Block.ladder.blockID, 2, 2);
+		//world.setBlock(i + 3, j + 11, k + 8, Block.ladder.blockID, 2, 2);
 		world.setBlock(i + 4, j + 3, k + 5, Block.tripWire.blockID, 0, 2);
 		world.setBlock(i + 4, j + 3, k + 6, Block.tripWire.blockID, 0, 2);
 		world.setBlock(i + 4, j + 3, k + 7, Block.tripWire.blockID, 0, 2);
@@ -2242,16 +2243,19 @@ public class StructureMasterTower extends WorldGenerator
 		world.setBlock(i + 5, j + 12, k + 2, BlockStoneBrickMovable.instance.blockID, 0, 2);
 		world.setBlock(i + 5, j + 13, k + 2, BlockStoneBrickMovable.instance.blockID, 0, 2);
 		world.setBlock(i + 3, j + 13, k + 8, BlockStoneBrickMovable.instance.blockID, 0, 2);
-		world.setBlock(i + 3, j + 0, k + 3, BlockAntibuilder.instance.blockID, 0, 2);//anti-builder
-		world.setBlock(i + 3, j + 0, k + 11, BlockAntibuilder.instance.blockID, 0, 2);//anti-builder
-		world.setBlock(i + 9, j + 0, k + 3, BlockAntibuilder.instance.blockID, 0, 2);//anti-builder
-		world.setBlock(i + 9, j + 0, k + 11, BlockAntibuilder.instance.blockID, 0, 2);//anti-builder
-		world.setBlock(i + 3, j + 11, k + 4, BlockAntibuilder.instance.blockID, 0, 2);//anti-builder
-		world.setBlock(i + 3, j + 11, k + 10, BlockAntibuilder.instance.blockID, 0, 2);//anti-builder
-		world.setBlock(i + 9, j + 11, k + 4, BlockAntibuilder.instance.blockID, 0, 2);//anti-builder
-		world.setBlock(i + 9, j + 11, k + 10, BlockAntibuilder.instance.blockID, 0, 2);//anti-builder
-		world.setBlock(i + 5, j + 22, k + 8, BlockAntibuilder.instance.blockID, 0, 2);//anti-builder
-		world.setBlock(i + 6, j + 33, k + 7, BlockAntibuilder.instance.blockID, 0, 2);//anti-builder
+		world.setBlock(i + 3, j + 3, k + 3, BlockAntibuilder.instance.blockID, 0, 2);
+		world.setBlock(i + 3, j + 3, k + 11, BlockAntibuilder.instance.blockID, 0, 2);
+		world.setBlock(i + 9, j + 3, k + 3, BlockAntibuilder.instance.blockID, 0, 2);
+		world.setBlock(i + 9, j + 3, k + 11, BlockAntibuilder.instance.blockID, 0, 2);
+		world.setBlock(i + 3, j + 11, k + 4, BlockAntibuilder.instance.blockID, 0, 2);
+		world.setBlock(i + 3, j + 11, k + 10, Block.stoneBrick.blockID, 0, 2);
+		world.setBlock(i + 3, j + 11, k + 9, BlockAntibuilder.instance.blockID, 0, 2);
+		world.setBlock(i + 9, j + 11, k + 4, Block.stoneBrick.blockID, 0, 2);
+		//world.setBlock(i + 9, j + 11, k + 4, BlockAntibuilder.instance.blockID, 0, 2);
+		world.setBlock(i + 9, j + 12, k + 5, BlockAntibuilder.instance.blockID, 0, 2);
+		world.setBlock(i + 9, j + 11, k + 10, BlockAntibuilder.instance.blockID, 0, 2);
+		world.setBlock(i + 5, j + 22, k + 8, BlockAntibuilder.instance.blockID, 0, 2);
+		world.setBlock(i + 6, j + 33, k + 7, BlockAntibuilder.instance.blockID, 0, 2);
 
 		return true;
 	}

@@ -37,6 +37,7 @@ public class ItemOrichalcumDust extends Item {
 	
 	public String getItemDisplayName(ItemStack par1ItemStack)
     {
-		return StatCollector.translateToLocal("mat."+matName[par1ItemStack.getItemDamage()]) + " " + StatCollector.translateToLocal("mat.infused") + " " + StatCollector.translateToLocal("item.orichalcum_dust");
+		int d = par1ItemStack.getItemDamage();
+		return StatCollector.translateToLocal("mat."+matName[par1ItemStack.getItemDamage()]) + (d>0?(" " + StatCollector.translateToLocal("mat.infused")):"") + " " + StatCollector.translateToLocal("item.orichalcum_dust");
     }
 }

@@ -113,7 +113,7 @@ public class ComponentCashout implements IArtifactComponent {
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		par3List.add(StatCollector.translateToLocal("effect.Converts to emeralds") + " " + StatCollector.translateToLocal("tool."+trigger));
-		if(trigger == "when dropped") {
+		if(trigger == "when dropped.") {
 			par3List.add(EnumChatFormatting.YELLOW + "  2" + StatCollector.translateToLocal("time.second") + " " + StatCollector.translateToLocal("time.fuse"));
 		}
 	}

@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import draco18s.artifacts.DragonArtifacts;
 import draco18s.artifacts.entity.TileEntityDisplayPedestal;
 import draco18s.artifacts.item.ItemArtifact;
+import draco18s.artifacts.item.ItemArtifactArmor;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
@@ -23,7 +24,7 @@ public class PedestalRenderer extends TileEntitySpecialRenderer{
 		
 		if(tileentity instanceof TileEntityDisplayPedestal) {
 			TileEntityDisplayPedestal ped = (TileEntityDisplayPedestal)tileentity;
-			if(ped.itemEnt != null && ped.itemEnt.getEntityItem().getItem() == ItemArtifact.instance && DragonArtifacts.renderNamesInPedestals) {
+			if(ped.itemEnt != null && DragonArtifacts.renderNamesInPedestals && (ped.itemEnt.getEntityItem().getItem() == ItemArtifact.instance || ped.itemEnt.getEntityItem().getItem() instanceof ItemArtifactArmor)) {
 				//"Artifact"
 				//String s = ped.itemEnt.getEntityItem().stackTagCompound.getString("name");
 				NBTTagCompound nbt = ped.itemEnt.getEntityItem().stackTagCompound;

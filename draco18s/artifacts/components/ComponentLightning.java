@@ -100,7 +100,7 @@ public class ComponentLightning implements IArtifactComponent {
 			//System.out.println("Sending packet..." + player);
 			PacketDispatcher.sendPacketToServer(packet);
 			//par1ItemStack.damageItem(1, par3EntityPlayer);
-			par1ItemStack.stackTagCompound.setInteger("onItemRightClickDelay", 120);
+			par1ItemStack.stackTagCompound.setInteger("onItemRightClickDelay", 5);
 		}
 		catch (IOException ex)
 		{

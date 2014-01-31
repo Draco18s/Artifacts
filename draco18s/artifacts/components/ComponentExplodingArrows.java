@@ -80,7 +80,7 @@ public class ComponentExplodingArrows implements IArtifactComponent {
 			out.writeInt(par3EntityPlayer.inventory.currentItem);
 			Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
 			PacketDispatcher.sendPacketToServer(packet);
-			par1ItemStack.stackTagCompound.setInteger("onItemRightClickDelay", 240);
+			par1ItemStack.stackTagCompound.setInteger("onItemRightClickDelay", 15);
 		}
 		catch (IOException ex)
 		{

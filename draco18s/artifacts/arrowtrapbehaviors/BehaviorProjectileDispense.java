@@ -42,11 +42,11 @@ public abstract class BehaviorProjectileDispense extends BehaviorDefaultDispense
 
     protected float func_82498_a()
     {
-        return 6.0F;
+        return 3.88F;
     }
 
     protected float func_82500_b()
     {
-        return 1.1F;
+        return 1.7F;
     }
 }

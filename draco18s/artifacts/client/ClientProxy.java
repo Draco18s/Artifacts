@@ -9,6 +9,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import draco18s.artifacts.CommonProxy;
 import draco18s.artifacts.GuiHandler;
+import draco18s.artifacts.block.BlockLaserBeam;
+import draco18s.artifacts.block.BlockLaserBeamSource;
 import draco18s.artifacts.block.BlockPedestal;
 import draco18s.artifacts.block.BlockSpikes;
 import draco18s.artifacts.block.BlockTrap;
@@ -48,5 +50,15 @@ public class ClientProxy extends CommonProxy {
         render = new SpikesRenderer();
         ClientRegistry.bindTileEntitySpecialRenderer(EntitySpikes.class, render);
         MinecraftForgeClient.registerItemRenderer(BlockSpikes.instance.blockID, new ItemRenderPedestal(render, new EntitySpikes()));
+        
+        r = RenderingRegistry.getNextAvailableRenderId();
+        handler = new RenderLaserBeam(r);
+		RenderingRegistry.registerBlockHandler(handler);
+		((BlockLaserBeam)BlockLaserBeam.instance).renderID = r;
+
+        r = RenderingRegistry.getNextAvailableRenderId();
+        handler = new RenderLaserSource(r);
+		RenderingRegistry.registerBlockHandler(handler);
+		((BlockLaserBeamSource)BlockLaserBeamSource.instance).renderID = r;
 	}
 }

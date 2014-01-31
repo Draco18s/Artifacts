@@ -102,6 +102,7 @@ public class ComponentJumping implements IArtifactComponent {
 			Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
 			PacketDispatcher.sendPacketToServer(packet);
 			par1ItemStack.damageItem(1, par3EntityPlayer);
+			par1ItemStack.stackTagCompound.setInteger("onItemRightClickDelay", 200);
 		}
 		catch (IOException ex)
 		{
@@ -175,7 +176,7 @@ public class ComponentJumping implements IArtifactComponent {
 				time = 45;
 			}
 			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Jump boost"));
-			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + StatCollector.translateToLocal("time.seconds") + ")");
+			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + " " + StatCollector.translateToLocal("time.seconds") + ")");
 		}
 	}
 

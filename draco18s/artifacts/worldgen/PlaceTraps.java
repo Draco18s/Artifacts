@@ -37,12 +37,13 @@ public class PlaceTraps implements IWorldGenerator {
 	public final boolean blacklistEnabled;
 	public final int[] whitelist;
 	public final int[] blacklist;
+	public final boolean iDontLikeAntibuilders;
 
 	public PlaceTraps() {
-		this(true, true, true, true, true, false, false, new int[] {}, new int[] {});
+		this(true, true, true, true, true, false, false, new int[] {}, new int[] {}, true);
 	}
 
-	public PlaceTraps(boolean pyrm, boolean temp, boolean strn, boolean quik, boolean tow, boolean usewhite, boolean useblack, int[] white, int[] black) {
+	public PlaceTraps(boolean pyrm, boolean temp, boolean strn, boolean quik, boolean tow, boolean usewhite, boolean useblack, int[] white, int[] black, boolean antibuild) {
 		//if(quik)
 		quicksandPit = new WorldGenLakes(BlockQuickSand.instance.blockID);
 		wizardTowerA = new StructureApprenticeTower();
@@ -59,6 +60,7 @@ public class PlaceTraps implements IWorldGenerator {
 		Arrays.sort(black);
 		whitelist = white;
 		blacklist = black;
+		iDontLikeAntibuilders = antibuild;
 	}
 
 	@Override
@@ -157,7 +159,7 @@ public class PlaceTraps implements IWorldGenerator {
 				}
 			}
 			boolean TFgen = BiomeGenBase.biomeList[bid].biomeName.toLowerCase().contains("magic");
-			if(genTowers && (bid == 0 || bid == 3 || bid == 14 || TFgen)) {
+			if(genTowers && (bid == 0 || bid == 3 || bid == 14)) {
 				int R = 6;
 				int mod = 57;
 				if(bid == 0) {
@@ -166,7 +168,7 @@ public class PlaceTraps implements IWorldGenerator {
 				}
 				int mX = chunkX/R;
 				int mY = chunkZ/R;
-				ch = (((mX+1) * mX + mY * mY + (int)Math.pow(1 + mX * mY, 3)) % mod);
+				ch = (((mX+100) * mX + (mY+50) * mY + (int)Math.pow(Math.abs(mX) * mY, 3)) % mod);
 				int nx = chunkX % R;
 				int ny = chunkZ % R;
 				int Z = nx + (ny * R);
@@ -181,6 +183,9 @@ public class PlaceTraps implements IWorldGenerator {
 						m -= 2;
 					}
 					//System.out.println("Tower rand: " + m);
+					if(iDontLikeAntibuilders && m < 3) {
+						m += 6;
+					}
 					switch(m) {
 						case 0:
 						case 1:
@@ -215,7 +220,7 @@ public class PlaceTraps implements IWorldGenerator {
 				}
 				int mX = chunkX/R;
 				int mY = chunkZ/R;
-				int ch = (((mX+1) * mX + mY * mY + (int)Math.pow(dim + mX * mY, 3)) % mod);
+				int ch = (((mX+100) * mX + (mY+50) * mY + (int)Math.pow(dim + Math.abs(mX) * mY, 3)) % mod);
 				
 				int nx = chunkX % R;
 				int ny = chunkZ % R;
@@ -226,7 +231,11 @@ public class PlaceTraps implements IWorldGenerator {
 				else if(ch == Z) {
 					tex = chunkX*16+8;
 					tez = chunkZ*16+8;
-					switch(rand.nextInt(12)) {
+					int m = rand.nextInt(12);
+					if(iDontLikeAntibuilders && m < 3) {
+						m += 6;
+					}
+					switch(m) {
 						case 0:
 						case 1:
 						case 2:

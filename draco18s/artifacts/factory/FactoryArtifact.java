@@ -497,6 +497,7 @@ public class FactoryArtifact implements IArtifactAPI {
 					e.printStackTrace();
 				}
 			}
+			a[numEff-1] = effID;
 			flags = c.getTextureBitflags();
 			flags >>= 9;
 			Boots += flags % 2;

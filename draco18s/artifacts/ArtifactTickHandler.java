@@ -39,8 +39,8 @@ public class ArtifactTickHandler implements ITickHandler {
     public static ArtifactTickHandler instance;
     private boolean shouldRun = false;
     private int lastLevel = 0;
-    private float trigger1 = 0F;
-    private float trigger2 = 1F;
+    private int trigger1 = 0;
+    private int trigger2 = 1;
     private int trigger3 = 18000;
     private int trigger4 = 2;
     private boolean randomized = false;
@@ -55,8 +55,9 @@ public class ArtifactTickHandler implements ITickHandler {
 			return;
 		if(eobj.openContainer == null || eobj.openContainer == eobj.inventoryContainer) {
 			shouldRun = false;
-			float state1 = world.getCurrentMoonPhaseFactor();
+			//int state1 = world.getMoonPhase();
 			long state2 = world.getWorldTime();
+			int state1 = world.provider.getMoonPhase(state2);
 			int calc = (int) Math.abs((state2%24000) - trigger3);
 			boolean flag = ((state1 == trigger1 || state1 == trigger2) && calc < 3000);
 			if(flag) {
@@ -88,8 +89,8 @@ public class ArtifactTickHandler implements ITickHandler {
 		if(!randomized) {
 			Random r = new Random(world.provider.getSeed());
 			trigger3 = r.nextInt(4) * 6000;
-			trigger1 = r.nextFloat();
-			trigger2 = 1 - trigger1;
+			trigger1 = r.nextInt(4);
+			trigger2 = trigger1 + 4;
 		}
 		randomized = true;
 	}

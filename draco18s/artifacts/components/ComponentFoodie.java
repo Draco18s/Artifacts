@@ -96,6 +96,7 @@ public class ComponentFoodie implements IArtifactComponent {
 			Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
 			PacketDispatcher.sendPacketToServer(packet);
 			par1ItemStack.damageItem(1, par3EntityPlayer);
+			par1ItemStack.stackTagCompound.setInteger("onItemRightClickDelay", 20);
 		}
 		catch (IOException ex)
 		{
@@ -161,7 +162,7 @@ public class ComponentFoodie implements IArtifactComponent {
 			time = 1;
 		}
 		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Food Saturation"));
-		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + StatCollector.translateToLocal("time.seconds") + ")");
+		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + " " + StatCollector.translateToLocal("time.seconds") + ")");
 	}
 
 	@Override
@@ -221,7 +222,7 @@ public class ComponentFoodie implements IArtifactComponent {
 		if(!par2World.isRemote) {
 			if(par3Entity instanceof EntityPlayer) {
 				EntityPlayer ent = (EntityPlayer) par3Entity;
-				if(ent.getFoodStats().getFoodLevel() < 9) {
+				if(ent.getFoodStats().getFoodLevel() < 18) {
 					ent.addPotionEffect(new PotionEffect(23, 10, 0));
 					par1ItemStack.damageItem(1, ent);
 				}

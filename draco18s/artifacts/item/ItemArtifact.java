@@ -1,11 +1,15 @@
 package draco18s.artifacts.item;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import com.google.common.collect.Multimap;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import draco18s.artifacts.api.ArtifactsAPI;
@@ -25,6 +29,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.Icon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -186,8 +191,27 @@ public class ItemArtifact extends Item {
 			effectID = data.getInteger("onItemRightClick");
 			if(effectID != 0) {
 				//System.out.println("Activating...");
-				IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
-				return c.onItemRightClick(par1ItemStack, par2World, par3EntityPlayer);
+				int d = data.getInteger("onItemRightClickDelay");
+				System.out.println("R-click: " + d);
+				if(d <= 0) {
+					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
+					par1ItemStack = c.onItemRightClick(par1ItemStack, par2World, par3EntityPlayer);
+					d = par1ItemStack.stackTagCompound.getInteger("onItemRightClickDelay");
+					ByteArrayOutputStream bt = new ByteArrayOutputStream();
+					DataOutputStream out = new DataOutputStream(bt);
+					try
+					{
+						out.writeInt(4096);
+						out.writeInt(d);
+						out.writeInt(par3EntityPlayer.inventory.currentItem);
+						Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
+						PacketDispatcher.sendPacketToServer(packet);
+					}
+					catch (IOException ex)
+					{
+						System.out.println("couldnt send packet!");
+					}
+				}
 			}
 		}
         return par1ItemStack;
@@ -341,8 +365,8 @@ public class ItemArtifact extends Item {
 					c.onHeld(par1ItemStack, par2World, par3Entity, par4, par5);
 				}
 				//
-			}
-			else {
+			/*}
+			else {*/
 				int d = data.getInteger("onItemRightClickDelay");
 				if(d > 0)
 					d--;

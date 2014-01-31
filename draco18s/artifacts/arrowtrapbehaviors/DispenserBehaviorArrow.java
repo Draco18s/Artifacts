@@ -17,7 +17,7 @@ final class DispenserBehaviorArrow extends BehaviorProjectileDispense
         entityarrow.canBePickedUp = 1;
         entityarrow.setDamage(6);
         return entityarrow;*/
-    	EntitySpecialArrow entityarrow = new EntitySpecialArrow(par1World, par2IPosition.getX(), par2IPosition.getY(), par2IPosition.getZ(), 3);
+    	EntitySpecialArrow entityarrow = new EntitySpecialArrow(par1World, par2IPosition.getX(), par2IPosition.getY(), par2IPosition.getZ(), 2);
     	entityarrow.canBePickedUp = 1;
     	return entityarrow;
     }

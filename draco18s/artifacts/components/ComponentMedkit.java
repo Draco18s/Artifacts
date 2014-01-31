@@ -153,7 +153,7 @@ public class ComponentMedkit implements IArtifactComponent {
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		par3List.add(StatCollector.translateToLocal("effect.Heals for a half-heart"));
-		par3List.add("   10" + StatCollector.translateToLocal("time.seconds") + " " + StatCollector.translateToLocal("tool."+trigger));
+		par3List.add("   10 " + StatCollector.translateToLocal("time.seconds") + " " + StatCollector.translateToLocal("tool."+trigger));
 	}
 
 	@Override

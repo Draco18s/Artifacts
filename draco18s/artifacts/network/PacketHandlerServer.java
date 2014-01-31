@@ -178,15 +178,25 @@ public class PacketHandlerServer implements IPacketHandler{
             		if(dis.readInt() == p.entityId) {
                         //Vec3 vec3 = p.getLook(1.0F);
                         //double d8 = 4.0D;
-                        EntitySpecialArrow arrow = new EntitySpecialArrow(world, p, 2, 2, ArrowEffect.EXPLOSIVE);
-                        world.spawnEntityInWorld(arrow);
                         is = p.inventory.getStackInSlot(dis.readInt());
-                        is.damageItem(1, p);
-                        world.playSoundAtEntity((Entity) player, "random.bow", 1.0F, 1.2F);
+                        if(is != null) {
+	                        EntitySpecialArrow arrow = new EntitySpecialArrow(world, p, 2, 2, ArrowEffect.EXPLOSIVE);
+	                        world.spawnEntityInWorld(arrow);
+	                        is.damageItem(1, p);
+	                        world.playSoundAtEntity((Entity) player, "random.bow", 1.0F, 1.2F);
+                        }
                         //System.out.println(is.getItemDamage());
             		}
             		else {
             			System.out.println("Oh god, what player! D:");
+            		}
+            		break;
+            	case 4096:
+            		//add right-click delay
+            		int d = dis.readInt();
+            		is = p.inventory.getStackInSlot(dis.readInt());
+            		if(is!=null) {
+            			is.stackTagCompound.setInteger("onItemRightClickDelay", d);
             		}
             		break;
             }

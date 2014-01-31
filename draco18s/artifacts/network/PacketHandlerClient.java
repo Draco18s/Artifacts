@@ -9,6 +9,7 @@ import java.io.Reader;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -19,9 +20,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
-import draco18s.artifacts.client.RadarParticle;
-import draco18s.artifacts.entity.TileEntityDisplayPedestal;
-import draco18s.artifacts.entity.TileEntityTrap;
+import draco18s.artifacts.client.*;
+import draco18s.artifacts.entity.*;
 
 public class PacketHandlerClient implements IPacketHandler{
 	Random rand = new Random();
@@ -53,9 +53,9 @@ public class PacketHandlerClient implements IPacketHandler{
 	        		int z = dis.readInt();
 	        		//if(rand.nextBoolean() && rand.nextBoolean())
 	        		if(y >= p.posY)
-	        			drawParticleLine(p.worldObj, x+.5, y+.5, z+.5, p.posX, p.posY+.25, p.posZ);
+	        			drawParticle(p.worldObj, x+.5, y+.5, z+.5, "radar", 0);
 	        		else
-	        			drawParticleLine(p.worldObj, x+.5, y+.5, z+.5, p.posX, p.posY-.3, p.posZ);
+	        			drawParticle(p.worldObj, x+.5, y+.5, z+.5, "radar", 0);
 	        		//System.out.println("Server particles");
 	        		break;
             	case 256:
@@ -73,6 +73,14 @@ public class PacketHandlerClient implements IPacketHandler{
             			//System.out.println("New owner: " + str);
             		}
             		break;
+            	case 4097:
+            		double tx = dis.readDouble();
+            		double ty = dis.readDouble();
+	        		double tz = dis.readDouble();
+	        		int a = dis.readInt();
+	        		//if(rand.nextBoolean() && rand.nextBoolean())
+	        		drawParticle(p.worldObj, tx, ty, tz, "reset", a);
+	        		break;
             	default:
             		return;
             }
@@ -86,17 +94,19 @@ public class PacketHandlerClient implements IPacketHandler{
         }
     }
     
-    protected void drawParticleLine(World worldObj, double srcX, double srcY, double srcZ, double destX, double destY, double destZ)
+    protected void drawParticle(World worldObj, double srcX, double srcY, double srcZ, String par1Str, int age)
     {
-    	int particles = 2;
-    	for (int i = 0; i < particles-1; i++)
-    	{
-    		double trailFactor = i / (particles - 1.0D);
-    		double tx = srcX + (destX - srcX) * trailFactor;// + rand.nextFloat() * 0.005D;
-    		double ty = srcY + (destY - srcY) * trailFactor;// + rand.nextFloat() * 0.005D;
-    		double tz = srcZ + (destZ - srcZ) * trailFactor;// + rand.nextFloat() * 0.005D;
-    		//worldObj.spawnParticle("reddust", tx, ty, tz, 1.0D, 1.0D, 1.0D);
-    		Minecraft.getMinecraft().effectRenderer.addEffect(new RadarParticle(worldObj, tx, ty, tz, 3, 20));
-    	}
+		double tx = srcX;
+		double ty = srcY;
+		double tz = srcZ;
+		EntityFX particle = null;
+		if(par1Str.equals("radar")) {
+			particle = new RadarParticle(worldObj, tx, ty, tz, 3, 20);
+		}
+		if(par1Str.equals("reset")) {
+			particle = new AntibuilderParticle(worldObj, tx, ty, tz, 1, age, 48);
+		}
+		if(particle != null)
+			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
     }
 }

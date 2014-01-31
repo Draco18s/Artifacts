@@ -88,7 +88,7 @@ public class ComponentFireball implements IArtifactComponent {
 			out.writeInt(par3EntityPlayer.inventory.currentItem);
 			Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
 			PacketDispatcher.sendPacketToServer(packet);
-			par1ItemStack.stackTagCompound.setInteger("onItemRightClickDelay", 240);
+			par1ItemStack.stackTagCompound.setInteger("onItemRightClickDelay", 20);
 		}
 		catch (IOException ex)
 		{

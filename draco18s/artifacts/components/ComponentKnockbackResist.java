@@ -64,9 +64,7 @@ public class ComponentKnockbackResist implements IArtifactComponent {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
-			EntityPlayer par3EntityPlayer) {
-		
+	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer) {
 		return par1ItemStack;
 	}
 
