@@ -176,7 +176,7 @@ public class ComponentJumping implements IArtifactComponent {
 				time = 45;
 			}
 			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Jump boost"));
-			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + " " + StatCollector.translateToLocal("time.seconds") + ")");
+			par3List.add("  " + EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + " "  + StatCollector.translateToLocal("time.seconds") + ")");
 		}
 	}
 

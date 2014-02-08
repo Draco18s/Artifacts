@@ -1,11 +1,17 @@
 package draco18s.artifacts;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.ai.attributes.AttributeInstance;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -14,24 +20,14 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.oredict.OreDictionary;
 import draco18s.artifacts.api.ArtifactsAPI;
 import draco18s.artifacts.api.interfaces.IArtifactComponent;
+import draco18s.artifacts.client.ClientProxy;
+import draco18s.artifacts.client.TextureCalendar;
 import draco18s.artifacts.components.ComponentOreRadar;
 import draco18s.artifacts.components.ComponentResurrect;
 import draco18s.artifacts.item.ItemArtifactArmor;
+import draco18s.artifacts.item.ItemCalendar;
 
 public class ArtifactEventHandler {
-	/*@ForgeSubscribe
-	public void EntityTickEvent(LivingEvent event) {
-		if(event.entity instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer)event.entity;
-			AttributeInstance atinst = player.getEntityAttribute(ArtifactsAPI.OnDeathAttribute);
-			if(atinst == null) {
-				System.out.println("Giving the player a death attribute");
-				player.getAttributeMap().func_111150_b(ArtifactsAPI.OnDeathAttribute);
-				System.out.println("Success!");
-			}
-		}
-	}*/
-
 	@ForgeSubscribe
 	public void EntityHurtEvent(LivingHurtEvent event) {
 		//System.out.println("Hurt event detected");
@@ -117,6 +113,20 @@ public class ArtifactEventHandler {
 			if(id == Block.enchantmentTable.blockID) {
 				ArtifactTickHandler.instance.readyTickHandler(world, event.entityPlayer);
 			}
+		}
+	}
+	
+	@ForgeSubscribe
+	@SideOnly(Side.CLIENT)
+	public void registerTextures(TextureStitchEvent.Pre event) {
+		//System.out.println("before: " + event.map.getTextureExtry("artifacts:calendar"));
+		//TextureMap tm = (TextureMap)Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.locationItemsTexture);
+		//boolean re = tm.setTextureEntry("artifacts:calendar", new TextureCalendar("artifacts:calendar"));
+		//System.out.println("Able to register calendar texture: " + re);
+		//ItemCalendar.instance.setTextureName("artifacts:calendar");
+		//System.out.println(event.map.getTextureExtry("artifacts:calendar"));
+		if(event.map.textureType == 1 ) {
+			event.map.setTextureEntry("artifacts:calendar", ClientProxy.calendar = new TextureCalendar("artifacts:calendar"));
 		}
 	}
 }

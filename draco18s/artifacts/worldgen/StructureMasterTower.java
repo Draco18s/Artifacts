@@ -13,6 +13,7 @@ import draco18s.artifacts.entity.TileEntityTrap;
 import draco18s.artifacts.item.*;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -2190,7 +2191,7 @@ public class StructureMasterTower extends WorldGenerator
 		e = new EntityPainting(world, i+10, j+13, k+12, 2, "Wither");
 		world.spawnEntityInWorld(e);*/
 		
-		EntityPainting e = new EntityPainting(world, i+5, j+13, k+9, 2);
+		EntityPainting e = new EntityPainting(world, i+5, j+13, k+9, 3);
 		NBTTagCompound nbt = new NBTTagCompound();
 		e.writeEntityToNBT(nbt);
 		nbt.setString("Motive", "Sunset");
@@ -2210,6 +2211,14 @@ public class StructureMasterTower extends WorldGenerator
 		nbt.setString("Motive", "Wither");
 		e.readEntityFromNBT(nbt);
 		world.spawnEntityInWorld(e);
+		//world.setBlock(i + 7, j + 8, k + 7, Block.torchWood.blockID, 0, 2);
+		//i + 7, j + 8, k + 8
+		EntityItemFrame f = new EntityItemFrame(world, i + 4, j + 9, k + 6, 3);
+		f.setDisplayedItem(new ItemStack(ItemCalendar.instance));
+		//nbt = new NBTTagCompound();
+		//f.writeEntityToNBT(nbt);
+		//f.readEntityFromNBT(nbt);
+		world.spawnEntityInWorld(f);
 		
 		/*ByteArrayOutputStream bt = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(bt);

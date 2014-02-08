@@ -29,7 +29,8 @@ public interface IArtifactAPI {
 	public ItemStack generateRandomArtifact();
 		
 	/**
-	 * Adds a component to the component list
+	 * Adds a component to the component list.  Mods should supply their own configs and pass null for any
+	 * disabled component to insure that the list remains static as the user changes settings.
 	 * @param component the component to register
 	 * @author Draco18s
 	 */
@@ -73,11 +74,23 @@ public interface IArtifactAPI {
 	
 	/**
 	 * Allows for artifacts to generate in custom treasure gen.  Plugins should provide their own
-	 * configuration options for enabling/disabling and altering the rarity.
+	 * configuration options for enabling/disabling and altering the rarity.<br/>
+	 * Depreciated, see now the typed version.
 	 * @param treasureString
 	 * @param rarity
 	 */
+	@Deprecated
 	public void setTreasureGeneration(String treasureString, int rarity);
+	
+	/**
+	 * Allows for artifacts to generate in custom treasure gen.  Plugins should provide their own
+	 * configuration options for enabling/disabling and altering the rarity.
+	 * @see {@link WeightedRandomArtifact}
+	 * @param treasureString
+	 * @param type
+	 * @param rarity
+	 */
+	public void setTreasureGeneration(String treasureString, ArtifactType type, int rarity);
 	
 	/**
 	 * Some effects may require some kind of delay; e.g. any right-click trigger has a built-in
@@ -101,4 +114,19 @@ public interface IArtifactAPI {
 	 * @return
 	 */
 	public ArrayList<String> getNBTKeys();
+	
+	/**
+	 * These are very generic artifact types.<br/>
+	 * Tool refers to the original artifact that comes in sword, trinket, and wand flavors.<br/>
+	 * The rest are armors, divided by material type.
+	 */
+	public enum ArtifactType
+    {
+        TOOL,
+        ARMOR_CLOTH,
+        ARMOR_CHAIN,
+        ARMOR_IRON,
+        ARMOR_GOLD,
+        ARMOR_DIAMOND;
+    }
 }

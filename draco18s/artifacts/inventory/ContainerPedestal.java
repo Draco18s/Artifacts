@@ -39,22 +39,20 @@ public class ContainerPedestal extends Container {
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		ItemStack stack = null;
 		Slot slotObject = (Slot) inventorySlots.get(slot);
+
 		//null checks and checks if the item can be stacked (maxStackSize > 1)
 		if (slotObject != null && slotObject.getHasStack()) {
 			ItemStack stackInSlot = slotObject.getStack();
 			stack = stackInSlot.copy();
 
 			//merges the item into player inventory since its in the tileEntity
-			//Value here is the number of slots in the container
-			if (slot < 1) {
-				//number of slots in the container, 36+[val]
-				if (!this.mergeItemStack(stackInSlot, 1, 37, true)) {
+			if (slot < 9) {
+				if (!this.mergeItemStack(stackInSlot, 0, 35, true)) {
 					return null;
 				}
 			}
 			//places it into the tileEntity is possible since its in the player inventory
-			//0, number of slots in container
-			else if (!this.mergeItemStack(stackInSlot, 0, 1, false)) {
+			else if (!this.mergeItemStack(stackInSlot, 0, 9, false)) {
 				return null;
 			}
 

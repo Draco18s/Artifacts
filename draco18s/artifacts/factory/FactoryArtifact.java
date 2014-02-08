@@ -19,9 +19,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.Configuration;
-import draco18s.artifacts.WeightedRandomArtifact;
 import draco18s.artifacts.api.ArtifactsAPI;
 import draco18s.artifacts.api.IArtifactAPI;
+import draco18s.artifacts.api.WeightedRandomArtifact;
 import draco18s.artifacts.api.interfaces.IArtifactComponent;
 import draco18s.artifacts.components.*;
 import draco18s.artifacts.item.ItemArtifact;
@@ -47,64 +47,123 @@ public class FactoryArtifact implements IArtifactAPI {
 	private int Leggings;    //4096
 	private final IArtifactComponent baseDamage = new ComponentNormalDamage();
 	private ArrayList<String> nbtkeys = new ArrayList<String>();
+	
+	//private int allHelms = 0;
+	//private int allChest = 0;
+	//private int allLeggs = 0;
+	//private int allBoots = 0;
 
 	public FactoryArtifact() {
 		Configuration config = new Configuration(new File("./config", "ArtifactEffects.cfg"));
 		config.load();
 		if(config.get("Effects", "Healing", true).getBoolean(true))
 			registerComponent(new ComponentHeal());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "ExtraDamage", true).getBoolean(true))
 			registerComponent(new ComponentDamage());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "Fireballs", true).getBoolean(true))
 			registerComponent(new ComponentFireball());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "Harvesting", true).getBoolean(true))
 			registerComponent(new ComponentHarvesting());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "Lightning", true).getBoolean(true))
 			registerComponent(new ComponentLightning());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "Mining", true).getBoolean(true))
 			registerComponent(new ComponentMining());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "Exploding", true).getBoolean(true))
 			registerComponent(new ComponentExplosive());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "Illumination", true).getBoolean(true))
 			registerComponent(new ComponentLight());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "Value", true).getBoolean(true))
 			registerComponent(new ComponentCashout());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "Resistance", true).getBoolean(true)) //#10
 			registerComponent(new ComponentResistance());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "JumpBoost", true).getBoolean(true))
 			registerComponent(new ComponentJumping());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "NightVision", true).getBoolean(true))
 			registerComponent(new ComponentVision());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "WaterBreathing", true).getBoolean(true))
 			registerComponent(new ComponentBreathing());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "FoodSaturation", true).getBoolean(true))
 			registerComponent(new ComponentFoodie());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "MoveSpeed", true).getBoolean(true))
 			registerComponent(new ComponentSpeed());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "MaxHealth", true).getBoolean(true))
 			registerComponent(new ComponentHealth());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "ToolRepair", true).getBoolean(true))
 			registerComponent(new ComponentRepair());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "MassWeb", true).getBoolean(true))
 			registerComponent(new ComponentMassWeb());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "AirWalking", true).getBoolean(true))
 			registerComponent(new ComponentAirWalk());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "Excavation", true).getBoolean(true)) //#20
 			registerComponent(new ComponentExcavation());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "KnockbackResist", true).getBoolean(true))
 			registerComponent(new ComponentKnockbackResist());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "Resurrection", true).getBoolean(true))
 			registerComponent(new ComponentResurrect());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "OreFinder", true).getBoolean(true))
 			registerComponent(new ComponentOreRadar());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "FirstAidKit", true).getBoolean(true))
 			registerComponent(new ComponentMedkit());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "AdrenalinePump", true).getBoolean(true))
 			registerComponent(new ComponentAdrenaline());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "RepairOther", true).getBoolean(true))
 			registerComponent(new ComponentRepairOther());
+		else
+			registerComponent(null);
 		if(config.get("Effects", "ExplodingArrows", true).getBoolean(true))
 			registerComponent(new ComponentExplodingArrows());
+		else
+			registerComponent(null);
 		config.save();
 	}
 	
@@ -112,7 +171,10 @@ public class FactoryArtifact implements IArtifactAPI {
 	public IArtifactComponent getComponent(int componentID) {
 		IArtifactComponent eff = (IArtifactComponent)effects.get(componentID);
 		if(eff == null) {
-			System.out.print("ERROR: NO EFFECT ID "+ componentID +" REGISTERED!");
+			if(componentID <= 0) {
+				Thread.dumpStack();
+				System.out.print("ERROR: NO EFFECT ID "+ componentID +" REGISTERED!");
+			}
 		}
 		return eff;
 	}
@@ -159,9 +221,13 @@ public class FactoryArtifact implements IArtifactAPI {
 		int count = 0, a[];
 		int numEff = rand.nextInt(5)+1;
 		a = new int[numEff];
+		//System.out.println("Generating item");
 		for(; numEff > 0; numEff--) {
-			effID = rand.nextInt(effects.size())+1;
-			c = getComponent(effID);
+			do {
+				effID = rand.nextInt(effects.size())+1;
+				c = getComponent(effID);
+				//System.out.println("Adding effect #" + effID + (c == null?" (disabled)":""));
+			} while(c == null);
 			if(c instanceof ComponentRepair && a.length < 3) {
 				numEff++;
 				int[]b = a.clone();
@@ -413,6 +479,7 @@ public class FactoryArtifact implements IArtifactAPI {
 		
 		artifact.stackTagCompound.setIntArray("allComponents", a);
 		if(rand.nextInt(8) == 0) {
+			//System.out.println("Applying some enchantments");
 			artifact = enchantArtifact(artifact, effectsOnItem, (iconType == "Sword" || iconType == "Dagger"));
 		}
 		return artifact;
@@ -420,7 +487,10 @@ public class FactoryArtifact implements IArtifactAPI {
 	
 
 	private ItemStack applyRandomArmorEffects(ItemStack artifact) {
-		
+		Boots = 1;
+		Helm = 1;
+		Chestplate = 1;
+		Leggings = 1;
 		int flags,effID;
 		String artiName = "";
 		Vector effectsOnItem = new Vector();
@@ -428,10 +498,14 @@ public class FactoryArtifact implements IArtifactAPI {
 		int count = 0, a[];
 		int numEff = rand.nextInt(3)+1;
 		a = new int[numEff];
-		ItemStack clone = artifact.copy();
+		//ItemStack clone = artifact.copy();
+		//System.out.println("Generating armor");
 		for(; numEff > 0; numEff--) {
-			effID = rand.nextInt(effects.size())+1;
-			c = getComponent(effID);
+			do {
+				effID = rand.nextInt(effects.size())+1;
+				c = getComponent(effID);
+				//System.out.println("Adding effect #" + effID + (c == null?" (disabled)":""));
+			} while(c == null);
 			
 			flags = c.getNegTextureBitflags();
 			//flags >>= 8;
@@ -526,7 +600,11 @@ public class FactoryArtifact implements IArtifactAPI {
 					a[numEff-1] = 0;
 			}
 		}
-		
+
+		//System.out.println("Helm: " + Helm);
+		//System.out.println("Chestplate: " + Chestplate);
+		//System.out.println("Leggings: " + Leggings);
+		//System.out.println("Boots: " + Boots);
 		Boots = Math.max(Boots, 0);
 		Chestplate = Math.max(Chestplate, 0);
 		Helm = Math.max(Helm, 0);
@@ -535,39 +613,48 @@ public class FactoryArtifact implements IArtifactAPI {
 		int t = Boots + Chestplate + Helm + Leggings;
 		int r = 0;
 		String iconType = "";
-		if(t > 0) {
-			r = rand.nextInt(t);
+		if(t < 0) {
+			Boots = 1;
+			Chestplate = 1;
+			Helm = 1;
+			Leggings = 1;
+			t = 4;
+		}
+		//if(t > 0)
+			r = rand.nextInt(t)+1;
+			//System.out.println("r: " + r);
 			if((r -= Boots) <= 0) {
 				iconType = "Boots";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberBoots;
 				artifact.stackTagCompound.setInteger("armorType", 3);
+				//allBoots++;
 			}
 			else if((r -= Chestplate) <= 0) {
 				iconType = "Chestplate";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberChestplates;
 				artifact.stackTagCompound.setInteger("armorType", 1);
+				//allChest++;
 			}
 			else if((r -= Helm) <= 0) {
 				iconType = "Helm";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberHelms;
 				artifact.stackTagCompound.setInteger("armorType", 0);
+				//allHelms++;
 			}
 			else if((r -= Leggings) <= 0) {
 				iconType = "Leggings";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberLeggings;
 				artifact.stackTagCompound.setInteger("armorType", 2);
+				//allLeggs++;
 			}
 			else {
 				iconType = "Artifact";
+				System.out.println("No prefrred icon possible?");
 				System.out.println((Boots + Chestplate + Helm + Leggings));
 				System.out.println(r);
 				t = 1;
 			}
-		}
-		else {
-			iconType = "Artifact";
-			t = 1;
-		}
+		//}
 		
 		String matName = "[Material]";
 		int r4 = -1;
@@ -642,6 +729,7 @@ public class FactoryArtifact implements IArtifactAPI {
 		
 		artifact.stackTagCompound.setIntArray("allComponents", a);
 		if(rand.nextInt(8) == 0) {
+			//System.out.println("Applying some enchantments");
 			artifact = enchantArtifactArmor(artifact, effectsOnItem, iconType);
 		}
 		
@@ -669,10 +757,10 @@ public class FactoryArtifact implements IArtifactAPI {
 					break;
 			}
 			//int offset = (nbtType - aa.armorType)*5;
-			//System.out.println("Changing from " + artifact.itemID + " to " + (artifact.itemID+offset));
+			//System.out.println("Changing id from " + artifact.itemID + " to " + newid + " to match.");
 			artifact.itemID = newid;
 		}
-		
+		//System.out.println(allHelms + ":" + allChest + ":" + allLeggs + ":" + allBoots);
 		return artifact;
 	}
 
@@ -1029,5 +1117,46 @@ public class FactoryArtifact implements IArtifactAPI {
 	
 	public ArrayList<String> getNBTKeys() {
 		return (ArrayList<String>)nbtkeys.clone();
+	}
+
+	@Override
+	public void setTreasureGeneration(String treasureString, ArtifactType type, int rarity) {
+		//if(type == ArtifactType.TOOL)
+		//	ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifact.instance.itemID, 0, 1, 1, rarity));
+		switch(type) {
+			case TOOL:
+				ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifact.instance.itemID, 0, 1, 1, rarity));
+				break;
+			case ARMOR_CLOTH:
+				ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.hcloth.itemID, 0, 1, 1, rarity));
+		        ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.ccloth.itemID, 0, 1, 1, rarity));
+		        ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.lcloth.itemID, 0, 1, 1, rarity));
+		        ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.bcloth.itemID, 0, 1, 1, rarity));
+		        break;
+			case ARMOR_CHAIN:
+				ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.hchain.itemID, 0, 1, 1, rarity));
+		        ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.cchain.itemID, 0, 1, 1, rarity));
+		        ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.lchain.itemID, 0, 1, 1, rarity));
+		        ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.bchain.itemID, 0, 1, 1, rarity));
+		        break;
+			case ARMOR_IRON:
+				ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.hiron.itemID, 0, 1, 1, rarity));
+		        ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.ciron.itemID, 0, 1, 1, rarity));
+		        ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.liron.itemID, 0, 1, 1, rarity));
+		        ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.biron.itemID, 0, 1, 1, rarity));
+		        break;
+			case ARMOR_GOLD:
+				ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.hgold.itemID, 0, 1, 1, rarity));
+		        ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.cgold.itemID, 0, 1, 1, rarity));
+		        ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.lgold.itemID, 0, 1, 1, rarity));
+		        ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.bgold.itemID, 0, 1, 1, rarity));
+		        break;
+			case ARMOR_DIAMOND:
+				ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.hdiamond.itemID, 0, 1, 1, rarity));
+		        ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.cdiamond.itemID, 0, 1, 1, rarity));
+		        ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.ldiamond.itemID, 0, 1, 1, rarity));
+		        ChestGenHooks.getInfo(treasureString).addItem(new WeightedRandomArtifact(ItemArtifactArmor.bdiamond.itemID, 0, 1, 1, rarity));
+		        break;
+		}
 	}
 }

@@ -173,7 +173,7 @@ public class ComponentBreathing implements IArtifactComponent {
 			time = 2;
 		}
 		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Water Breathing"));
-		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + " " + StatCollector.translateToLocal("time.seconds") + ")");
+		par3List.add("  " + EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + StatCollector.translateToLocal("time.seconds") + ")");
 	}
 
 	@Override

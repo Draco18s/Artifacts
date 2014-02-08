@@ -1,5 +1,8 @@
 package draco18s.artifacts.client;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -21,8 +24,11 @@ import draco18s.artifacts.entity.EntitySpikes;
 import draco18s.artifacts.entity.TileEntityDisplayPedestal;
 import draco18s.artifacts.entity.TileEntitySword;
 import draco18s.artifacts.entity.TileEntityTrap;
+import draco18s.artifacts.item.ItemCalendar;
 
 public class ClientProxy extends CommonProxy {
+	public static TextureAtlasSprite calendar;
+	
 	@Override
 	public void registerRenders() {
 		int r = RenderingRegistry.getNextAvailableRenderId();
@@ -39,7 +45,6 @@ public class ClientProxy extends CommonProxy {
 		handler = new RenderCoverPlate(r);
 		RenderingRegistry.registerBlockHandler(handler);
 		((BlockCoverPlate)BlockCoverPlate.instance).renderType = r;
-        NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySword.class, new TESwordRenderer());
         RenderingRegistry.registerEntityRenderingHandler(EntityClayGolem.class, new RenderClayGolem());
         

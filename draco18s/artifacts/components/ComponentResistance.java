@@ -162,7 +162,7 @@ public class ComponentResistance implements IArtifactComponent {
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		if(trigger == "passively.") {
-			par3List.add(EnumChatFormatting.AQUA + "effect.Damage resistance");
+			par3List.add(EnumChatFormatting.AQUA + "effect.Damage Resistance");
 		}
 		else {
 			int time = 0;
@@ -172,14 +172,14 @@ public class ComponentResistance implements IArtifactComponent {
 			else if(trigger == "when used.") {
 				time = 30;
 			}
-			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Damage resistance"));
-			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + " " + StatCollector.translateToLocal("time.seconds") + ")");
+			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Damage Resistance"));
+			par3List.add("  " + EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + " "  + StatCollector.translateToLocal("time.seconds") + ")");
 		}
 	}
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Damage resistance"));
+		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Damage Resistance"));
 	}
 
 	@Override

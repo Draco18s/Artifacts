@@ -2,7 +2,6 @@ package draco18s.artifacts.arrowtrapbehaviors;
 
 import java.util.List;
 
-import draco18s.artifacts.DamageSourceSword;
 import draco18s.artifacts.api.internals.IBlockSource;
 import draco18s.artifacts.entity.TileEntityTrap;
 
@@ -65,7 +64,7 @@ final class DispenserBehaviorSword extends BehaviorDefaultDispenseItem
         if(ents.size() > 0) {
         	for(int l=ents.size() - 1; l >= 0; l--) {
         		EntityLivingBase ent = ents.get(l);
-        		ent.attackEntityFrom(DamageSourceSword.instance, damage);
+        		ent.attackEntityFrom(DamageSource.generic, damage);
         		par2ItemStack.damageItem(1, ent);
         	}
         }

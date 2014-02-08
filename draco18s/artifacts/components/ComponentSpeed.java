@@ -72,24 +72,25 @@ public class ComponentSpeed implements IArtifactComponent {
 	@Override
 	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
 		int q = i.stackTagCompound.getInteger("onHeld");
-		IArtifactComponent a = ArtifactsAPI.artifacts.getComponent(q);
-		if(a == this) {
-			NBTTagCompound inbt = i.stackTagCompound;
-			NBTTagCompound nnbt = new NBTTagCompound();
-			NBTTagList nnbtl = new NBTTagList();
-			double amount = 0.05D + rand.nextInt(5)/200D + rand.nextInt(5)/200D;
-			i.stackTagCompound.setDouble("boostAmount",amount);
-			AttributeModifier att = new AttributeModifier("generic.movementSpeed", amount, 2);
-			nnbt.setLong("UUIDMost", att.getID().getMostSignificantBits());
-			nnbt.setLong("UUIDLeast", att.getID().getLeastSignificantBits());
-			nnbt.setString("Name", att.getName());
-			nnbt.setDouble("Amount", att.getAmount());
-			nnbt.setInteger("Operation", att.getOperation());
-			nnbt.setString("AttributeName", att.getName());
-			nnbtl.appendTag(nnbt);
-			inbt.setTag("AttributeModifiers", nnbtl);
+		if(q > 0) {
+			IArtifactComponent a = ArtifactsAPI.artifacts.getComponent(q);
+			if(a == this) {
+				NBTTagCompound inbt = i.stackTagCompound;
+				NBTTagCompound nnbt = new NBTTagCompound();
+				NBTTagList nnbtl = new NBTTagList();
+				double amount = 0.05D + rand.nextInt(5)/200D + rand.nextInt(5)/200D;
+				i.stackTagCompound.setDouble("boostAmount",amount);
+				AttributeModifier att = new AttributeModifier("generic.movementSpeed", amount, 2);
+				nnbt.setLong("UUIDMost", att.getID().getMostSignificantBits());
+				nnbt.setLong("UUIDLeast", att.getID().getLeastSignificantBits());
+				nnbt.setString("Name", att.getName());
+				nnbt.setDouble("Amount", att.getAmount());
+				nnbt.setInteger("Operation", att.getOperation());
+				nnbt.setString("AttributeName", att.getName());
+				nnbtl.appendTag(nnbt);
+				inbt.setTag("AttributeModifiers", nnbtl);
+			}
 		}
-		//i.addEnchantment(Enchantment.sharpness, rand.nextInt(5)+1);
 		return i;
 	}
 

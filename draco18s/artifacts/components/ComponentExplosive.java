@@ -247,24 +247,26 @@ public class ComponentExplosive implements IArtifactComponent {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase) {
-		ByteArrayOutputStream bt = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(bt);
-		try
-		{
-			//System.out.println("Building packet...");
-			out.writeInt(7);
-			out.writeInt(par2EntityPlayer.entityId);
-			out.writeInt(par2EntityPlayer.inventory.currentItem);
-			//out.writeFloat(par3EntityPlayer.getHealth()+1);
-			Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
-			//System.out.println("Sending packet..." + player);
-			PacketDispatcher.sendPacketToServer(packet);
-			//par1ItemStack.damageItem(1, par2EntityPlayer);
-			return true;
-		}
-		catch (IOException ex)
-		{
-			System.out.println("couldnt send packet!");
+		if(par2EntityPlayer.worldObj.isRemote) {
+			ByteArrayOutputStream bt = new ByteArrayOutputStream();
+			DataOutputStream out = new DataOutputStream(bt);
+			try
+			{
+				//System.out.println("Building packet...");
+				out.writeInt(7);
+				out.writeInt(par2EntityPlayer.entityId);
+				out.writeInt(par2EntityPlayer.inventory.currentItem);
+				//out.writeFloat(par3EntityPlayer.getHealth()+1);
+				Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
+				//System.out.println("Sending packet..." + player);
+				PacketDispatcher.sendPacketToServer(packet);
+				//par1ItemStack.damageItem(1, par2EntityPlayer);
+				return true;
+			}
+			catch (IOException ex)
+			{
+				System.out.println("couldnt send packet!");
+			}
 		}
 		return false;
 	}
@@ -278,7 +280,7 @@ public class ComponentExplosive implements IArtifactComponent {
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		par3List.add(StatCollector.translateToLocal("effect.Explodes") + " " + StatCollector.translateToLocal("tool."+trigger));
 		if(trigger == "when dropped.") {
-			par3List.add(EnumChatFormatting.YELLOW + "  8" + StatCollector.translateToLocal("time.second") + " " + StatCollector.translateToLocal("time.fuse"));
+			par3List.add(EnumChatFormatting.YELLOW + "  8 " + StatCollector.translateToLocal("time.second") + " " + StatCollector.translateToLocal("time.fuse"));
 		}
 	}
 

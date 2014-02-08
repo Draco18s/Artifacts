@@ -5,11 +5,9 @@ import java.util.Random;
 import draco18s.artifacts.api.ArtifactsAPI;
 import draco18s.artifacts.block.*;
 import draco18s.artifacts.entity.TileEntityDisplayPedestal;
-import draco18s.artifacts.entity.TileEntityTrap;
 import draco18s.artifacts.item.ItemArtifact;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -290,6 +288,7 @@ public class StructureApprenticeTower extends WorldGenerator {
 		world.setBlock(i + 3, j + 15, k + 1, Block.cobblestone.blockID, 0, 2);
 		world.setBlock(i + 3, j + 15, k + 2, 0);
 		world.setBlock(i + 3, j + 15, k + 3, 0);
+		world.setBlock(i + 3, j + 15, k + 4, Block.chest.blockID, 2, 2);
 		world.setBlock(i + 3, j + 15, k + 5, Block.cobblestone.blockID, 0, 2);
 		world.setBlock(i + 3, j + 16, k + 1, 0);
 		world.setBlock(i + 3, j + 16, k + 2, 0);
@@ -646,26 +645,12 @@ public class StructureApprenticeTower extends WorldGenerator {
 			ted.setInventorySlotContents(0, ArtifactsAPI.artifacts.generateRandomArtifact());
 			ted.rotation = 180;
 		}
-		if(rand.nextBoolean()) {
-			world.setBlock(i + 3, j + 15, k + 4, Block.chest.blockID, 3, 2);
-			TileEntityChest tileentitychest = (TileEntityChest)world.getBlockTileEntity(i + 3, j + 15, k + 4);
-			if (tileentitychest != null)
-	        {
-	            ChestGenHooks info = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST);
-	            WeightedRandomChestContent.generateChestContents(rand, info.getItems(rand), tileentitychest, info.getCount(rand));
-	        }
-		}
-		else {
-			world.setBlock(i + 3, j + 15, k + 4, BlockTrap.instance.blockID, 3, 2);
-			TileEntityTrap tileentitychest = (TileEntityTrap)world.getBlockTileEntity(i + 3, j + 15, k + 4);
-			if (tileentitychest != null)
-	        {
-	            ChestGenHooks info = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST);
-	            WeightedRandomChestContent.generateChestContents(rand, info.getItems(rand), tileentitychest, info.getCount(rand));
-	            tileentitychest.addItem(new ItemStack(Item.swordIron));
-	        }
-			world.setBlock(i + 3, j + 15, k + 3, Block.pressurePlateStone.blockID, 0, 2);
-		}
+		TileEntityChest tileentitychest = (TileEntityChest)world.getBlockTileEntity(i + 3, j + 15, k + 4);
+		if (tileentitychest != null)
+        {
+            ChestGenHooks info = ChestGenHooks.getInfo(ChestGenHooks.PYRAMID_JUNGLE_CHEST);
+            WeightedRandomChestContent.generateChestContents(rand, info.getItems(rand), tileentitychest, info.getCount(rand));
+        }
 		basement(world, i, j, k);
 		return true;
 	}

@@ -146,7 +146,7 @@ public class ComponentVision implements IArtifactComponent {
 				time = 2;
 			}
 			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Night Vision"));
-			par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + " " + StatCollector.translateToLocal("time.minutes")+ ")");
+			par3List.add("  " + EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + " "  + StatCollector.translateToLocal("time.minutes")+ ")");
 		}
 	}
 

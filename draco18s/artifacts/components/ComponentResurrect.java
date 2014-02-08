@@ -208,12 +208,12 @@ public class ComponentResurrect implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 4864;
+		return 1280;//3328;//4864;
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
-		return 255;
+		return 767;//255;
 	}
 
 	@Override

@@ -162,14 +162,13 @@ public class ComponentAdrenaline implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		
 		return 1024;
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
 		
-		return 6911;
+		return 2815;//6911;
 	}
 
 	@Override

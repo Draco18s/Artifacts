@@ -55,7 +55,6 @@ public class ArtifactTickHandler implements ITickHandler {
 			return;
 		if(eobj.openContainer == null || eobj.openContainer == eobj.inventoryContainer) {
 			shouldRun = false;
-			//int state1 = world.getMoonPhase();
 			long state2 = world.getWorldTime();
 			int state1 = world.provider.getMoonPhase(state2);
 			int calc = (int) Math.abs((state2%24000) - trigger3);

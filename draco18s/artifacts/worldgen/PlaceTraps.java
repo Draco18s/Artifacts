@@ -14,10 +14,12 @@ import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.common.IWorldGenerator;
 import draco18s.artifacts.block.*;
@@ -141,10 +143,13 @@ public class PlaceTraps implements IWorldGenerator {
 			}
 			else if(genQuicksand && !(bid == 2 || bid == 3 || bid == 22 || (bid >= 17 && bid <= 20))) {
 				int R = 2;
+				if(world.provider.terrainType == WorldType.LARGE_BIOMES) {
+					R*=2;
+				}
 				int mX = chunkX/R;
 				int mY = chunkZ/R;
 				
-				ch = (((mX+1) * mX + mY * mY + (int)Math.pow(1 + mX * mY, 3)) % 29);
+				ch = (((mX+1) * mX + mY * mY + (int)Math.pow(1 + Math.abs(mX) * mY, 3)) % 29);
 				
 				int nx = chunkX % R;
 				int ny = chunkZ % R;
@@ -158,17 +163,24 @@ public class PlaceTraps implements IWorldGenerator {
 					quicksandPit.generate(world, rand, tex, 128, tez);
 				}
 			}
-			boolean TFgen = BiomeGenBase.biomeList[bid].biomeName.toLowerCase().contains("magic");
-			if(genTowers && (bid == 0 || bid == 3 || bid == 14)) {
-				int R = 6;
-				int mod = 57;
-				if(bid == 0) {
-					mod = 29;
-					R = 3;
+			boolean mountain = BiomeDictionary.isBiomeOfType(BiomeGenBase.biomeList[bid], BiomeDictionary.Type.MOUNTAIN);
+			boolean magical = BiomeDictionary.isBiomeOfType(BiomeGenBase.biomeList[bid], BiomeDictionary.Type.MAGICAL);//BiomeGenBase.biomeList[bid].biomeName.toLowerCase().contains("magic");
+			boolean frozen = BiomeDictionary.isBiomeOfType(BiomeGenBase.biomeList[bid], BiomeDictionary.Type.FROZEN);;
+			mountain &= frozen;
+			magical &= frozen;
+			if(genTowers && (bid == 0 || bid == 3 || bid == 14 || magical || mountain)) {
+				//int R = 6;
+				//int mod = 59;
+				//if(bid == 0) {
+					int mod = 29;
+					int R = 3;
+				//}
+				if(world.provider.terrainType == WorldType.LARGE_BIOMES) {
+					R*=2;
 				}
 				int mX = chunkX/R;
 				int mY = chunkZ/R;
-				ch = (((mX+100) * mX + (mY+50) * mY + (int)Math.pow(Math.abs(mX) * mY, 3)) % mod);
+				ch = (((mX+50) * mX + (mY+100) * mY + (int)Math.pow(1 + Math.abs(mX) * mY, 3)) % mod);
 				int nx = chunkX % R;
 				int ny = chunkZ % R;
 				int Z = nx + (ny * R);
@@ -176,10 +188,12 @@ public class PlaceTraps implements IWorldGenerator {
 					//Z = -1;
 				}
 				else if(ch == Z) {
+					//System.out.println();
 					tex = chunkX*16+8;
 					tez = chunkZ*16+8;
+					//System.out.println(tex + "," + tez);
 					int m = rand.nextInt(12);
-					if(TFgen && m >= 3) {
+					if(magical && m >= 3) {
 						m -= 2;
 					}
 					//System.out.println("Tower rand: " + m);
@@ -212,15 +226,18 @@ public class PlaceTraps implements IWorldGenerator {
 		else if(dim != 1 && dim != -1 && (!whitelistEnabled || Arrays.binarySearch(whitelist, dim) >= 0) && !(blacklistEnabled && Arrays.binarySearch(blacklist, dim) >= 0)	){
 			int bid = world.getBiomeGenForCoords(chunkX*16, chunkZ*16).biomeID;
 			if(genTowers && (bid == 0 || bid == 3 || bid == 14)) {
-				int R = 6;
-				int mod = 57;
-				if(bid == 0) {
-					mod = 29;
-					R = 3;
+				//int R = 6;
+				//int mod = 59;
+				//if(bid == 0) {
+					int mod = 29;
+					int R = 3;
+				//}
+				if(world.provider.terrainType == WorldType.LARGE_BIOMES) {
+					R*=4;
 				}
 				int mX = chunkX/R;
 				int mY = chunkZ/R;
-				int ch = (((mX+100) * mX + (mY+50) * mY + (int)Math.pow(dim + Math.abs(mX) * mY, 3)) % mod);
+				int ch = (((mX+50) * mX + (mY+100) * mY + (int)Math.pow(dim + Math.abs(mX) * mY, 3)) % mod);
 				
 				int nx = chunkX % R;
 				int ny = chunkZ % R;

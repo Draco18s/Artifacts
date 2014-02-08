@@ -1,4 +1,4 @@
-package draco18s.artifacts;
+package draco18s.artifacts.api;
 
 import java.util.Random;
 
@@ -6,8 +6,14 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
-import draco18s.artifacts.api.ArtifactsAPI;
 
+/**
+ * This class is exposed to aid mod developers adding artifacts to their loot chests in a more detailed manner.<br/>
+ * This class insures that artifacts generated in this manner will already have their effects applied.<br/>
+ * Use this class exactly as you would WeightedRandomChestContent
+ * @author Draco18s
+ *
+ */
 public class WeightedRandomArtifact extends WeightedRandomChestContent {
 
 	public WeightedRandomArtifact(int itemID, int metadata, int minNumberPerStack, int maxNumberPerStack, int probability) {

@@ -40,6 +40,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
 import draco18s.artifacts.api.ArtifactsAPI;
+import draco18s.artifacts.api.WeightedRandomArtifact;
 import draco18s.artifacts.arrowtrapbehaviors.DispenserBehaviors;
 import draco18s.artifacts.block.*;
 import draco18s.artifacts.client.*;
@@ -50,7 +51,7 @@ import draco18s.artifacts.network.PacketHandlerClient;
 import draco18s.artifacts.network.PacketHandlerServer;
 import draco18s.artifacts.worldgen.PlaceTraps;
 
-@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "0.11.4")
+@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "0.12.0")
 @NetworkMod(clientSideRequired = true, serverSideRequired = false,
 	clientPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerClient.class),
 	serverPacketHandlerSpec = @SidedPacketHandler(channels = {"Artifacts"}, packetHandler = PacketHandlerServer.class))
@@ -107,7 +108,8 @@ public class DragonArtifacts {
 			int tb5 = config.getItem("trapblade_diamond", 4005).getInt();
 			int lightID = config.getBlock("lightblock", 4000).getInt();
 			int pedID = config.getBlock("pedestal", 4001).getInt();
-    		int repkitID = config.getItem("repairkit", 4020).getInt();
+    		int orichalcumID = config.getItem("orichalcumDust", 4020).getInt();
+    		int calendarID = config.getItem("calendar", 4021).getInt();
 			
 			ConfigCategory worldGenConf = config.getCategory("worldgen");
 			worldGenConf.setComment("By default this mod alters worldgen slightly, adding more and different traps to\npyramids, temples, and strongholds as well as quicksand 'lakes'.\nThese may be disabled individually.");
@@ -242,7 +244,8 @@ public class DragonArtifacts {
 		ItemArtifactArmor.doMatName = ItemArtifact.doMatName = matName.getBoolean(true);
 		ItemArtifactArmor.doAdjName = ItemArtifact.doAdjName = adjName.getBoolean(true);
 		
-		ItemOrichalcumDust.instance = new ItemOrichalcumDust(repkitID);
+		ItemOrichalcumDust.instance = new ItemOrichalcumDust(orichalcumID);
+		ItemCalendar.instance = new ItemCalendar(calendarID);
 		
 		BlockLight.instance = new BlockLight(lightID);
 		BlockPedestal.instance = new BlockPedestal(pedID);
@@ -382,6 +385,7 @@ public class DragonArtifacts {
         ItemStack thinglass = new ItemStack(Block.thinGlass);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockPedestal.instance,2), "ggg","g g","sss",'g', thinglass, 's', "stone"));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockSpikes.instance, 2), "i i","sss", 'i', "ingotIron", 's', new ItemStack(Block.stoneSingleSlab)));
+		GameRegistry.addShapedRecipe(new ItemStack(BlockSpikes.instance, 2), "i i","sss", 'i', new ItemStack(Item.ingotIron), 's', new ItemStack(Block.stoneSingleSlab));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockTrap.instance), new ItemStack(Item.painting), new ItemStack(Block.dispenser));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockWallPlate.instance, 2), "s", "s", "s", 's', "stone"));
 		GameRegistry.addShapedRecipe(new ItemStack(BlockWallPlate.obsidian, 2), "s", "s", "s", 's', new ItemStack(Block.obsidian));
@@ -405,6 +409,7 @@ public class DragonArtifacts {
 			GameRegistry.addShapelessRecipe(new ItemStack(ItemOrichalcumDust.instance, 4, 0), new ItemStack(ItemArtifactArmor.goldArray[i]));
 			GameRegistry.addShapelessRecipe(new ItemStack(ItemOrichalcumDust.instance, 4, 0), new ItemStack(ItemArtifactArmor.diamondArray[i]));
 		}
+		
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance, 2), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt), new ItemStack(Block.dirt));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance, 3), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt));
@@ -413,11 +418,10 @@ public class DragonArtifacts {
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance, 6), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance, 7), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockQuickSand.instance, 8), new ItemStack(Item.potion, 1, 8204), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt), new ItemStack(Block.dirt));
-		
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockLaserBeamSource.instance, 4), "sss", "rog", "sss", 'o', new ItemStack(ItemOrichalcumDust.instance, 4, 0), 'g', thinglass, 's', "stone", 'r', new ItemStack(Item.redstone)));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockLaserBeamSource.instance), "sss", "rog", "sss", 'o', new ItemStack(ItemOrichalcumDust.instance, 4, 0), 'g', thinglass, 's', "stone", 'r', new ItemStack(Item.redstone)));
+		GameRegistry.addShapedRecipe(new ItemStack(ItemCalendar.instance), "ppp","pcp","ppp", 'p', new ItemStack(Item.paper), 'c', new ItemStack(Item.pocketSundial));
 		
 		MinecraftForge.setToolClass(ItemArtifact.instance, "pickaxe", 3);
-		
 		DamageSourceSword.instance = new DamageSourceSword("trapsword");
     }
 	
@@ -433,5 +437,6 @@ public class DragonArtifacts {
 		DispenserBehaviors.registerBehaviors();
 		ArtifactTickHandler tickHandler = new ArtifactTickHandler();
 	    TickRegistry.registerTickHandler(tickHandler, Side.SERVER);
+        NetworkRegistry.instance().registerGuiHandler(this, new GuiHandler());
 	}
 }

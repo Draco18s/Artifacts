@@ -13,6 +13,10 @@ tile.Anti-Builder.name=Anti-Builder
 tile.Anti Anti-Builder Stone.name=Anti Anti-Builder Block
 tile.Display Pedestal.name=Display Pedestal
 
+#Entities
+entity.Clay Golem.name=Clay Golem
+entity.Artifacts.SpecialArrow.name=Arrow
+
 #These names appear in the creative inventory
 item.artifact.armorCLOTH.name=Leather Armor
 item.artifact.armorCHAIN.name=Chain Armor
@@ -20,6 +24,7 @@ item.artifact.armorIRON.name=Iron Armor
 item.artifact.armorGOLD.name=Gold Armor
 item.artifact.armorDIAMOND.name=Diamond Armor
 item.orichalcum_dust=Manaesence
+item.Moon Calendar.name=Lunar Calendar
 
 #Material names (mirror vanilla)
 mat.Wood=Wood
@@ -174,7 +179,7 @@ time.second=second
 time.seconds=seconds
 time.minute=minute
 time.minutes=minutes
-time.fuse
+time.fuse=fuse
 time.on=on
 time.cooldown=cooldown
 

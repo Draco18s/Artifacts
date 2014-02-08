@@ -10,6 +10,7 @@ import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.World;
 
 /**

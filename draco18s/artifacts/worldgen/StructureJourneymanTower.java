@@ -8,6 +8,8 @@ import draco18s.artifacts.entity.*;
 import draco18s.artifacts.item.*;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -831,6 +833,7 @@ public class StructureJourneymanTower extends WorldGenerator {
 		world.setBlock(i + 9, j + 4, k + 6, Block.cobblestone.blockID, 0, 2);
 		world.setBlock(i + 9, j + 4, k + 7, Block.stairsCobblestone.blockID, 7, 2);
 		world.setBlock(i + 9, j + 5, k + 4, BlockTrap.instance.blockID, 3, 2);
+		world.setBlockMetadataWithNotify(i + 9, j + 5, k + 4, 3, 2);
 		te = world.getBlockTileEntity(i + 9, j + 5, k + 4); 
 		if(te instanceof TileEntityTrap) {
 			ted = (TileEntityTrap)te;
@@ -1033,6 +1036,14 @@ public class StructureJourneymanTower extends WorldGenerator {
 
 		world.setBlock(i + 4, j + 9, k + 8, Block.bed.blockID, 3, 2);
 		world.setBlock(i + 5, j + 9, k + 8, Block.bed.blockID, 11, 2);
+		
+		//world.setBlock(i + 11, j + 5, k + 6, Block.enchantmentTable.blockID, 0, 2);
+		EntityItemFrame e = new EntityItemFrame(world, i + 13, j + 6, k + 6, 1);
+		e.setDisplayedItem(new ItemStack(ItemCalendar.instance));
+		//NBTTagCompound nbt = new NBTTagCompound();
+		//e.writeEntityToNBT(nbt);
+		//e.readEntityFromNBT(nbt);
+		world.spawnEntityInWorld(e);
 		
 		basement(world, i, j, k);
 		return true;

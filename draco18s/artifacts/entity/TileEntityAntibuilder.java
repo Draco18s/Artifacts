@@ -320,7 +320,7 @@ public class TileEntityAntibuilder extends TileEntity {
 				out.writeDouble(tx);
 				out.writeDouble(ty);
 				out.writeDouble(tz);
-				out.writeInt(i-r);
+				out.writeInt(i+r);
 				Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
 				PacketDispatcher.sendPacketToAllAround(xCoord, yCoord, zCoord, 32, worldObj.provider.dimensionId, packet);
 			}

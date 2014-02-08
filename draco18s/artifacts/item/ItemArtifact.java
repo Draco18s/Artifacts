@@ -477,6 +477,8 @@ public class ItemArtifact extends Item {
     {
     	String n = "";
     	if(par1ItemStack.stackTagCompound != null) {
+        	if(par1ItemStack.stackTagCompound.getString("matName").length() <= 0)
+        		par1ItemStack = ArtifactsAPI.artifacts.applyRandomEffects(par1ItemStack);
     		if(doEnchName) {
     			if(par1ItemStack.stackTagCompound.getString("enchName").length() > 0)
 					n += StatCollector.translateToLocal(par1ItemStack.stackTagCompound.getString("enchName")) + " ";

@@ -153,25 +153,27 @@ public class ComponentLightning implements IArtifactComponent {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase) {
-		ByteArrayOutputStream bt = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(bt);
-		try
-		{
-			//System.out.println("Building packet...");
-			out.writeInt(5);
-			out.writeInt(par2EntityPlayer.entityId);
-			//EntityPlayer par3EntityPlayer = (EntityPlayer) par3EntityLivingBase;
-			out.writeInt(par2EntityPlayer.inventory.currentItem);
-			//out.writeFloat(par3EntityPlayer.getHealth()+1);
-			Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
-			//System.out.println("Sending packet..." + player);
-			PacketDispatcher.sendPacketToServer(packet);
-			//par1ItemStack.damageItem(1, par2EntityPlayer);
-			return true;
-		}
-		catch (IOException ex)
-		{
-			System.out.println("couldnt send packet!");
+		if(par2EntityPlayer.worldObj.isRemote) {
+			ByteArrayOutputStream bt = new ByteArrayOutputStream();
+			DataOutputStream out = new DataOutputStream(bt);
+			try
+			{
+				//System.out.println("Building packet...");
+				out.writeInt(5);
+				out.writeInt(par2EntityPlayer.entityId);
+				//EntityPlayer par3EntityPlayer = (EntityPlayer) par3EntityLivingBase;
+				out.writeInt(par2EntityPlayer.inventory.currentItem);
+				//out.writeFloat(par3EntityPlayer.getHealth()+1);
+				Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
+				//System.out.println("Sending packet..." + player);
+				PacketDispatcher.sendPacketToServer(packet);
+				//par1ItemStack.damageItem(1, par2EntityPlayer);
+				return true;
+			}
+			catch (IOException ex)
+			{
+				System.out.println("couldnt send packet!");
+			}
 		}
 		return false;
 	}

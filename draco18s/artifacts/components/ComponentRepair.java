@@ -176,7 +176,7 @@ public class ComponentRepair implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 77;
+		return 4173;//77;
 	}
 
 	@Override
