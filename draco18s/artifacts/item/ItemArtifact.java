@@ -125,7 +125,8 @@ public class ItemArtifact extends Item {
 			effectID = data.getInteger("onDroppedByPlayer");
 			if(effectID != 0) {
 				IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
-				return c.onDroppedByPlayer(item, player);
+				if(c != null)
+					return c.onDroppedByPlayer(item, player);
 			}
 		}
 		return true;
@@ -170,7 +171,8 @@ public class ItemArtifact extends Item {
 			for(int i=ca.length-1; i >= 0; i--) {
 				if(ca[i] != 0) {
 					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(ca[i]);
-					y = c.getStrVsBlock(par1ItemStack, par2Block);
+					if(c != null)
+						y = c.getStrVsBlock(par1ItemStack, par2Block);
 					if(y > r)
 						r = y;
 				}
@@ -195,7 +197,8 @@ public class ItemArtifact extends Item {
 				System.out.println("R-click: " + d);
 				if(d <= 0) {
 					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
-					par1ItemStack = c.onItemRightClick(par1ItemStack, par2World, par3EntityPlayer);
+					if(c != null)
+						par1ItemStack = c.onItemRightClick(par1ItemStack, par2World, par3EntityPlayer);
 					d = par1ItemStack.stackTagCompound.getInteger("onItemRightClickDelay");
 					ByteArrayOutputStream bt = new ByteArrayOutputStream();
 					DataOutputStream out = new DataOutputStream(bt);
@@ -226,7 +229,9 @@ public class ItemArtifact extends Item {
 			effectID = data.getInteger("hitEntity");
 			if(effectID != 0) {
 				IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
-				boolean r = c.hitEntity(par1ItemStack, par2EntityLivingBase, par3EntityLivingBase);
+				boolean r = false;
+				if(c != null)
+					r = c.hitEntity(par1ItemStack, par2EntityLivingBase, par3EntityLivingBase);
 				par1ItemStack.damageItem(1, par2EntityLivingBase);
 				return r;
 			}
@@ -244,12 +249,14 @@ public class ItemArtifact extends Item {
 				effectID = data.getInteger("onBlockDestroyed");
 				if(effectID != 0) {
 					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
-					return c.onBlockDestroyed(par1ItemStack, par2World, blockID, par4, par5, par6, par7EntityLivingBase);
+					if(c != null)
+						return c.onBlockDestroyed(par1ItemStack, par2World, blockID, par4, par5, par6, par7EntityLivingBase);
 				}
 				effectID = data.getInteger("onDig");
 				if(effectID != 0) {
 					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
-					return c.onBlockDestroyed(par1ItemStack, par2World, blockID, par4, par5, par6, par7EntityLivingBase);
+					if(c != null)
+						return c.onBlockDestroyed(par1ItemStack, par2World, blockID, par4, par5, par6, par7EntityLivingBase);
 				}
 				else {
 					if(canHarvestBlock(Block.blocksList[blockID], par1ItemStack)) {
@@ -299,7 +306,8 @@ public class ItemArtifact extends Item {
 			effectID = data.getInteger("itemInteractionForEntity");
 			if(effectID != 0) {
 				IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
-				return c.itemInteractionForEntity(par1ItemStack, par2EntityPlayer, par3EntityLivingBase);
+				if(c != null)
+					return c.itemInteractionForEntity(par1ItemStack, par2EntityPlayer, par3EntityLivingBase);
 			}
 		}
         return false;
@@ -316,12 +324,14 @@ public class ItemArtifact extends Item {
 				effectID = data.getInteger("onUpdate");
 				if(effectID != 0) {
 					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
-					c.onEntityItemUpdate(entityItem,"onUpdate");
+					if(c != null)
+						c.onEntityItemUpdate(entityItem,"onUpdate");
 				}
 				effectID = data.getInteger("onEntityItemUpdate");
 				if(effectID != 0) {
 					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
-					c.onEntityItemUpdate(entityItem,"onEntityItemUpdate");
+					if(c != null)
+						c.onEntityItemUpdate(entityItem,"onEntityItemUpdate");
 				}
 				effectID = data.getInteger("onDropped");
 				if(effectID != 0) {
@@ -329,7 +339,8 @@ public class ItemArtifact extends Item {
 					//System.out.println("Dropped: " + del + "<=" + entityItem.age);
 					if(del <= entityItem.age) {
 						IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
-						c.onEntityItemUpdate(entityItem,"onDropped");
+						if(c != null)
+							c.onEntityItemUpdate(entityItem,"onDropped");
 					}
 				}
 				ArrayList<String> keys = ArtifactsAPI.artifacts.getNBTKeys();
@@ -354,15 +365,21 @@ public class ItemArtifact extends Item {
 		int effectID = 0;
 		if(data != null) {
 			if(!par2World.isRemote) {
+	        	if(par1ItemStack.stackTagCompound.getString("matName").length() <= 0) {
+	        		par1ItemStack.stackTagCompound = null;//ArtifactsAPI.artifacts.applyRandomEffects(par1ItemStack.copy()).stackTagCompound;
+	        		return;
+	        	}
 				effectID = data.getInteger("onUpdate");
 				if(effectID != 0) {
 					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
-					c.onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
+					if(c != null)
+						c.onUpdate(par1ItemStack, par2World, par3Entity, par4, par5);
 				}
 				effectID = data.getInteger("onHeld");
 				if(effectID != 0 && par5) {
 					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
-					c.onHeld(par1ItemStack, par2World, par3Entity, par4, par5);
+					if(c != null)
+						c.onHeld(par1ItemStack, par2World, par3Entity, par4, par5);
 				}
 				//
 			/*}
@@ -420,52 +437,62 @@ public class ItemArtifact extends Item {
 			effectID = data.getInteger("onItemRightClick");
 			if(effectID != 0) {
 				c = ArtifactsAPI.artifacts.getComponent(effectID);
-				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when used.", advTooltip);
+				if(c != null)
+					c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when used.", advTooltip);
 			}
 			effectID = data.getInteger("hitEntity");
 			if(effectID != 0) {
 				c = ArtifactsAPI.artifacts.getComponent(effectID);
-				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when inflicting damage.", advTooltip);
+				if(c != null)
+					c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when inflicting damage.", advTooltip);
 			}
 			effectID = data.getInteger("onUpdate");
 			if(effectID != 0) {
 				c = ArtifactsAPI.artifacts.getComponent(effectID);
-				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "passively.", advTooltip);
+				if(c != null)
+					c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "passively.", advTooltip);
 			}
 			effectID = data.getInteger("onEntityItemUpdate");
 			if(effectID != 0) {
 				c = ArtifactsAPI.artifacts.getComponent(effectID);
-				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "passively.", advTooltip);
+				if(c != null)
+					c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "passively.", advTooltip);
 			}
 			effectID = data.getInteger("onBlockDestroyed");
 			if(effectID != 0) {
 				c = ArtifactsAPI.artifacts.getComponent(effectID);
-				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when destroying blocks.", advTooltip);
+				if(c != null)
+					c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when destroying blocks.", advTooltip);
 			}
 			effectID = data.getInteger("itemInteractionForEntity");
 			if(effectID != 0) {
 				c = ArtifactsAPI.artifacts.getComponent(effectID);
-				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when interacting with entities.", advTooltip);
+				if(c != null)
+					c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when interacting with entities.", advTooltip);
 			}
 			effectID = data.getInteger("onDig");
 			if(effectID != 0) {
 				c = ArtifactsAPI.artifacts.getComponent(effectID);
-				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, advTooltip);
+				if(c != null)
+					c.addInformation(par1ItemStack, par2EntityPlayer, par3List, advTooltip);
 			}
 			effectID = data.getInteger("onDroppedByPlayer");
 			if(effectID != 0) {
 				c = ArtifactsAPI.artifacts.getComponent(effectID);
-				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when dropped.", advTooltip);
+				if(c != null)
+					c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when dropped.", advTooltip);
 			}
 			effectID = data.getInteger("onDropped");
 			if(effectID != 0) {
 				c = ArtifactsAPI.artifacts.getComponent(effectID);
-				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when dropped.", advTooltip);
+				if(c != null)
+					c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when dropped.", advTooltip);
 			}
 			effectID = data.getInteger("onHeld");
 			if(effectID != 0) {
 				c = ArtifactsAPI.artifacts.getComponent(effectID);
-				c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when held.", advTooltip);
+				if(c != null)
+					c.addInformation(par1ItemStack, par2EntityPlayer, par3List, "when held.", advTooltip);
 			}
 		}
 		else {
@@ -477,8 +504,6 @@ public class ItemArtifact extends Item {
     {
     	String n = "";
     	if(par1ItemStack.stackTagCompound != null) {
-        	if(par1ItemStack.stackTagCompound.getString("matName").length() <= 0)
-        		par1ItemStack = ArtifactsAPI.artifacts.applyRandomEffects(par1ItemStack);
     		if(doEnchName) {
     			if(par1ItemStack.stackTagCompound.getString("enchName").length() > 0)
 					n += StatCollector.translateToLocal(par1ItemStack.stackTagCompound.getString("enchName")) + " ";

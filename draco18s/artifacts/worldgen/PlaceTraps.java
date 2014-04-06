@@ -1,5 +1,8 @@
 package draco18s.artifacts.worldgen;
 
+import hunternif.mc.atlas.api.AtlasAPI;
+import hunternif.mc.atlas.ext.ExtTileIdMap;
+
 import java.util.Arrays;
 import java.util.Random;
 
@@ -22,6 +25,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.common.IWorldGenerator;
+import cpw.mods.fml.common.Loader;
 import draco18s.artifacts.block.*;
 import draco18s.artifacts.entity.TileEntityTrap;
 
@@ -165,9 +169,9 @@ public class PlaceTraps implements IWorldGenerator {
 			}
 			boolean mountain = BiomeDictionary.isBiomeOfType(BiomeGenBase.biomeList[bid], BiomeDictionary.Type.MOUNTAIN);
 			boolean magical = BiomeDictionary.isBiomeOfType(BiomeGenBase.biomeList[bid], BiomeDictionary.Type.MAGICAL);//BiomeGenBase.biomeList[bid].biomeName.toLowerCase().contains("magic");
-			boolean frozen = BiomeDictionary.isBiomeOfType(BiomeGenBase.biomeList[bid], BiomeDictionary.Type.FROZEN);;
-			mountain &= frozen;
-			magical &= frozen;
+			boolean frozen = BiomeDictionary.isBiomeOfType(BiomeGenBase.biomeList[bid], BiomeDictionary.Type.FROZEN);
+			mountain &= !frozen;
+			magical &= !frozen;
 			if(genTowers && (bid == 0 || bid == 3 || bid == 14 || magical || mountain)) {
 				//int R = 6;
 				//int mod = 59;
@@ -220,12 +224,22 @@ public class PlaceTraps implements IWorldGenerator {
 							wizardTowerA.generate(world, rand, tex, 128, tez);
 							break;
 					}
+					if(Loader.isModLoaded("antiqueatlas")) {
+						AtlasAPI.getTileAPI().putCustomTile(world, 0, "wizardtower",
+								chunkX,
+								chunkZ);
+					}
 				}
 			}
 		}
 		else if(dim != 1 && dim != -1 && (!whitelistEnabled || Arrays.binarySearch(whitelist, dim) >= 0) && !(blacklistEnabled && Arrays.binarySearch(blacklist, dim) >= 0)	){
 			int bid = world.getBiomeGenForCoords(chunkX*16, chunkZ*16).biomeID;
-			if(genTowers && (bid == 0 || bid == 3 || bid == 14)) {
+			boolean mountain = BiomeDictionary.isBiomeOfType(BiomeGenBase.biomeList[bid], BiomeDictionary.Type.MOUNTAIN);
+			boolean magical = BiomeDictionary.isBiomeOfType(BiomeGenBase.biomeList[bid], BiomeDictionary.Type.MAGICAL);//BiomeGenBase.biomeList[bid].biomeName.toLowerCase().contains("magic");
+			boolean frozen = BiomeDictionary.isBiomeOfType(BiomeGenBase.biomeList[bid], BiomeDictionary.Type.FROZEN);
+			mountain &= !frozen;
+			magical &= !frozen;
+			if(genTowers && (bid == 0 || bid == 3 || bid == 14 || magical || mountain)) {
 				//int R = 6;
 				//int mod = 59;
 				//if(bid == 0) {
@@ -271,6 +285,11 @@ public class PlaceTraps implements IWorldGenerator {
 						case 11:
 							wizardTowerA.generate(world, rand, tex, 128, tez);
 							break;
+					}
+					if(Loader.isModLoaded("antiqueatlas")) {
+						AtlasAPI.getTileAPI().putCustomTile(world, 0, "wizardtower",
+								chunkX,
+								chunkZ);
 					}
 				}
 			}

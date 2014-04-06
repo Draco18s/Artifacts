@@ -126,7 +126,8 @@ public class ComponentMedkit implements IArtifactComponent {
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
 		if(worn) {
 			if(itemStack.stackTagCompound.getInteger("medkitDelay_armor") == 1) {
-				ByteArrayOutputStream bt = new ByteArrayOutputStream();
+				player.heal(0.5F);
+				/*ByteArrayOutputStream bt = new ByteArrayOutputStream();
 				DataOutputStream out = new DataOutputStream(bt);
 				try
 				{
@@ -140,7 +141,7 @@ public class ComponentMedkit implements IArtifactComponent {
 				catch (IOException ex)
 				{
 					System.out.println("couldnt send packet!");
-				}
+				}*/
 			}
 		}
 	}

@@ -613,7 +613,7 @@ public class FactoryArtifact implements IArtifactAPI {
 		int t = Boots + Chestplate + Helm + Leggings;
 		int r = 0;
 		String iconType = "";
-		if(t < 0) {
+		if(t <= 0) {
 			Boots = 1;
 			Chestplate = 1;
 			Helm = 1;
@@ -750,10 +750,10 @@ public class FactoryArtifact implements IArtifactAPI {
 					newid = ItemArtifactArmor.ironArray[nbtType].itemID;
 					break;
 				case 3:
-					newid = ItemArtifactArmor.goldArray[nbtType].itemID;
+					newid = ItemArtifactArmor.diamondArray[nbtType].itemID;
 					break;
 				case 4:
-					newid = ItemArtifactArmor.diamondArray[nbtType].itemID;
+					newid = ItemArtifactArmor.goldArray[nbtType].itemID;
 					break;
 			}
 			//int offset = (nbtType - aa.armorType)*5;

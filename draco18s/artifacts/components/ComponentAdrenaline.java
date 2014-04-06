@@ -18,6 +18,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -195,15 +196,21 @@ public class ComponentAdrenaline implements IArtifactComponent {
 	}
 	
 	private void sendPotionPacket(int potionID, int duration, int level, Entity entity) throws IOException {
-		ByteArrayOutputStream bt = new ByteArrayOutputStream();
-		DataOutputStream out = new DataOutputStream(bt);
-		out.writeInt(10);
-		out.writeInt(entity.entityId);
-		out.writeInt(potionID);
-		out.writeInt(duration);
-		out.writeInt(level);
-		Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
-		PacketDispatcher.sendPacketToServer(packet);
+		if(entity.worldObj.isRemote) {
+			ByteArrayOutputStream bt = new ByteArrayOutputStream();
+			DataOutputStream out = new DataOutputStream(bt);
+			out.writeInt(10);
+			out.writeInt(entity.entityId);
+			out.writeInt(potionID);
+			out.writeInt(duration);
+			out.writeInt(level);
+			Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
+			PacketDispatcher.sendPacketToServer(packet);
+		}
+		else {
+			EntityLivingBase living = (EntityLivingBase) entity;
+			living.addPotionEffect(new PotionEffect(potionID, duration, level));
+		}
 	}
 
 	@Override

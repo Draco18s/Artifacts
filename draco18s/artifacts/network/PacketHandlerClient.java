@@ -96,23 +96,17 @@ public class PacketHandlerClient implements IPacketHandler{
     
     protected void drawParticle(World worldObj, double srcX, double srcY, double srcZ, String par1Str, int age)
     {
-    	//int particles = 2;
-    	//for (int i = 0; i < number-1; i++)
-    	//{
-    		double trailFactor = 0;
-    		double tx = srcX;// + (destX - srcX) * trailFactor;// + rand.nextFloat() * 0.005D;
-    		double ty = srcY;// + (destY - srcY) * trailFactor;// + rand.nextFloat() * 0.005D;
-    		double tz = srcZ;// + (destZ - srcZ) * trailFactor;// + rand.nextFloat() * 0.005D;
-    		//worldObj.spawnParticle("reddust", tx, ty, tz, 1.0D, 1.0D, 1.0D);
-    		EntityFX particle = null;
-    		if(par1Str.equals("radar")) {
-    			particle = new RadarParticle(worldObj, tx, ty, tz, 3, 20);
-    		}
-    		if(par1Str.equals("reset")) {
-    			particle = new AntibuilderParticle(worldObj, tx, ty, tz, 1, age, 63);
-    		}
-    		if(particle != null)
-    			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
-    	//}
+		double tx = srcX;
+		double ty = srcY;
+		double tz = srcZ;
+		EntityFX particle = null;
+		if(par1Str.equals("radar")) {
+			particle = new RadarParticle(worldObj, tx, ty, tz, 3, 20);
+		}
+		if(par1Str.equals("reset")) {
+			particle = new AntibuilderParticle(worldObj, tx, ty, tz, 1, age, 48);
+		}
+		if(particle != null)
+			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
     }
 }

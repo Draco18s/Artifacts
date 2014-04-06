@@ -73,7 +73,8 @@ public class PacketHandlerServer implements IPacketHandler{
                         //System.out.println(entitylargefireball.posX + "," + entitylargefireball.posY + "," + entitylargefireball.posZ);
                         world.spawnEntityInWorld(entitylargefireball);
                         is = p.inventory.getStackInSlot(dis.readInt());
-                        is.damageItem(1, p);
+                        if(is != null)
+                        	is.damageItem(1, p);
                         //System.out.println(is.getItemDamage());
             		}
             		else {
@@ -142,9 +143,11 @@ public class PacketHandlerServer implements IPacketHandler{
             			System.out.println("Oh god, what player! D:");
             		}
             		is = p.inventory.getStackInSlot(dis.readInt());
-                    is.damageItem(1, p);
+            		if(is != null)
+                    	is.damageItem(1, p);
             		break;
             	case 7:
+            		//explosions
             		int id = dis.readInt();
             		if(id >= 0) {
             			//System.out.println("Reading entity position");
@@ -160,7 +163,8 @@ public class PacketHandlerServer implements IPacketHandler{
             			world.newExplosion(p, px, py, pz, 3F, false, true);
             		}
             		is = p.inventory.getStackInSlot(dis.readInt());
-                    is.damageItem(3, p);
+            		if(is != null)
+                    	is.damageItem(3, p);
             		break;
             	case 10:
             		//all potions
@@ -172,6 +176,13 @@ public class PacketHandlerServer implements IPacketHandler{
             			EntityLivingBase living = (EntityLivingBase) ent;
             			living.addPotionEffect(new PotionEffect(pid, dur, aug));
             		}
+            		break;
+            	case 26:
+            		is = p.inventory.getStackInSlot(dis.readInt());
+            		is.setItemDamage(is.getItemDamage()-5);
+            		is = p.inventory.getStackInSlot(dis.readInt());
+            		if(is != null)
+                    	is.damageItem(2, (EntityLivingBase) p);
             		break;
             	case 27:
             		//Exploding Arrows

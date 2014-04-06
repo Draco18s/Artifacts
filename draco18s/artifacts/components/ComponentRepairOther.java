@@ -94,8 +94,22 @@ public class ComponentRepairOther implements IArtifactComponent {
 			stack = par3EntityPlayer.inventory.getStackInSlot(i);
 		} while((stack == null || stack == par1ItemStack || !stack.isItemDamaged()) && c < 100);
 		if(stack != null && stack.isItemDamaged()) {
-			stack.setItemDamage(stack.getItemDamage()-5);
-			par1ItemStack.damageItem(5, (EntityLivingBase) par3EntityPlayer);
+			//stack.setItemDamage(stack.getItemDamage()-5);
+			//par1ItemStack.damageItem(5, (EntityLivingBase) par3EntityPlayer);
+			ByteArrayOutputStream bt = new ByteArrayOutputStream();
+			DataOutputStream out = new DataOutputStream(bt);
+			try
+			{
+				out.writeInt(26);
+				out.writeInt(i);
+				out.writeInt(par3EntityPlayer.inventory.currentItem);
+				Packet250CustomPayload packet = new Packet250CustomPayload("Artifacts", bt.toByteArray());
+				PacketDispatcher.sendPacketToServer(packet);
+			}
+			catch (IOException ex)
+			{
+				System.out.println("couldnt send packet!");
+			}
 			//par1ItemStack.setItemDamage(par1ItemStack.getItemDamage()+1);
 		}
 		return par1ItemStack;

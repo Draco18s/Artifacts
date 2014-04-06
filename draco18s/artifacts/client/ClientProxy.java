@@ -1,13 +1,17 @@
 package draco18s.artifacts.client;
 
+import hunternif.mc.atlas.api.AtlasAPI;
+import hunternif.mc.atlas.api.TileAPI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import draco18s.artifacts.CommonProxy;
@@ -65,5 +69,9 @@ public class ClientProxy extends CommonProxy {
         handler = new RenderLaserSource(r);
 		RenderingRegistry.registerBlockHandler(handler);
 		((BlockLaserBeamSource)BlockLaserBeamSource.instance).renderID = r;
+		
+		if(Loader.isModLoaded("antiqueatlas")) {
+			AtlasAPI.getTileAPI().setTexture("wizardtower", new ResourceLocation("artifacts:textures/gui/tower.png"));
+		}
 	}
 }
