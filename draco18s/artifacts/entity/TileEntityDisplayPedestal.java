@@ -219,16 +219,18 @@ public class TileEntityDisplayPedestal extends TileEntity implements IInventory 
 	@Override
 	public void onInventoryChanged() {
 		super.onInventoryChanged();
-		if(contents[0] != null) {
-			itemEnt = new EntityItem(this.worldObj, this.xCoord, this.yCoord, this.zCoord, contents[0]);
-			itemEnt.hoverStart = 0;
-			itemEnt.rotationYaw = 0;
-			itemEnt.motionX = 0;
-			itemEnt.motionY = 0;
-			itemEnt.motionZ = 0;
-		}
-		else {
-			itemEnt = null;
+		if(this.worldObj != null) {
+			if(contents[0] != null) {
+				itemEnt = new EntityItem(this.worldObj, this.xCoord, this.yCoord, this.zCoord, contents[0]);
+				itemEnt.hoverStart = 0;
+				itemEnt.rotationYaw = 0;
+				itemEnt.motionX = 0;
+				itemEnt.motionY = 0;
+				itemEnt.motionZ = 0;
+			}
+			else {
+				itemEnt = null;
+			}
 		}
 	}
 
