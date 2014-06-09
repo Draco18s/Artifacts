@@ -141,6 +141,8 @@ public class DragonArtifacts{
 			int[] white = cw.getIntList();
 			int[] black = cb.getIntList();
 			
+			int golemID = config.get("Entities", "Golem ID", 3).getInt();
+			
 			Arrays.sort(white);
 			Arrays.sort(black);
 			
@@ -470,7 +472,7 @@ public class DragonArtifacts{
 		GameRegistry.registerTileEntity(TileEntityAntibuilder.class, "artifacts.antibuilder");
         EntityRegistry.registerModEntity(EntityClayGolem.class, "EntClayGolem", 0, this, 350, 5, false);
         EntityRegistry.registerModEntity(EntitySpecialArrow.class, "SpecialArrow", 1, this, 64, 20, true);
-        EntityList.addMapping(EntityClayGolem.class, "ClayGolem", 3, 13347172, 7033635);//13347172 is pale
+        EntityList.addMapping(EntityClayGolem.class, "ClayGolem", golemID, 13347172, 7033635);//13347172 is pale
 		
         proxy.registerTickHandlers();
         proxy.registerEventHandlers();
