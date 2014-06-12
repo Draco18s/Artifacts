@@ -129,7 +129,7 @@ public class TileEntityAntibuilder extends TileEntity {
 											i.getEntityItem().stackSize = 0;
 										}
 									}
-									System.out.println("Bad Block ID (A)");
+									//System.out.println("Bad Block ID (A)");
 									worldObj.setBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, Block.getBlockById(blocks[ox*121+oy*11+oz]));
 									worldObj.setBlockMetadataWithNotify(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, metas[ox*121+oy*11+oz], 3);
 									drawParticleLine(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5, xCoord+0.5, yCoord+0.5, zCoord+0.5);
@@ -188,7 +188,7 @@ public class TileEntityAntibuilder extends TileEntity {
 										metas[ox*121+oy*11+oz] = (byte)wMeta;
 									}
 									else {
-										System.out.println("Bad Block ID (B)");
+										//System.out.println("Bad Block ID (B)");
 										worldObj.setBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, Block.getBlockById(blocks[ox*121+oy*11+oz]), metas[ox*121+oy*11+oz], 3);
 										drawParticleLine(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5, xCoord+0.5, yCoord+0.5, zCoord+0.5);
 										//particles.add(Vec3.createVectorHelper(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5));
@@ -237,7 +237,7 @@ public class TileEntityAntibuilder extends TileEntity {
 													i.getEntityItem().stackSize = 0;
 												}
 											}
-											System.out.println("Bad Block ID (C)");
+											//System.out.println("Bad Block ID (C)");
 											worldObj.setBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, Block.getBlockById(blocks[ox*121+oy*11+oz]), metas[ox*121+oy*11+oz], 3);
 											drawParticleLine(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5, xCoord+0.5, yCoord+0.5, zCoord+0.5);
 											//particles.add(Vec3.createVectorHelper(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5));
@@ -252,7 +252,7 @@ public class TileEntityAntibuilder extends TileEntity {
 										metas[ox*121+oy*11+oz] = (byte)wMeta;
 									}
 									else if(Block.getIdFromBlock(wBlock) != blocks[ox*121+oy*11+oz] || wMeta != metas[ox*121+oy*11+oz]) {
-										System.out.println("Bad Block ID (D)");
+										//System.out.println("Bad Block ID (D)");
 										if(blocks[ox*121+oy*11+oz] == 0) {
 											//EntityItem ei = new EntityItem(worldObj, ox, oy, oz, new ItemStack(Block.blocksList[wid], 1, wmd));
 											//worldObj.spawnEntityInWorld(ei);
