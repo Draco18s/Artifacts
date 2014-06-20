@@ -18,7 +18,7 @@ import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.ArtifactsAPI;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
 import com.draco18s.artifacts.factory.FactoryItemIcons;
-import com.draco18s.artifacts.network.CPacketArtifactComponent;
+import com.draco18s.artifacts.network.CToSMessageComponent;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -237,7 +237,7 @@ public class ItemArtifact extends Item {
 			if(effectID != 0) {
 				//System.out.println("Activating...");
 				int d = data.getInteger("onItemRightClickDelay");
-				System.out.println("R-click: " + d);
+				//System.out.println("R-click: " + d);
 				if(d <= 0) {
 					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
 					if(c != null)
@@ -248,8 +248,8 @@ public class ItemArtifact extends Item {
 					out.writeInt(4096);
 					out.writeInt(d);
 					out.writeInt(player.inventory.currentItem);
-					CPacketArtifactComponent packet = new CPacketArtifactComponent(player.getCommandSenderName(), out);
-					DragonArtifacts.packetPipeline.sendToServer(packet);
+					CToSMessageComponent packet = new CToSMessageComponent(player.getUniqueID(), out);
+					DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 				}
 			}
 		}

@@ -37,6 +37,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -50,17 +51,17 @@ import com.draco18s.artifacts.client.*;
 import com.draco18s.artifacts.entity.*;
 import com.draco18s.artifacts.factory.*;
 import com.draco18s.artifacts.item.*;
-import com.draco18s.artifacts.network.ArtifactPacketPipeline;
-import com.draco18s.artifacts.network.CPacketArtifactComponent;
+import com.draco18s.artifacts.network.CToSMessageComponent;
 import com.draco18s.artifacts.network.PacketHandlerClient;
 import com.draco18s.artifacts.network.PacketHandlerServer;
-import com.draco18s.artifacts.network.SPacketGeneral;
+import com.draco18s.artifacts.network.SToCMessageGeneral;
 import com.draco18s.artifacts.worldgen.PlaceTraps;
 
-@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "1.0.0")
+@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "1.0.1")
 public class DragonArtifacts{
 	@Instance("Artifacts")
     public static DragonArtifacts instance;
+	public static SimpleNetworkWrapper artifactNetworkWrapper;
 	public static boolean renderNamesInPedestals = false;
 	public static boolean renderInvis = false;
 	public static boolean boundingInvis = true;
@@ -68,9 +69,6 @@ public class DragonArtifacts{
     
     @SidedProxy(clientSide = "com.draco18s.artifacts.client.ClientProxy", serverSide = "com.draco18s.artifacts.CommonProxy")
     public static CommonProxy proxy;
-    
-    //Pipeline for packets
-    public static ArtifactPacketPipeline packetPipeline = new ArtifactPacketPipeline();
     
     public static CreativeTabs tabGeneral = new CreativeTabs("tabGeneral") {
 		@Override
@@ -478,19 +476,26 @@ public class DragonArtifacts{
         proxy.registerEventHandlers();
 		proxy.registerRenders();
 		DispenserBehaviors.registerBehaviors();
+		
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-    }
+        
+        //These have to be unique
+        byte serverMessageID = 1;
+        byte clientMessageID = 2;
+        
+        //Registering the "messages", which are simple packets.
+ 		artifactNetworkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("Artifacts");
+ 		artifactNetworkWrapper.registerMessage(PacketHandlerServer.class, CToSMessageComponent.class, serverMessageID, Side.SERVER);
+ 		artifactNetworkWrapper.registerMessage(PacketHandlerClient.class, SToCMessageGeneral.class, clientMessageID, Side.CLIENT);
+   }
 	
 	@EventHandler
     public void load(FMLInitializationEvent event)
     {
-		packetPipeline.initialise();
     }
 	
 	@EventHandler
-	public void PostInit(FMLPostInitializationEvent event) {
-		packetPipeline.registerPacket(CPacketArtifactComponent.class);
-		packetPipeline.registerPacket(SPacketGeneral.class);
-		packetPipeline.postInitialise();
+	public void PostInit(FMLPostInitializationEvent event) 
+	{
 	}
 }

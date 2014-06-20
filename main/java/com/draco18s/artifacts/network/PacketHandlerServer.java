@@ -6,11 +6,17 @@ import io.netty.buffer.Unpooled;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import com.draco18s.artifacts.entity.ArrowEffect;
 import com.draco18s.artifacts.entity.EntitySpecialArrow;
 
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiMerchant;
 import net.minecraft.client.gui.GuiScreen;
@@ -32,7 +38,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.World;
 
-public class PacketHandlerServer {
+public class PacketHandlerServer implements IMessageHandler<CToSMessageComponent,IMessage> {
 
 	//Effect Ids
 	public static final int HEALING = 1;
@@ -44,16 +50,36 @@ public class PacketHandlerServer {
 	public static final int EXPLODING_ARROWS = 27;
 	public static final int DAMAGE_ITEM = 28;
 
-	public static void handleComponentPacket(CPacketArtifactComponent packet)
+	/**
+	 * Handles Server Side Packets (specifically for artifact components). Only returns null.
+	 */
+	@Override
+	public IMessage onMessage(CToSMessageComponent packet, MessageContext context)
 	{
-		//System.out.println("Packet found: " + packet.channel);
+		System.out.println("Caught a packet " + packet.getData() + " for player " + packet.getUUID());
 
 		ByteBuf buff = Unpooled.wrappedBuffer(packet.getData());
 
 		try
 		{
 			int effectID = buff.readInt();
-			EntityPlayerMP p = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(packet.getUsername());
+			UUID uuid = packet.getUUID();
+			EntityPlayerMP p = null;
+			
+			List<EntityPlayerMP> playerList = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+			
+			for(EntityPlayerMP entityPlayer : playerList) {
+				if(entityPlayer.getUniqueID().equals(uuid)) {
+					p = entityPlayer;
+					break;
+				}
+			}
+	        
+	        if(p == null) {
+	        	System.out.println("Couldn't find a player with UUID " + uuid.toString());
+	        	return null;
+	        }
+	        
 			World world = p.worldObj;
 			ItemStack is;
 
@@ -122,7 +148,7 @@ public class PacketHandlerServer {
 					Vec3 vec31 = vec3.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
 					MovingObjectPosition movingobjectposition = world.func_147447_a/*rayTraceBlocks_do_do*/(vec3, vec31, false, true, false);
 					if (movingobjectposition == null) {
-						return;
+						return null;
 					}
 					if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
 					{
@@ -229,5 +255,7 @@ public class PacketHandlerServer {
 			System.err.println("Problem while handling artifact components!");
 			e.printStackTrace();
 		}
+		
+		return null;
 	}
 }

@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 
 import com.draco18s.artifacts.DragonArtifacts;
-import com.draco18s.artifacts.network.CPacketArtifactComponent;
+import com.draco18s.artifacts.network.CToSMessageComponent;
 import com.draco18s.artifacts.network.PacketHandlerServer;
 
 public class UtilsForComponents {
@@ -28,8 +28,8 @@ public class UtilsForComponents {
 			out.writeInt(potionID);
 			out.writeInt(duration);
 			out.writeInt(level);
-			CPacketArtifactComponent packet = new CPacketArtifactComponent(entity.getCommandSenderName(), out);
-			DragonArtifacts.packetPipeline.sendToServer(packet);
+			CToSMessageComponent packet = new CToSMessageComponent(entity.getUniqueID(), out);
+			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		}
 	}
 	
@@ -41,8 +41,8 @@ public class UtilsForComponents {
 			out.writeInt(player.getEntityId());
 			out.writeInt(inventorySlot);
 			out.writeInt(damageToDeal);
-			CPacketArtifactComponent packet = new CPacketArtifactComponent(player.getCommandSenderName(), out);
-			DragonArtifacts.packetPipeline.sendToServer(packet);
+			CToSMessageComponent packet = new CToSMessageComponent(player.getUniqueID(), out);
+			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		}
 	}
 	

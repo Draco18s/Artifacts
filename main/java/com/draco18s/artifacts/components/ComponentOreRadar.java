@@ -34,7 +34,7 @@ import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.ArtifactsAPI;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
 import com.draco18s.artifacts.network.PacketHandlerClient;
-import com.draco18s.artifacts.network.SPacketGeneral;
+import com.draco18s.artifacts.network.SToCMessageGeneral;
 
 public class ComponentOreRadar implements IArtifactComponent {
 	//Random rand;
@@ -149,8 +149,8 @@ public class ComponentOreRadar implements IArtifactComponent {
 							out.writeInt(xx);
 							out.writeInt(yy);
 							out.writeInt(zz);
-							SPacketGeneral packet = new SPacketGeneral("Artifacts", out);
-							DragonArtifacts.packetPipeline.sendTo(packet, player);
+							SToCMessageGeneral packet = new SToCMessageGeneral(out);
+							DragonArtifacts.artifactNetworkWrapper.sendTo(packet, player);
 						
 							Vec3 s = Vec3.createVectorHelper(xx, yy, zz);
 							detectedBlocks.add(s);
@@ -169,8 +169,8 @@ public class ComponentOreRadar implements IArtifactComponent {
 									out.writeInt(xx);
 									out.writeInt(yy);
 									out.writeInt(zz);
-									SPacketGeneral packet = new SPacketGeneral("Artifacts", out);
-									DragonArtifacts.packetPipeline.sendTo(packet, player);
+									SToCMessageGeneral packet = new SToCMessageGeneral(out);
+									DragonArtifacts.artifactNetworkWrapper.sendTo(packet, player);
 
 									Vec3 s = Vec3.createVectorHelper(xx, yy, zz);
 									detectedBlocks.add(s);

@@ -13,7 +13,7 @@ import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.block.*;
 import com.draco18s.artifacts.client.RadarParticle;
 import com.draco18s.artifacts.network.PacketHandlerClient;
-import com.draco18s.artifacts.network.SPacketGeneral;
+import com.draco18s.artifacts.network.SToCMessageGeneral;
 
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.block.Block;
@@ -328,8 +328,8 @@ public class TileEntityAntibuilder extends TileEntity {
 				out.writeDouble(ty);
 				out.writeDouble(tz);
 				out.writeInt(i-r);
-				SPacketGeneral packet = new SPacketGeneral("Artifacts", out);
-				DragonArtifacts.packetPipeline.sendToAllAround(packet, new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 32));
+				SToCMessageGeneral packet = new SToCMessageGeneral(out);
+				DragonArtifacts.artifactNetworkWrapper.sendToAllAround(packet, new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 32));
 			}
 			catch (Exception ex)
 			{

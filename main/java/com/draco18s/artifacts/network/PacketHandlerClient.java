@@ -28,75 +28,75 @@ import net.minecraft.world.World;
 import com.draco18s.artifacts.client.*;
 import com.draco18s.artifacts.entity.*;
 
-public class PacketHandlerClient {
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+
+public class PacketHandlerClient implements IMessageHandler<SToCMessageGeneral, IMessage> {
 	
 	public static final int ORE_RADAR = 23;
 	public static final int PEDESTAL = 256;
 	public static final int ANTI_BUILDER = 4097;
 
-    public static void handleGeneralPacket(SPacketGeneral packet)
+    public IMessage onMessage(SToCMessageGeneral packet, MessageContext context)
     {
-    	//System.out.println("Packet found: " + packet.channel);
     	
-    	if (packet.getInfo().equals("Artifacts"))
+    	EntityClientPlayerMP p = Minecraft.getMinecraft().thePlayer;
+        World world = p.worldObj;
+        ByteArrayInputStream stream = new ByteArrayInputStream(packet.getData());
+        DataInputStream dis = new DataInputStream(stream);
+        //System.out.println("Packet get");
+        TileEntity te;
+        try
         {
-        	EntityClientPlayerMP p = Minecraft.getMinecraft().thePlayer;
-            World world = p.worldObj;
-            ByteArrayInputStream stream = new ByteArrayInputStream(packet.getData());
-            DataInputStream dis = new DataInputStream(stream);
-            //System.out.println("Packet get");
-            TileEntity te;
-            try
-            {
-                int effectID = dis.readInt();
-                switch(effectID) {
-    	        	case ORE_RADAR:
-    	        		int x = dis.readInt();
-    	        		int y = dis.readInt();
-    	        		int z = dis.readInt();
-    	        		//if(rand.nextBoolean() && rand.nextBoolean())
-    	        		if(y >= p.posY)
-    	        			drawParticle(p.worldObj, x+.5, y+.5, z+.5, "radar", 0);
-    	        		else
-    	        			drawParticle(p.worldObj, x+.5, y+.5, z+.5, "radar", 0);
-    	        		//System.out.println("Server particles");
-    	        		break;
-                	case PEDESTAL:
-                		te = world.getTileEntity(dis.readInt(), dis.readInt(), dis.readInt());
-                		if(te instanceof TileEntityDisplayPedestal) {
-                			TileEntityDisplayPedestal ted = (TileEntityDisplayPedestal)te;
-                			/*InputStreamReader reader = new InputStreamReader(stream);
-                			BufferedReader br = new BufferedReader(reader);
-                			String str = br.readLine();*/
-                			String str = "";
-                			for(int s = dis.readInt()-1; s >= 0; s--) {
-                				str += dis.readChar();
-                			}
-                			//String str = dis.readLine();
-                			//System.out.println("New owner: " + str);
-                		}
-                		break;
-                	case ANTI_BUILDER:
-                		double tx = dis.readDouble();
-                		double ty = dis.readDouble();
-    	        		double tz = dis.readDouble();
-    	        		int a = dis.readInt();
-    	        		//if(rand.nextBoolean() && rand.nextBoolean())
-    	        		drawParticle(p.worldObj, tx, ty, tz, "reset", a);
-    	        		break;
-                	default:
-                		return;
-                }
-            }
-            catch  (IOException e)
-            {
-            	e.printStackTrace();
-                System.out.println("Failed to read packet");
+            int effectID = dis.readInt();
+            switch(effectID) {
+	        	case ORE_RADAR:
+	        		int x = dis.readInt();
+	        		int y = dis.readInt();
+	        		int z = dis.readInt();
+	        		//if(rand.nextBoolean() && rand.nextBoolean())
+	        		if(y >= p.posY)
+	        			drawParticle(p.worldObj, x+.5, y+.5, z+.5, "radar", 0);
+	        		else
+	        			drawParticle(p.worldObj, x+.5, y+.5, z+.5, "radar", 0);
+	        		//System.out.println("Server particles");
+	        		break;
+            	case PEDESTAL:
+            		te = world.getTileEntity(dis.readInt(), dis.readInt(), dis.readInt());
+            		if(te instanceof TileEntityDisplayPedestal) {
+            			TileEntityDisplayPedestal ted = (TileEntityDisplayPedestal)te;
+            			/*InputStreamReader reader = new InputStreamReader(stream);
+            			BufferedReader br = new BufferedReader(reader);
+            			String str = br.readLine();*/
+            			String str = "";
+            			for(int s = dis.readInt()-1; s >= 0; s--) {
+            				str += dis.readChar();
+            			}
+            			//String str = dis.readLine();
+            			//System.out.println("New owner: " + str);
+            		}
+            		break;
+            	case ANTI_BUILDER:
+            		double tx = dis.readDouble();
+            		double ty = dis.readDouble();
+	        		double tz = dis.readDouble();
+	        		int a = dis.readInt();
+	        		//if(rand.nextBoolean() && rand.nextBoolean())
+	        		drawParticle(p.worldObj, tx, ty, tz, "reset", a);
+	        		break;
+            	default:
+            		return null;
             }
         }
-        else {
-        	System.out.println("Unknown packet recieved.");
+        catch  (IOException e)
+        {
+        	e.printStackTrace();
+            System.out.println("Failed to read packet");
         }
+        
+        //Don't return anything.
+    	return null;
     }
     
     private static void drawParticle(World worldObj, double srcX, double srcY, double srcZ, String par1Str, int age)

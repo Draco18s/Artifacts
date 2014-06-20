@@ -6,6 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import java.io.IOException;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,21 +14,20 @@ import net.minecraft.network.INetHandler;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
 
-public class SPacketGeneral extends AbstractPacket{
-	private String type;
+public class SToCMessageGeneral implements IMessage{
 	private byte[] data;
 	
-	public SPacketGeneral() 
+	public SToCMessageGeneral() 
 	{
-		this("testName", new byte[]{0});
+		this(new byte[]{0});
 	}
 	
-	public SPacketGeneral(String nameToSet, ByteBuf dataToSet)
+	public SToCMessageGeneral(ByteBuf dataToSet)
     {
-        this(nameToSet, dataToSet.array());
+        this(dataToSet.array());
     }
 
-    public SPacketGeneral(String nameToSet, byte[] dataToSet)
+    public SToCMessageGeneral(byte[] dataToSet)
     {
         
         if (dataToSet.length > 0x1ffff0)
@@ -35,13 +35,16 @@ public class SPacketGeneral extends AbstractPacket{
             throw new IllegalArgumentException("Payload may not be larger than 2097136 (0x1ffff0) bytes");
         }
         //System.out.println("Creating General Packet!");
-        this.type = nameToSet;
         this.data = dataToSet;
 
     }
 
+    /**
+     * Deconstruct your message into the supplied byte buffer
+     * @param buf
+     */
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
+	public void toBytes(ByteBuf buffer) {
 		//System.out.println("Encoding General Packet!");
         
 		if (data.length > 0x1ffff0)
@@ -49,45 +52,24 @@ public class SPacketGeneral extends AbstractPacket{
             throw new IllegalArgumentException("Payload may not be larger than 2097136 (0x1ffff0) bytes");
         }
 		
-		int stringLength = this.type.length();
-		buffer.writeInt(stringLength); 
-		for(int i = 0; i < stringLength; i++){
-			buffer.writeChar(this.type.charAt(i));
-		}
         buffer.writeShort(this.data.length);
         buffer.writeBytes(this.data);
 		
 	}
 
+	/**
+     * Convert from the supplied buffer into your specific message type
+     * @param buffer 
+     */
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
+	public void fromBytes(ByteBuf buffer) {
 		//System.out.println("Decoding General Packet!");
         
-		int stringLength = buffer.readInt();
-		char[] stringArray = new char[stringLength];
-		for(int i = 0; i < stringLength; i++){
-			stringArray[i] = buffer.readChar();
-		}
-		this.type = String.valueOf(stringArray);
 		this.data = new byte[buffer.readShort()];
         buffer.readBytes(this.data);
-	}
-
-	@Override
-	public void handleClientSide(EntityPlayer player) {
-		PacketHandlerClient.handleGeneralPacket(this);
-	}
-
-	@Override
-	public void handleServerSide(EntityPlayer player) {
-		
 	}
 	
     public byte[] getData() {
         return this.data;
-    }
-	
-    public String getInfo() {
-        return this.type;
     }
 }

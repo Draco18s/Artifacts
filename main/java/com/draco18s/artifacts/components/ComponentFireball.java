@@ -11,7 +11,7 @@ import java.util.Random;
 import com.google.common.collect.Multimap;
 import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
-import com.draco18s.artifacts.network.CPacketArtifactComponent;
+import com.draco18s.artifacts.network.CToSMessageComponent;
 import com.draco18s.artifacts.network.PacketHandlerServer;
 
 import net.minecraft.block.Block;
@@ -88,8 +88,8 @@ public class ComponentFireball implements IArtifactComponent {
 		out.writeInt(PacketHandlerServer.FIREBALLS);
 		out.writeInt(player.getEntityId());
 		out.writeInt(player.inventory.currentItem);
-		CPacketArtifactComponent packet = new CPacketArtifactComponent(player.getCommandSenderName(), out);
-		DragonArtifacts.packetPipeline.sendToServer(packet);
+		CToSMessageComponent packet = new CToSMessageComponent(player.getUniqueID(), out);
+		DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 1);
 		itemStack.stackTagCompound.setInteger("onItemRightClickDelay", 20);
 		

@@ -12,7 +12,7 @@ import com.google.common.collect.Multimap;
 import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.ArtifactsAPI;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
-import com.draco18s.artifacts.network.CPacketArtifactComponent;
+import com.draco18s.artifacts.network.CToSMessageComponent;
 import com.draco18s.artifacts.network.PacketHandlerServer;
 
 import net.minecraft.block.Block;
@@ -145,8 +145,8 @@ public class ComponentExplosive implements IArtifactComponent {
 			out.writeInt(iy);
 			out.writeInt(iz);
 			out.writeInt(player.inventory.currentItem);
-			CPacketArtifactComponent packet = new CPacketArtifactComponent(player.getCommandSenderName(), out);
-			DragonArtifacts.packetPipeline.sendToServer(packet);
+			CToSMessageComponent packet = new CToSMessageComponent(player.getUniqueID(), out);
+			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 			UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 3);
         }
         if (movingobjectposition.typeOfHit == MovingObjectType.ENTITY) {
@@ -161,8 +161,8 @@ public class ComponentExplosive implements IArtifactComponent {
 			out.writeInt(PacketHandlerServer.EXPLOSIONS);
 			out.writeInt(movingobjectposition.entityHit.getEntityId());
 			out.writeInt(player.inventory.currentItem);
-			CPacketArtifactComponent packet = new CPacketArtifactComponent(player.getCommandSenderName(), out);
-			DragonArtifacts.packetPipeline.sendToServer(packet);
+			CToSMessageComponent packet = new CToSMessageComponent(player.getUniqueID(), out);
+			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 			UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 3);
         }
 		par1ItemStack.stackTagCompound.setInteger("onItemRightClickDelay", 20);
@@ -203,9 +203,9 @@ public class ComponentExplosive implements IArtifactComponent {
 			out.writeInt(player.getEntityId());
 			out.writeInt(player.inventory.currentItem);
 			//out.writeFloat(par3EntityPlayer.getHealth()+1);
-			CPacketArtifactComponent packet = new CPacketArtifactComponent(player.getCommandSenderName(), out);
+			CToSMessageComponent packet = new CToSMessageComponent(player.getUniqueID(), out);
 			//System.out.println("Sending packet..." + player);
-			DragonArtifacts.packetPipeline.sendToServer(packet);
+			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 			//par1ItemStack.damageItem(1, par2EntityPlayer);
 			
 			return true;
