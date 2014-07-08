@@ -17,6 +17,8 @@ import com.draco18s.artifacts.entity.EntitySpecialArrow;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiMerchant;
 import net.minecraft.client.gui.GuiScreen;
@@ -50,9 +52,14 @@ public class PacketHandlerServer implements IMessageHandler<CToSMessageComponent
 	public static final int EXPLODING_ARROWS = 27;
 	public static final int DAMAGE_ITEM = 28;
 
+	public PacketHandlerServer() {
+		
+	}
+	
 	/**
 	 * Handles Server Side Packets (specifically for artifact components). Only returns null.
 	 */
+	@SideOnly(Side.SERVER)
 	@Override
 	public IMessage onMessage(CToSMessageComponent packet, MessageContext context)
 	{

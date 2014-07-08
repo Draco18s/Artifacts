@@ -31,13 +31,20 @@ import com.draco18s.artifacts.entity.*;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class PacketHandlerClient implements IMessageHandler<SToCMessageGeneral, IMessage> {
 	
 	public static final int ORE_RADAR = 23;
 	public static final int PEDESTAL = 256;
 	public static final int ANTI_BUILDER = 4097;
+	
+	public PacketHandlerClient() {
+		
+	}
 
+	@SideOnly(Side.CLIENT)
     public IMessage onMessage(SToCMessageGeneral packet, MessageContext context)
     {
     	
@@ -99,6 +106,7 @@ public class PacketHandlerClient implements IMessageHandler<SToCMessageGeneral, 
     	return null;
     }
     
+    @SideOnly(Side.CLIENT)
     private static void drawParticle(World worldObj, double srcX, double srcY, double srcZ, String par1Str, int age)
     {
 		double tx = srcX;
