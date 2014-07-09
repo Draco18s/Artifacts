@@ -44,7 +44,6 @@ public class PacketHandlerClient implements IMessageHandler<SToCMessageGeneral, 
 		
 	}
 
-	@SideOnly(Side.CLIENT)
     public IMessage onMessage(SToCMessageGeneral packet, MessageContext context)
     {
     	

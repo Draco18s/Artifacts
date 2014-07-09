@@ -59,7 +59,6 @@ public class PacketHandlerServer implements IMessageHandler<CToSMessageComponent
 	/**
 	 * Handles Server Side Packets (specifically for artifact components). Only returns null.
 	 */
-	@SideOnly(Side.SERVER)
 	@Override
 	public IMessage onMessage(CToSMessageComponent packet, MessageContext context)
 	{
