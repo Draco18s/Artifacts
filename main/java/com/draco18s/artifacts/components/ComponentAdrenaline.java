@@ -174,7 +174,7 @@ public class ComponentAdrenaline implements IArtifactComponent {
 	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {
 		//System.out.println("Player has been damaged!");
 		if(isWornArmor) {
-			if(itemStack.stackTagCompound.getInteger("adrenDelay_armor") <= 0) {
+			if(itemStack.stackTagCompound.getInteger("adrenDelay_armor") <= 0 && event.entity instanceof EntityPlayer) {
 				//System.out.println("Attempting to apply potion effects to player.");
 				EntityPlayer p = (EntityPlayer)event.entity;
 				//if(p.getHealth() <= 4) {

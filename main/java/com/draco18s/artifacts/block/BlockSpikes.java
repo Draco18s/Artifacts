@@ -71,14 +71,14 @@ public class BlockSpikes extends BlockContainer {
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
     {
         float f = 0.0625F;
-        return AxisAlignedBB.getAABBPool().getAABB((double)((float)par2), (double)par3, (double)((float)par4), (double)((float)(par2 + 1)), (double)(par3 + 1 - f), (double)((float)(par4 + 1)));
+        return AxisAlignedBB.getBoundingBox((double)((float)par2), (double)par3, (double)((float)par4), (double)((float)(par2 + 1)), (double)(par3 + 1 - f), (double)((float)(par4 + 1)));
     }
 	
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4)
     {
         float f = 0.0625F;
-        return AxisAlignedBB.getAABBPool().getAABB((double)((float)par2), (double)par3, (double)((float)par4), (double)((float)(par2 + 1)), (double)(par3 + 1 - f), (double)((float)(par4 + 1)));
+        return AxisAlignedBB.getBoundingBox((double)((float)par2), (double)par3, (double)((float)par4), (double)((float)(par2 + 1)), (double)(par3 + 1 - f), (double)((float)(par4 + 1)));
     }
 	
 	@Override

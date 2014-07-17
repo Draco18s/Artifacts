@@ -6,9 +6,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
+import com.draco18s.artifacts.ArtifactEventHandler;
 import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.block.*;
 import com.draco18s.artifacts.client.RadarParticle;
@@ -17,6 +22,7 @@ import com.draco18s.artifacts.network.SToCMessageGeneral;
 
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
@@ -32,8 +38,43 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
+import net.minecraft.world.ChunkPosition;
 
 public class TileEntityAntibuilder extends TileEntity {
+	public static class AntibuilderLocation {
+		public int x, y, z, dimension;
+		
+		public AntibuilderLocation(int xToSet, int yToSet, int zToSet, int dimToSet) {
+			x = xToSet;
+			y = yToSet;
+			z = zToSet;
+			dimension = dimToSet;
+		}
+	}
+	
+	//Comparator for comparing locations (for quick adding/deleting in a set/map). 
+	private static Comparator<AntibuilderLocation> ALcomparator = new Comparator<AntibuilderLocation>() {
+		@Override
+		public int compare(AntibuilderLocation first, AntibuilderLocation second) {
+			if(first.x != second.x){
+				return first.x - second.x;
+			}
+			if(first.y != second.y){
+				return first.y - second.y;
+			}
+			if(first.z != second.z){
+				return first.z - second.z;
+			}
+			if(first.dimension != second.dimension){
+				return first.dimension - second.dimension;
+			}
+			
+			return 0;
+		}
+	};
+	
+	public static TreeMap<AntibuilderLocation, Integer> antibuilders = new TreeMap<AntibuilderLocation, Integer>(ALcomparator);
+	
 	private short[] blocks = new short[1332];
 	private byte[] metas = new byte[1332];
 	private boolean active = true;
@@ -47,7 +88,9 @@ public class TileEntityAntibuilder extends TileEntity {
 	@Override
 	public void updateEntity() {
 		if(active) {
-			AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(xCoord-32, yCoord-32, zCoord-32, xCoord+32, yCoord+32, zCoord+32);
+			antibuilders.put(new AntibuilderLocation(this.xCoord, this.yCoord, this.zCoord, this.worldObj.provider.dimensionId), 10);
+			
+			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(xCoord-32, yCoord-32, zCoord-32, xCoord+32, yCoord+32, zCoord+32);
 			List w = worldObj.getEntitiesWithinAABB(EntityPlayer.class, aabb);
 			if(w.size() == 0) {
 				expTNT = 0;
@@ -116,7 +159,7 @@ public class TileEntityAntibuilder extends TileEntity {
 								|| Block.blocksList[blocks[ox*121+oy*11+oz]].blockMaterial == Material.circuits) {*/
 								Block wBlock = worldObj.getBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5);
 								if(Block.getIdFromBlock(wBlock) != blocks[ox*121+oy*11+oz] && (wBlock == null || wBlock.getMaterial() != Material.circuits)) {
-									List l = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getAABBPool().getAABB(xCoord-3, yCoord-3, zCoord-3, xCoord+3, yCoord+3, zCoord+3));
+									List l = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord-3, yCoord-3, zCoord-3, xCoord+3, yCoord+3, zCoord+3));
 									//System.out.println("Block was broken: " + l.size());
 									while(l.size() > 0) {
 										EntityItem i = (EntityItem) l.remove(0);
@@ -160,7 +203,8 @@ public class TileEntityAntibuilder extends TileEntity {
 									|| blocks[ox*121+oy*11+oz] == Block.getIdFromBlock(Blocks.piston)
 									|| blocks[ox*121+oy*11+oz] == Block.getIdFromBlock(Blocks.piston_extension)
 									|| blocks[ox*121+oy*11+oz] == Block.getIdFromBlock(Blocks.torch)
-									|| blocks[ox*121+oy*11+oz] == Block.getIdFromBlock(BlockSword.instance)) {
+									|| blocks[ox*121+oy*11+oz] == Block.getIdFromBlock(BlockSword.instance)
+									|| Block.getBlockById(blocks[ox*121+oy*11+oz]) instanceof BlockFalling) {
 
 								Block wBlock = worldObj.getBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5);
 								int wMeta = worldObj.getBlockMetadata(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5);
@@ -229,14 +273,14 @@ public class TileEntityAntibuilder extends TileEntity {
 									if(Block.getIdFromBlock(wBlock) != blocks[ox*121+oy*11+oz] && blocks[ox*121+oy*11+oz] == Block.getIdFromBlock(Blocks.tnt)) {
 										if(expTNT < maxTNT) {
 											expTNT++;
-											List l = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getAABBPool().getAABB(xCoord-3, yCoord-3, zCoord-3, xCoord+3, yCoord+3, zCoord+3));
-											while(l.size() > 0) {
-												EntityItem i = (EntityItem) l.remove(0);
-												if(Item.getIdFromItem(i.getEntityItem().getItem()) == blocks[ox*121+oy*11+oz]) {
-													i.setDead();
-													i.getEntityItem().stackSize = 0;
-												}
-											}
+//											List l = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord-3, yCoord-3, zCoord-3, xCoord+3, yCoord+3, zCoord+3));
+//											while(l.size() > 0) {
+//												EntityItem i = (EntityItem) l.remove(0);
+//												if(Item.getIdFromItem(i.getEntityItem().getItem()) == blocks[ox*121+oy*11+oz]) {
+//													i.setDead();
+//													i.getEntityItem().stackSize = 0;
+//												}
+//											}
 											//System.out.println("Bad Block ID (C)");
 											worldObj.setBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, Block.getBlockById(blocks[ox*121+oy*11+oz]), metas[ox*121+oy*11+oz], 3);
 											drawParticleLine(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5, xCoord+0.5, yCoord+0.5, zCoord+0.5);
@@ -254,21 +298,23 @@ public class TileEntityAntibuilder extends TileEntity {
 									else if(Block.getIdFromBlock(wBlock) != blocks[ox*121+oy*11+oz] || wMeta != metas[ox*121+oy*11+oz]) {
 										//System.out.println("Bad Block ID (D)");
 										if(blocks[ox*121+oy*11+oz] == 0) {
-											//EntityItem ei = new EntityItem(worldObj, ox, oy, oz, new ItemStack(Block.blocksList[wid], 1, wmd));
-											//worldObj.spawnEntityInWorld(ei);
-											//xCoord+ox-5, yCoord+oy-5, zCoord+oz-5
+//											EntityItem ei = new EntityItem(worldObj, xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, new ItemStack(Item.getItemFromBlock(wBlock), 1, wMeta));
+//											worldObj.spawnEntityInWorld(ei);
+//											xCoord+ox-5, yCoord+oy-5, zCoord+oz-5
+											ArtifactEventHandler.ignore = true;
 											wBlock.dropBlockAsItem(worldObj, xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, wMeta, 0);
+											ArtifactEventHandler.ignore = false;
 										}
 										else {
 											//System.out.println("Cleaning dropped items");
-											List l = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getAABBPool().getAABB(xCoord-10, yCoord-10, zCoord-10, xCoord+10, yCoord+10, zCoord+10));
-											while(l.size() > 0) {
-												EntityItem i = (EntityItem) l.remove(0);
-												if(Item.getIdFromItem(i.getEntityItem().getItem()) == blocks[ox*121+oy*11+oz]) {
-													i.setDead();
-													i.getEntityItem().stackSize = 0;
-												}
-											}
+//											List l = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord-10, yCoord-10, zCoord-10, xCoord+10, yCoord+10, zCoord+10));
+//											while(l.size() > 0) {
+//												EntityItem i = (EntityItem) l.remove(0);
+//												if(Item.getIdFromItem(i.getEntityItem().getItem()) == blocks[ox*121+oy*11+oz]) {
+//													i.setDead();
+//													i.getEntityItem().stackSize = 0;
+//												}
+//											}
 										}
 										worldObj.setBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, Block.getBlockById(blocks[ox*121+oy*11+oz]));
 										worldObj.setBlockMetadataWithNotify(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, metas[ox*121+oy*11+oz], 3);

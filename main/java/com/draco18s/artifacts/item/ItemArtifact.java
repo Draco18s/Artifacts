@@ -308,8 +308,7 @@ public class ItemArtifact extends Item {
     }
 	
 	@Override
-    public boolean canHarvestBlock(Block par1Block, ItemStack itemStack)
-    {
+	public boolean canHarvestBlock(Block block, ItemStack itemStack) {
     	NBTTagCompound data = itemStack.getTagCompound();
 		int effectID = 0;
 		if(data != null) {
@@ -328,7 +327,7 @@ public class ItemArtifact extends Item {
 			for(int i=ca.length-1; i >= 0; i--) {
 				if(ca[i] != 0) {
 					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(ca[i]);
-					r = r||c.canHarvestBlock(par1Block, itemStack);
+					r = r||c.canHarvestBlock(block, itemStack);
 				}
 			}
 		}

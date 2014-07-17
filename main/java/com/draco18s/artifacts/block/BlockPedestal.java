@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.UUID;
 
@@ -82,7 +83,21 @@ public class BlockPedestal extends BlockContainer {
 			TileEntity te = world.getTileEntity(x, y, z);
 			if(te instanceof TileEntityDisplayPedestal && entityLivingBase instanceof EntityPlayer) {
 				TileEntityDisplayPedestal ted = (TileEntityDisplayPedestal)te;
-				EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(entityLivingBase.getCommandSenderName());
+				EntityPlayerMP player = null;
+				Iterator iterator = MinecraftServer.getServer().getConfigurationManager().playerEntityList.iterator();
+
+		        do
+		        {
+		            if (!iterator.hasNext())
+		            {
+		                player = null;
+		                break;
+		            }
+
+		            player = (EntityPlayerMP)iterator.next();
+		        }
+		        while (!player.getCommandSenderName().equalsIgnoreCase(entityLivingBase.getCommandSenderName()));
+		        
 				ted.owner = player.getPersistentID();
 
 				try

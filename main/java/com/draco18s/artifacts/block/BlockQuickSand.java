@@ -112,7 +112,7 @@ public class BlockQuickSand extends Block
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z)
     {
     	int meta = world.getBlockMetadata(x, y, z);
-        return AxisAlignedBB.getAABBPool().getAABB((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + this.maxX, (double)y + this.maxY - (meta / 16), (double)z + this.maxZ);
+        return AxisAlignedBB.getBoundingBox((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + this.maxX, (double)y + this.maxY - (meta / 16), (double)z + this.maxZ);
     }
     
     @Override

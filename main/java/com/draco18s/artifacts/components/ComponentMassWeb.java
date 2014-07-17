@@ -162,7 +162,7 @@ public class ComponentMassWeb implements IArtifactComponent {
 				double par4 = entityItem.posX+10;
 				double par5 = entityItem.posY+10;
 				double par6 = entityItem.posZ+10;
-				AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(par1, par2, par3, par4, par5, par6);
+				AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(par1, par2, par3, par4, par5, par6);
 				List<EntityLivingBase> ents = entityItem.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
 				EntityPlayer player = null;
 				EntityLivingBase someEnt = null;

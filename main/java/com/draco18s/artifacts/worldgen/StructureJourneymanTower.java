@@ -1083,8 +1083,8 @@ public class StructureJourneymanTower extends WorldGenerator {
 					}
 				}
 			}
-			world.setBlock(i+5, j+y+6, k+4, Blocks.mob_spawner, 0, 2);
-			TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner)world.getTileEntity(i+5, j+y+6, k+4);
+			world.setBlock(i+5, j+y+5, k+4, Blocks.mob_spawner, 0, 2);
+			TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner)world.getTileEntity(i+5, j+y+5, k+4);
 
             if (tileentitymobspawner != null)
             {

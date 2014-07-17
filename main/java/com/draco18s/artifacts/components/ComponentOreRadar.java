@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -126,7 +127,20 @@ public class ComponentOreRadar implements IArtifactComponent {
 		int x = (int)entityPlayer.posX;
 		int y = (int)entityPlayer.posY;
 		int z = (int)entityPlayer.posZ;
-		EntityPlayerMP player = MinecraftServer.getServer().getConfigurationManager().getPlayerForUsername(entityPlayer.getCommandSenderName());
+		EntityPlayerMP player = null;
+		Iterator iterator = MinecraftServer.getServer().getConfigurationManager().playerEntityList.iterator();
+
+        do
+        {
+            if (!iterator.hasNext())
+            {
+                player = null;
+                break;
+            }
+
+            player = (EntityPlayerMP)iterator.next();
+        }
+        while (!player.getCommandSenderName().equalsIgnoreCase(entityPlayer.getCommandSenderName()));
 		
 		//+/- 4
 		boolean found = false;
@@ -142,7 +156,8 @@ public class ComponentOreRadar implements IArtifactComponent {
 					}
 					if(!already) {
 						Block block = world.getBlock(xx, yy,zz);
-						if(block == Blocks.diamond_ore || block == Blocks.iron_ore || block == Blocks.coal_ore || block == Blocks.redstone_ore || block == Blocks.lit_redstone_ore || block == Blocks.emerald_ore || block == Blocks.gold_ore || block == Blocks.lapis_ore || block == Blocks.quartz_ore){
+						if(block == Blocks.diamond_ore || block == Blocks.iron_ore || block == Blocks.coal_ore || block == Blocks.redstone_ore || block == Blocks.lit_redstone_ore || block == Blocks.emerald_ore || block == Blocks.gold_ore || block == Blocks.lapis_ore || block == Blocks.quartz_ore ||
+								block.getUnlocalizedName().contains("ore") || block.getUnlocalizedName().contains("ORE") || block.getUnlocalizedName().contains("Ore")){
 							PacketBuffer out = new PacketBuffer(Unpooled.buffer());
 							
 							out.writeInt(PacketHandlerClient.ORE_RADAR);
@@ -160,7 +175,6 @@ public class ComponentOreRadar implements IArtifactComponent {
 							yy = y + 10;
 						}
 						else {
-							String oreName;
 							for(int a=ComponentOreRadar.oreBlocks.size()-1; a >= 0; a--) {
 								if(Item.getItemFromBlock(block) == ComponentOreRadar.oreBlocks.get(a).getItem()) {
 									PacketBuffer out = new PacketBuffer(Unpooled.buffer());

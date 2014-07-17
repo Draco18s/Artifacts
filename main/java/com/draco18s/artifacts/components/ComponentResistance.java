@@ -82,7 +82,7 @@ public class ComponentResistance implements IArtifactComponent {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-		UtilsForComponents.sendPotionPacket(11, 600, 1, player);
+		UtilsForComponents.sendPotionPacket(11, 600, 0, player);
 		UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 1);
 		itemStack.stackTagCompound.setInteger("onItemRightClickDelay", 200);
 		return itemStack;
@@ -91,7 +91,7 @@ public class ComponentResistance implements IArtifactComponent {
 	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase entityLivingHit, EntityLivingBase entityLivingPlayer) {
 		if(!entityLivingPlayer.worldObj.isRemote) {
-			entityLivingPlayer.addPotionEffect(new PotionEffect(11, 100, 1));
+			entityLivingPlayer.addPotionEffect(new PotionEffect(11, 100, 0));
 		}
 		return false;
 	}
@@ -117,7 +117,7 @@ public class ComponentResistance implements IArtifactComponent {
 		if(!world.isRemote) {
 			if(par3Entity instanceof EntityLivingBase) {
 				EntityLivingBase ent = (EntityLivingBase) par3Entity;
-				ent.addPotionEffect(new PotionEffect(11, 10, 1));
+				ent.addPotionEffect(new PotionEffect(11, 10, 0));
 			}
 		}
 	}

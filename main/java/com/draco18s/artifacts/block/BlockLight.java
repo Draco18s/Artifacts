@@ -23,18 +23,15 @@ public class BlockLight extends Block {
 		this.setLightLevel(1);
 		this.setHardness(0);
 		this.setResistance(0);
+		this.setTickRandomly(true); //So it destroys itself over time.
 	}
 	
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
 		if(world.getBlock(x, y, z) == BlockLight.instance) {
-			int meta = world.getBlockMetadata(x, y, z);
-			if(meta >= 8) {
-				world.setBlockToAir(x, y, z);
-			}
-			else {
-				world.setBlockMetadataWithNotify(x, y, z, meta+1, 3);
-			}
+			
+			world.setBlockToAir(x, y, z);
+			
 		}
 	}
 	

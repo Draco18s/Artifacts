@@ -62,7 +62,7 @@ final class DispenserBehaviorSword extends BehaviorDefaultDispenseItem
         //Play sound.
         blockSource.getWorld().playAuxSFX(1002, blockSource.getXInt(), blockSource.getYInt(), blockSource.getZInt(), 0);
         
-        AxisAlignedBB par2AxisAlignedBB = AxisAlignedBB.getAABBPool().getAABB(d0, d1, d2, d3, d4, d5);
+        AxisAlignedBB par2AxisAlignedBB = AxisAlignedBB.getBoundingBox(d0, d1, d2, d3, d4, d5);
         //System.out.println(par2AxisAlignedBB);
         List<EntityLivingBase> ents = blockSource.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, par2AxisAlignedBB);
         if(ents.size() > 0) {

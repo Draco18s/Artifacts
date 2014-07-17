@@ -11,19 +11,28 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.oredict.OreDictionary;
+
 import com.draco18s.artifacts.api.ArtifactsAPI;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
+import com.draco18s.artifacts.block.BlockAntibuilder;
+import com.draco18s.artifacts.block.BlockStoneBrickMovable;
+import com.draco18s.artifacts.block.BlockSword;
 import com.draco18s.artifacts.client.ClientProxy;
 import com.draco18s.artifacts.client.TextureCalendar;
 import com.draco18s.artifacts.components.ComponentOreRadar;
 import com.draco18s.artifacts.components.ComponentResurrect;
+import com.draco18s.artifacts.entity.TileEntityAntibuilder;
+import com.draco18s.artifacts.entity.TileEntityAntibuilder.AntibuilderLocation;
 import com.draco18s.artifacts.item.ItemArtifactArmor;
 import com.draco18s.artifacts.item.ItemCalendar;
 
@@ -126,6 +135,40 @@ public class ArtifactEventHandler {
 		//System.out.println(event.map.getTextureExtry("artifacts:calendar"));
 		if(event.map.getTextureType() == 1 ) {
 			event.map.setTextureEntry("artifacts:calendar", ClientProxy.calendar = new TextureCalendar("artifacts:calendar"));
+		}
+	}
+	
+	private boolean blockUnderAntibuilderInfluence(World world, int x, int y, int z) {
+		if(world.getBlock(x, y, z) == Blocks.fire || 
+				world.getBlock(x, y, z) == BlockAntibuilder.instance ||
+				world.getBlock(x, y, z) == Blocks.web ||
+				world.getBlock(x, y, z) == Blocks.torch ||
+				world.getBlock(x, y, z) == BlockSword.instance) {
+			return false;
+		}
+		
+		for(AntibuilderLocation al : TileEntityAntibuilder.antibuilders.keySet()) {
+			if(world.provider.dimensionId == al.dimension && MathHelper.abs(x - al.x) <= 5 && MathHelper.abs(y - al.y) <= 5 && MathHelper.abs(z - al.z) <= 5) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	@SubscribeEvent
+	public void onBlockDestroyedByPlayer(BreakEvent event) {
+		if(blockUnderAntibuilderInfluence(event.world, event.x, event.y, event.z)) {
+			event.setCanceled(true);
+		}
+	}
+	
+	public static boolean ignore = false;
+	
+	@SubscribeEvent
+	public void onBlockHarvested(HarvestDropsEvent event) {
+		if(!ignore && blockUnderAntibuilderInfluence(event.world, event.x, event.y, event.z)) {
+			event.drops.clear();
 		}
 	}
 }

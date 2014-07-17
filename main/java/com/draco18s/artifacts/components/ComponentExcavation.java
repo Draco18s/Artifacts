@@ -124,26 +124,36 @@ public class ComponentExcavation implements IArtifactComponent {
 	public boolean canHarvestBlock(Block block, ItemStack itemStack) {
 		ToolMaterial toolMaterial = ToolMaterial.values()[itemStack.stackTagCompound.getInteger("material")];
 		
-		if(block == Blocks.dirt || block == Blocks.grass || block == Blocks.gravel || block == Blocks.sand) {
+		try {
+			if(block.getBlockHardness(null, 0, 0, 0) == -1) {
+				return false;
+			}
+		}
+		catch(NullPointerException e) {
+			return false;
+		}
+		
+		if(block.getMaterial().isToolNotRequired()) {
 			return true;
 		}
 		
 		if(toolMaterial == ToolMaterial.WOOD) {
-			return Items.wooden_pickaxe.func_150897_b/*canHarvestBlock*/(block);
+			return Items.wooden_pickaxe.func_150897_b/*canHarvestBlock*/(block) || Items.wooden_shovel.func_150897_b(block);
 		}
 		else if(toolMaterial == ToolMaterial.STONE) {
-			return Items.stone_pickaxe.func_150897_b(block);
+			return Items.stone_pickaxe.func_150897_b(block) || Items.stone_shovel.func_150897_b(block);
 		}
 		else if(toolMaterial == ToolMaterial.EMERALD) {
-			return Items.diamond_pickaxe.func_150897_b(block);
+			return Items.diamond_pickaxe.func_150897_b(block) || Items.diamond_shovel.func_150897_b(block);
 		}
 		else if(toolMaterial == ToolMaterial.IRON) {
-			return Items.iron_pickaxe.func_150897_b(block);
+			return Items.iron_pickaxe.func_150897_b(block) || Items.iron_shovel.func_150897_b(block);
 		}
 		else if(toolMaterial == ToolMaterial.GOLD) {
-			return Items.golden_pickaxe.func_150897_b(block);
+			return Items.golden_pickaxe.func_150897_b(block) || Items.golden_shovel.func_150897_b(block);
 		}
-		return block == Blocks.obsidian ? toolMaterial.getHarvestLevel() == 3 : (block != Blocks.diamond_block && block != Blocks.diamond_ore ? (block != Blocks.emerald_ore && block != Blocks.emerald_block ? (block != Blocks.gold_block && block != Blocks.gold_ore ? (block != Blocks.iron_block && block != Blocks.iron_ore ? (block != Blocks.lapis_block && block != Blocks.lapis_ore ? (block != Blocks.redstone_ore && block != Blocks.lit_redstone_ore ? (block.getMaterial() == Material.rock ? true : (block.getMaterial() == Material.iron ? true : block.getMaterial() == Material.anvil)) : toolMaterial.getHarvestLevel() >= 2) : toolMaterial.getHarvestLevel() >= 1) : toolMaterial.getHarvestLevel() >= 1) : toolMaterial.getHarvestLevel() >= 2) : toolMaterial.getHarvestLevel() >= 2) : toolMaterial.getHarvestLevel() >= 2);
+
+		return toolMaterial.getHarvestLevel() >= block.getHarvestLevel(0);
 	}
 
 	@Override

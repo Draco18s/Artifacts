@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Random;
@@ -40,6 +41,8 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 
 import com.draco18s.artifacts.components.ComponentRepair;
+import com.draco18s.artifacts.entity.TileEntityAntibuilder;
+import com.draco18s.artifacts.entity.TileEntityAntibuilder.AntibuilderLocation;
 import com.draco18s.artifacts.item.ItemArtifact;
 import com.draco18s.artifacts.item.ItemArtifactArmor;
 import com.draco18s.artifacts.item.ItemOrichalcumDust;
@@ -84,7 +87,6 @@ public class ArtifactTickHandler {
 					}
 				}
 			}
-			
 		}
 		else {
 			//System.out.println("Tick Start.");
@@ -149,6 +151,20 @@ public class ArtifactTickHandler {
 			repairCount++;
 			if(repairCount > 1200) {
 				repairCount = 0;
+			}
+			
+			//Update antibuilders present
+			ArrayList<AntibuilderLocation> toRemove = new ArrayList<AntibuilderLocation>();
+			for(AntibuilderLocation location : TileEntityAntibuilder.antibuilders.keySet()) {
+				int strength = TileEntityAntibuilder.antibuilders.get(location);
+				TileEntityAntibuilder.antibuilders.put(location, strength - 1);
+				if(strength - 1 < 0) {
+					toRemove.add(location);
+				}
+			}
+			
+			for(AntibuilderLocation location : toRemove) {
+				TileEntityAntibuilder.antibuilders.remove(location);
 			}
 		}
 	}

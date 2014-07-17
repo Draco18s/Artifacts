@@ -2300,8 +2300,8 @@ public class StructureMasterTower extends WorldGenerator
 					}
 				}
 			}
-			world.setBlock(i+5, j+y+6, k+6, Blocks.mob_spawner, 0, 2);
-			TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner)world.getTileEntity(i+5, j+y+6, k+6);
+			world.setBlock(i+5, j+y+5, k+6, Blocks.mob_spawner, 0, 2);
+			TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner)world.getTileEntity(i+5, j+y+5, k+6);
 
             if (tileentitymobspawner != null)
             {

@@ -26,7 +26,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import net.minecraft.util.Vec3Pool;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
@@ -114,7 +113,7 @@ public class EntitySpecialArrow extends EntityArrow {
 		if (block != Blocks.air) {
 			block.setBlockBoundsBasedOnState(this.worldObj, this.xTile, this.yTile, this.zTile);
 			AxisAlignedBB var2 = block.getCollisionBoundingBoxFromPool(this.worldObj, this.xTile, this.yTile, this.zTile);
-			if ((var2 != null) && (var2.isVecInside(this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ))))
+			if ((var2 != null) && (var2.isVecInside(Vec3.createVectorHelper(this.posX, this.posY, this.posZ))))
 				this.inGround = true;
 		}
 		if (this.arrowShake > 0)
@@ -138,13 +137,13 @@ public class EntitySpecialArrow extends EntityArrow {
 		}
 		else {
 			this.ticksInAir += 1;
-			Vec3 posVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
-			Vec3 newPosVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+			Vec3 posVector = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+			Vec3 newPosVector = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 			MovingObjectPosition moPos = this.worldObj.func_147447_a(posVector, newPosVector, false, true, false);
-			posVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX, this.posY, this.posZ);
-			newPosVector = this.worldObj.getWorldVec3Pool().getVecFromPool(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
+			posVector = Vec3.createVectorHelper(this.posX, this.posY, this.posZ);
+			newPosVector = Vec3.createVectorHelper(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 			if (moPos != null)
-				newPosVector = this.worldObj.getWorldVec3Pool().getVecFromPool(moPos.hitVec.xCoord, moPos.hitVec.yCoord, moPos.hitVec.zCoord);
+				newPosVector = Vec3.createVectorHelper(moPos.hitVec.xCoord, moPos.hitVec.yCoord, moPos.hitVec.zCoord);
 			Entity entity = null;
 			List entityList = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0D, 1.0D, 1.0D));
 			double var7 = 0.0D;

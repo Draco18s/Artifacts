@@ -111,17 +111,25 @@ public class ComponentLight implements IArtifactComponent {
 				int nlz = MathHelper.floor_double(entity.posZ);
 				if(nlx != lx || nly != ly || nlz != lz) {
 					int d = (nlx - lx)*(nlx - lx)+(nly - ly)*(nly - ly)+(nlz - lz)*(nlz - lz);
-					if(d > 13 && world.getBlockLightValue(nlx,nly,nlz) < 10) {
-						//updating lighting info isn't fast :(
-						if(ly >= 0 && ly < 256 && world.getBlock(lx, ly, lz) == BlockLight.instance) {
-							world.setBlockToAir(lx, ly, lz);
-							//System.out.println("Removed: " + lx + "," + ly + "," + lz);
+					if(world.getBlockLightValue(nlx,nly,nlz) < 10) {
+						if(d > 13) {
+							//updating lighting info isn't fast :(
+							if(ly >= 0 && ly < 256 && world.getBlock(lx, ly, lz) == BlockLight.instance) {
+								world.setBlockToAir(lx, ly, lz);
+								//System.out.println("Removed: " + lx + "," + ly + "," + lz);
+							}
+							if(nly >= 0 && nly < 256 && world.isAirBlock(nlx, nly, nlz)) {
+								world.setBlock(nlx, nly, nlz, BlockLight.instance);
+								stack.stackTagCompound.setInteger("lastLightX",nlx);
+								stack.stackTagCompound.setInteger("lastLightY",nly);
+								stack.stackTagCompound.setInteger("lastLightZ",nlz);
+							}
 						}
-						if(nly >= 0 && nly < 256 && world.isAirBlock(nlx, nly, nlz)) {
-							world.setBlock(nlx, nly, nlz, BlockLight.instance);
-							stack.stackTagCompound.setInteger("lastLightX",nlx);
-							stack.stackTagCompound.setInteger("lastLightY",nly);
-							stack.stackTagCompound.setInteger("lastLightZ",nlz);
+						else {
+							//Reset the block if it disappeared
+							if(world.getBlock(lx, ly, lz) != BlockLight.instance) {
+								world.setBlock(lx, ly, lz, BlockLight.instance);
+							}
 						}
 					}
 				}

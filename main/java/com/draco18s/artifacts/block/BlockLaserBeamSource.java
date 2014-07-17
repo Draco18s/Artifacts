@@ -399,7 +399,7 @@ public class BlockLaserBeamSource extends Block {
         	int l = par1World.getBlockMetadata(par2, par3, par4);
             boolean flag = (l & 8) == 8;
         	boolean flag1 = false;
-        	List list = par1World.getEntitiesWithinAABBExcludingEntity((Entity)null, AxisAlignedBB.getAABBPool().getAABB((double)par2 + this.minX, (double)par3 + this.minY, (double)par4 + this.minZ, (double)par2 + this.maxX, (double)par3 + this.maxY, (double)par4 + this.maxZ));
+        	List list = par1World.getEntitiesWithinAABBExcludingEntity((Entity)null, AxisAlignedBB.getBoundingBox((double)par2 + this.minX, (double)par3 + this.minY, (double)par4 + this.minZ, (double)par2 + this.maxX, (double)par3 + this.maxY, (double)par4 + this.maxZ));
 
             if (!list.isEmpty())
             {

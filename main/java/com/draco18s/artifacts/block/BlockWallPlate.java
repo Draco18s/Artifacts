@@ -175,7 +175,7 @@ public class BlockWallPlate extends BlockBasePressurePlate {
     protected AxisAlignedBB func_150061_a(int x, int y, int z)
     {
         float f = 0.125F;
-        return AxisAlignedBB.getAABBPool().getAABB((double)((float)x), (double)y, (double)((float)z), (double)((float)(x + 1)), (double)y + 1D, (double)((float)(z + 1)));
+        return AxisAlignedBB.getBoundingBox((double)((float)x), (double)y, (double)((float)z), (double)((float)(x + 1)), (double)y + 1D, (double)((float)(z + 1)));
     }
     
     protected AxisAlignedBB getMetaSensitiveAABB(int x, int y, int z, int meta)
@@ -183,19 +183,19 @@ public class BlockWallPlate extends BlockBasePressurePlate {
         float f = 0.125F;
         switch(meta) {
         	case 2:
-        		return AxisAlignedBB.getAABBPool().getAABB((double)((float)x + f), (double)((float)y + f), (double)((float)(z + 1)-0.25f), (double)((float)(x + 1) - f), (double)((float)(y + 1) - f), (double)(z + 1));
+        		return AxisAlignedBB.getBoundingBox((double)((float)x + f), (double)((float)y + f), (double)((float)(z + 1)-0.25f), (double)((float)(x + 1) - f), (double)((float)(y + 1) - f), (double)(z + 1));
         		//break;
         	case 3:
-        		return AxisAlignedBB.getAABBPool().getAABB((double)((float)x + f), (double)((float)y + f), (double)z, (double)((float)(x + 1) - f), (double)((float)(y + 1) - f), (double)z + 0.25D);
+        		return AxisAlignedBB.getBoundingBox((double)((float)x + f), (double)((float)y + f), (double)z, (double)((float)(x + 1) - f), (double)((float)(y + 1) - f), (double)z + 0.25D);
         		//break;
         	case 4:
-        		return AxisAlignedBB.getAABBPool().getAABB((double)((float)(x + 1)-0.25f), (double)((float)y + f), (double)((float)z + f), (double)(x + 1), (double)((float)(y + 1) - f), (double)((float)(z + 1) - f));
+        		return AxisAlignedBB.getBoundingBox((double)((float)(x + 1)-0.25f), (double)((float)y + f), (double)((float)z + f), (double)(x + 1), (double)((float)(y + 1) - f), (double)((float)(z + 1) - f));
         		//break;
         	case 5:
-        		return AxisAlignedBB.getAABBPool().getAABB((double)x, (double)((float)y + f), (double)((float)z + f), (double)x + 0.25D, (double)((float)(y + 1) - f), (double)((float)(z + 1) - f));
+        		return AxisAlignedBB.getBoundingBox((double)x, (double)((float)y + f), (double)((float)z + f), (double)x + 0.25D, (double)((float)(y + 1) - f), (double)((float)(z + 1) - f));
         		//break;
         }
-        return AxisAlignedBB.getAABBPool().getAABB((double)((float)x + f), (double)y, (double)((float)z + f), (double)((float)(x + 1) - f), (double)y + 0.25D, (double)((float)(z + 1) - f));
+        return AxisAlignedBB.getBoundingBox((double)((float)x + f), (double)y, (double)((float)z + f), (double)((float)(x + 1) - f), (double)y + 0.25D, (double)((float)(z + 1) - f));
     }
     
     @Override

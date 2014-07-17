@@ -288,7 +288,7 @@ public class BlockTrap extends BlockContainer
     		TileEntityDispenser dis;
     		if(te instanceof TileEntityDispenser) {
     			dis = ((TileEntityDispenser) te);
-	    		AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(par2-0.2, par3-0.2, par4-0.2, par2+1.2, par3+1.2, par4+1.2);
+	    		AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(par2-0.2, par3-0.2, par4-0.2, par2+1.2, par3+1.2, par4+1.2);
 	    		List<EntitySpecialArrow> arrs = par1World.getEntitiesWithinAABB(EntitySpecialArrow.class, aabb);
 	    		for(int a = arrs.size()-1; a>=0; a--) {
 	    			EntityArrow arr = arrs.get(a);
