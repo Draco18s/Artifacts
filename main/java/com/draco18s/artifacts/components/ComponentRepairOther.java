@@ -12,7 +12,7 @@ import com.google.common.collect.Multimap;
 import com.draco18s.artifacts.ArtifactTickHandler;
 import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
-import com.draco18s.artifacts.network.CToSMessageComponent;
+import com.draco18s.artifacts.network.CToSMessage;
 import com.draco18s.artifacts.network.PacketHandlerServer;
 
 import net.minecraft.block.Block;
@@ -103,7 +103,7 @@ public class ComponentRepairOther implements IArtifactComponent {
 			out.writeInt(PacketHandlerServer.REPAIRING);
 			out.writeInt(i);
 			out.writeInt(player.inventory.currentItem);
-			CToSMessageComponent packet = new CToSMessageComponent(player.getUniqueID(), out);
+			CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
 			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		
 			//par1ItemStack.setItemDamage(par1ItemStack.getItemDamage()+1);

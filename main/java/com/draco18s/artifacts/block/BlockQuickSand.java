@@ -219,7 +219,7 @@ public class BlockQuickSand extends Block
     }
     
     //Returns true if the entity's head is in inside the quicksand.
-    private boolean headInQuicksand(World world, int x, int y, int z, Entity entity)
+    public static boolean headInQuicksand(World world, int x, int y, int z, Entity entity)
     {
     	x = MathHelper.floor_double(entity.posX);
     	int headY = MathHelper.floor_double(entity.posY + entity.getEyeHeight());    	

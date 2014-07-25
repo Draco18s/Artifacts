@@ -13,12 +13,12 @@ import java.util.Random;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.draco18s.artifacts.ArtifactEventHandler;
+import com.draco18s.artifacts.ArtifactServerEventHandler;
 import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.block.*;
 import com.draco18s.artifacts.client.RadarParticle;
 import com.draco18s.artifacts.network.PacketHandlerClient;
-import com.draco18s.artifacts.network.SToCMessageGeneral;
+import com.draco18s.artifacts.network.SToCMessage;
 
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.block.Block;
@@ -204,6 +204,8 @@ public class TileEntityAntibuilder extends TileEntity {
 									|| blocks[ox*121+oy*11+oz] == Block.getIdFromBlock(Blocks.piston_extension)
 									|| blocks[ox*121+oy*11+oz] == Block.getIdFromBlock(Blocks.torch)
 									|| blocks[ox*121+oy*11+oz] == Block.getIdFromBlock(BlockSword.instance)
+									|| Block.getBlockById(blocks[ox*121+oy*11+oz]).getUnlocalizedName().toLowerCase().contains("leaves") 
+									|| Block.getBlockById(blocks[ox*121+oy*11+oz]).getUnlocalizedName().toLowerCase().contains("leaf")
 									|| Block.getBlockById(blocks[ox*121+oy*11+oz]) instanceof BlockFalling) {
 
 								Block wBlock = worldObj.getBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5);
@@ -290,20 +292,20 @@ public class TileEntityAntibuilder extends TileEntity {
 											//blocks[ox*121+oy*11+oz] = 0;
 										}
 									}
-									else if(blocks[ox*121+oy*11+oz] != 0 && (Block.getBlockById(blocks[ox*121+oy*11+oz]).getUnlocalizedName().toLowerCase().contains("leaves") || Block.getBlockById(blocks[ox*121+oy*11+oz]).getUnlocalizedName().toLowerCase().contains("leaf"))) {
-										//don't touch leaves
-										blocks[ox*121+oy*11+oz] = (short)Block.getIdFromBlock(wBlock);
-										metas[ox*121+oy*11+oz] = (byte)wMeta;
-									}
+//									else if(blocks[ox*121+oy*11+oz] != 0 && (Block.getBlockById(blocks[ox*121+oy*11+oz]).getUnlocalizedName().toLowerCase().contains("leaves") || Block.getBlockById(blocks[ox*121+oy*11+oz]).getUnlocalizedName().toLowerCase().contains("leaf"))) {
+//										//don't touch leaves
+//										blocks[ox*121+oy*11+oz] = (short)Block.getIdFromBlock(wBlock);
+//										metas[ox*121+oy*11+oz] = (byte)wMeta;
+//									}
 									else if(Block.getIdFromBlock(wBlock) != blocks[ox*121+oy*11+oz] || wMeta != metas[ox*121+oy*11+oz]) {
 										//System.out.println("Bad Block ID (D)");
 										if(blocks[ox*121+oy*11+oz] == 0) {
 //											EntityItem ei = new EntityItem(worldObj, xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, new ItemStack(Item.getItemFromBlock(wBlock), 1, wMeta));
 //											worldObj.spawnEntityInWorld(ei);
 //											xCoord+ox-5, yCoord+oy-5, zCoord+oz-5
-											ArtifactEventHandler.ignore = true;
+											ArtifactServerEventHandler.ignore = true;
 											wBlock.dropBlockAsItem(worldObj, xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, wMeta, 0);
-											ArtifactEventHandler.ignore = false;
+											ArtifactServerEventHandler.ignore = false;
 										}
 										else {
 											//System.out.println("Cleaning dropped items");
@@ -374,7 +376,7 @@ public class TileEntityAntibuilder extends TileEntity {
 				out.writeDouble(ty);
 				out.writeDouble(tz);
 				out.writeInt(i-r);
-				SToCMessageGeneral packet = new SToCMessageGeneral(out);
+				SToCMessage packet = new SToCMessage(out);
 				DragonArtifacts.artifactNetworkWrapper.sendToAllAround(packet, new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 32));
 			}
 			catch (Exception ex)

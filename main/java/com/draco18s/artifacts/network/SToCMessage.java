@@ -4,60 +4,57 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.io.IOException;
-import java.util.UUID;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.INetHandler;
-import net.minecraft.network.Packet;
-import net.minecraft.network.PacketBuffer;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.INetHandler;
+import net.minecraft.network.Packet;
+import net.minecraft.network.PacketBuffer;
 
-public class CToSMessageComponent implements IMessage {
-	private UUID playerID;
+public class SToCMessage implements IMessage{
 	private byte[] data;
 	
-	public CToSMessageComponent() 
+	public SToCMessage() 
 	{
-		this(new UUID(0,0), new byte[]{0});
+		this(new byte[]{0});
 	}
-
-	public CToSMessageComponent(UUID playerUUID, ByteBuf dataToSet)
+	
+	public SToCMessage(ByteBuf dataToSet)
     {
-        this(playerUUID, dataToSet.array());
+        this(dataToSet.array());
     }
 
-    public CToSMessageComponent(UUID playerUUID, byte[] dataToSet)
+    public SToCMessage(byte[] dataToSet)
     {
         
         if (dataToSet.length > 0x1ffff0)
         {
             throw new IllegalArgumentException("Payload may not be larger than 2097136 (0x1ffff0) bytes");
         }
-        
-        this.playerID = playerUUID;
+        //System.out.println("Creating General Packet!");
         this.data = dataToSet;
 
     }
-    
+
     /**
      * Deconstruct your message into the supplied byte buffer
      * @param buf
      */
 	@Override
 	public void toBytes(ByteBuf buffer) {
-		System.out.println("Encoding");
+		//System.out.println("Encoding General Packet!");
+        
 		if (data.length > 0x1ffff0)
         {
             throw new IllegalArgumentException("Payload may not be larger than 2097136 (0x1ffff0) bytes");
         }
 		
-		buffer.writeLong(playerID.getLeastSignificantBits());
-		buffer.writeLong(playerID.getMostSignificantBits());
         buffer.writeShort(this.data.length);
         buffer.writeBytes(this.data);
+		
 	}
 
 	/**
@@ -66,21 +63,13 @@ public class CToSMessageComponent implements IMessage {
      */
 	@Override
 	public void fromBytes(ByteBuf buffer) {
-		System.out.println("Decoding");
-		
-		long uuidLeastBits = buffer.readLong();
-		long uuidMostBits = buffer.readLong();
-		this.playerID = new UUID(uuidMostBits, uuidLeastBits);
+		//System.out.println("Decoding General Packet!");
+        
 		this.data = new byte[buffer.readShort()];
         buffer.readBytes(this.data);
 	}
-
+	
     public byte[] getData() {
         return this.data;
     }
-	
-	public UUID getUUID() {
-		return this.playerID;
-	}
-
 }

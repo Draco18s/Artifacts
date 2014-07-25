@@ -79,7 +79,8 @@ public class ComponentFoodie implements IArtifactComponent {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world,	EntityPlayer player) {		
-		UtilsForComponents.sendPotionPacket(23, 20, 0, player);
+		UtilsForComponents.sendPotionPacket(23, 2, 0, player);
+//		UtilsForComponents.sendPotionPacket(9, 200, 0, player);
 		UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 1);
 		itemStack.stackTagCompound.setInteger("onItemRightClickDelay", 20);
 		return itemStack;
@@ -88,7 +89,8 @@ public class ComponentFoodie implements IArtifactComponent {
 	@Override
 	public boolean hitEntity(ItemStack itemStack, EntityLivingBase entityLivingHit, EntityLivingBase entityLivingPlayer) {
 		if(!entityLivingPlayer.worldObj.isRemote && entityLivingPlayer instanceof EntityPlayer) {
-			entityLivingPlayer.addPotionEffect(new PotionEffect(23, 100, 0));
+			entityLivingPlayer.addPotionEffect(new PotionEffect(23, 2, 0));
+//			entityLivingPlayer.addPotionEffect(new PotionEffect(9, 200, 0));
 			itemStack.damageItem(1, entityLivingPlayer);
 		}
 		return false;
@@ -116,15 +118,12 @@ public class ComponentFoodie implements IArtifactComponent {
 	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		int time = 0;
-		if(trigger == "when inflicting damage.") {
-			time = 5;
-		}
-		else if(trigger == "when used.") {
-			time = 1;
+		String amount = "effect.fills hunger when half empty";
+		if(trigger == "when inflicting damage." || trigger == "when used.") {
+			amount = "effect.fills 1 drumstick";
 		}
 		par3List.add(EnumChatFormatting.AQUA + StatCollector.translateToLocal("effect.Food Saturation"));
-		par3List.add("  " + EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + time + " " + StatCollector.translateToLocal("time.seconds") + ")");
+		par3List.add("  " + EnumChatFormatting.AQUA + StatCollector.translateToLocal("tool."+trigger) + " (" + StatCollector.translateToLocal(amount) + ")");
 	}
 
 	@Override
@@ -184,8 +183,9 @@ public class ComponentFoodie implements IArtifactComponent {
 		if(!par2World.isRemote) {
 			if(par3Entity instanceof EntityPlayer) {
 				EntityPlayer ent = (EntityPlayer) par3Entity;
-				if(ent.getFoodStats().getFoodLevel() < 18) {
+				if(ent.getFoodStats().getFoodLevel() < 11) {
 					ent.addPotionEffect(new PotionEffect(23, 10, 0));
+//					ent.addPotionEffect(new PotionEffect(9, 200, 0));
 					par1ItemStack.damageItem(1, ent);
 				}
 			}

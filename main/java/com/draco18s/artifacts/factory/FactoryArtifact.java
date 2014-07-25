@@ -192,6 +192,22 @@ public class FactoryArtifact implements IArtifactAPI {
 		}else { 
 			registerComponent(null);
 		}
+		if(config.get("Effects", "Obscurity", true).getBoolean(true)) {
+			registerComponent(new ComponentObscurity());
+		}else {
+			registerComponent(null);
+		}
+		if(config.get("Effects", "Baking", true).getBoolean(true)) {
+			registerComponent(new ComponentBaking());
+		}else {
+			registerComponent(null);
+		}
+		if(config.get("Effects", "MusicPlayer", true).getBoolean(true)) { //#30
+			registerComponent(new ComponentMusicPlayer());
+		}
+		else {
+			registerComponent(null);
+		}
 		config.save();
 	}
 	

@@ -1,6 +1,7 @@
 package com.draco18s.artifacts.item;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.common.collect.Multimap;
@@ -107,21 +108,33 @@ public class ItemArtifactArmor extends ItemArmor {
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type) {
-		//slot will tell us helmet vs. boots
-		//type will be either null or overlay (cloth armor)
-		//can use stack.stackTagCompound.getString("matName") for material, etc.
-		//return "artifacts:textures/armor/Models/artifact_layer1.png";
-		String layer = "1";
-		String material = stack.stackTagCompound.getString("matName").toLowerCase();
+		
+		//The default texture (in case there is no given texture).
+		String matName = stack.stackTagCompound.getString("matName").toLowerCase();
 		if(type == null) {
-			type = "";
-			material = "iron";
+			matName = "color";
 		}
-		if(slot == 2) {
-			layer="2";
+		String texture = "artifacts:textures/models/armor/"+matName+"_default_layer"+ (slot == 2 ? "2" : "1") +".png";
+		
+		if(stack.stackTagCompound == null) {
+			return texture;
 		}
-		return "artifacts:textures/models/armor/"+material+"_layer_"+layer+type+".png";
-		//return super.getArmorTexture(stack, entity, slot, type);
+		//Get the armor model texture map holding the textures mapped to the item's icon.
+		HashMap<ArmorMaterial, String> modelMap = ArtifactsAPI.itemicons.armorModels.get( (type == null ? "color_" : "") + stack.stackTagCompound.getString("icon").toLowerCase());
+		if(modelMap == null) {
+			return texture;
+		}
+		
+		//Get the texture for the material type.
+		String modelTexture = modelMap.get(this.getArmorMaterial());
+		if(modelTexture == null) {
+			return texture;
+		}
+		else {
+			texture = modelTexture;
+		}
+		
+		return texture;
 	}
 
 	@Override

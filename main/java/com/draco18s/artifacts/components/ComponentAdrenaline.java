@@ -25,7 +25,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
-import com.draco18s.artifacts.network.CToSMessageComponent;
+import com.draco18s.artifacts.network.CToSMessage;
 import com.draco18s.artifacts.network.PacketHandlerServer;
 
 public class ComponentAdrenaline implements IArtifactComponent {

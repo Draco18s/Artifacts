@@ -1,9 +1,13 @@
 package com.draco18s.artifacts;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GLContext;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -11,8 +15,10 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -36,7 +42,7 @@ import com.draco18s.artifacts.entity.TileEntityAntibuilder.AntibuilderLocation;
 import com.draco18s.artifacts.item.ItemArtifactArmor;
 import com.draco18s.artifacts.item.ItemCalendar;
 
-public class ArtifactEventHandler {
+public class ArtifactServerEventHandler {
 	
 	@SubscribeEvent
 	public void EntityHurtEvent(LivingHurtEvent event) {

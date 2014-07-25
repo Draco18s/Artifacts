@@ -35,7 +35,7 @@ import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.ArtifactsAPI;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
 import com.draco18s.artifacts.network.PacketHandlerClient;
-import com.draco18s.artifacts.network.SToCMessageGeneral;
+import com.draco18s.artifacts.network.SToCMessage;
 
 public class ComponentOreRadar implements IArtifactComponent {
 	//Random rand;
@@ -127,20 +127,7 @@ public class ComponentOreRadar implements IArtifactComponent {
 		int x = (int)entityPlayer.posX;
 		int y = (int)entityPlayer.posY;
 		int z = (int)entityPlayer.posZ;
-		EntityPlayerMP player = null;
-		Iterator iterator = MinecraftServer.getServer().getConfigurationManager().playerEntityList.iterator();
-
-        do
-        {
-            if (!iterator.hasNext())
-            {
-                player = null;
-                break;
-            }
-
-            player = (EntityPlayerMP)iterator.next();
-        }
-        while (!player.getCommandSenderName().equalsIgnoreCase(entityPlayer.getCommandSenderName()));
+		EntityPlayerMP player = UtilsForComponents.getPlayerFromUsername(entityPlayer.getCommandSenderName());
 		
 		//+/- 4
 		boolean found = false;
@@ -164,7 +151,7 @@ public class ComponentOreRadar implements IArtifactComponent {
 							out.writeInt(xx);
 							out.writeInt(yy);
 							out.writeInt(zz);
-							SToCMessageGeneral packet = new SToCMessageGeneral(out);
+							SToCMessage packet = new SToCMessage(out);
 							DragonArtifacts.artifactNetworkWrapper.sendTo(packet, player);
 						
 							Vec3 s = Vec3.createVectorHelper(xx, yy, zz);
@@ -183,7 +170,7 @@ public class ComponentOreRadar implements IArtifactComponent {
 									out.writeInt(xx);
 									out.writeInt(yy);
 									out.writeInt(zz);
-									SToCMessageGeneral packet = new SToCMessageGeneral(out);
+									SToCMessage packet = new SToCMessage(out);
 									DragonArtifacts.artifactNetworkWrapper.sendTo(packet, player);
 
 									Vec3 s = Vec3.createVectorHelper(xx, yy, zz);

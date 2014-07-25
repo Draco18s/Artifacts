@@ -3,7 +3,7 @@ package com.draco18s.artifacts.item;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-import com.draco18s.artifacts.ArtifactEventHandler;
+import com.draco18s.artifacts.ArtifactServerEventHandler;
 import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.ArtifactsAPI;
 import com.draco18s.artifacts.client.ClientProxy;

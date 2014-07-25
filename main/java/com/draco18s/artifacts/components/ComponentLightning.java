@@ -11,7 +11,7 @@ import java.util.Random;
 import com.google.common.collect.Multimap;
 import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
-import com.draco18s.artifacts.network.CToSMessageComponent;
+import com.draco18s.artifacts.network.CToSMessage;
 import com.draco18s.artifacts.network.PacketHandlerServer;
 
 import net.minecraft.block.Block;
@@ -94,7 +94,7 @@ public class ComponentLightning implements IArtifactComponent {
 		out.writeInt(PacketHandlerServer.LIGHTNING);
 		out.writeInt(player.getEntityId());
 		out.writeInt(player.inventory.currentItem);
-		CToSMessageComponent packet = new CToSMessageComponent(player.getUniqueID(), out);
+		CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
 		DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 1);
 		itemStack.stackTagCompound.setInteger("onItemRightClickDelay", 5);
@@ -131,7 +131,7 @@ public class ComponentLightning implements IArtifactComponent {
 				//EntityPlayer par3EntityPlayer = (EntityPlayer) par3EntityLivingBase;
 				out.writeInt(player.inventory.currentItem);
 				//out.writeFloat(par3EntityPlayer.getHealth()+1);
-				CToSMessageComponent packet = new CToSMessageComponent(player.getUniqueID(), out);
+				CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
 				DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 				//par1ItemStack.damageItem(1, par2EntityPlayer);
 				return true;

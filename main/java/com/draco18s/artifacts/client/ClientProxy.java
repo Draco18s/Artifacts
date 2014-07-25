@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -16,6 +17,8 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
+import com.draco18s.artifacts.ArtifactClientEventHandler;
+import com.draco18s.artifacts.ArtifactServerEventHandler;
 import com.draco18s.artifacts.CommonProxy;
 import com.draco18s.artifacts.GuiHandler;
 import com.draco18s.artifacts.block.BlockLaserBeam;
@@ -88,5 +91,10 @@ public class ClientProxy extends CommonProxy {
 		if(Loader.isModLoaded("antiqueatlas")) {
 //			AtlasAPI.getTileAPI().setTexture("wizardtower", new ResourceLocation("artifacts:textures/gui/tower.png"));
 		}
+	}
+	
+	public void registerEventHandlers() {
+		super.registerEventHandlers();
+		MinecraftForge.EVENT_BUS.register(new ArtifactClientEventHandler());
 	}
 }

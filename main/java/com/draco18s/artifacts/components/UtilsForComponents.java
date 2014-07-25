@@ -1,12 +1,16 @@
 package com.draco18s.artifacts.components;
 
+import java.util.Iterator;
+
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.server.MinecraftServer;
 
 import com.draco18s.artifacts.DragonArtifacts;
-import com.draco18s.artifacts.network.CToSMessageComponent;
+import com.draco18s.artifacts.network.CToSMessage;
 import com.draco18s.artifacts.network.PacketHandlerServer;
 
 public class UtilsForComponents {
@@ -28,7 +32,7 @@ public class UtilsForComponents {
 			out.writeInt(potionID);
 			out.writeInt(duration);
 			out.writeInt(level);
-			CToSMessageComponent packet = new CToSMessageComponent(entity.getUniqueID(), out);
+			CToSMessage packet = new CToSMessage(entity.getUniqueID(), out);
 			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		}
 	}
@@ -41,9 +45,27 @@ public class UtilsForComponents {
 			out.writeInt(player.getEntityId());
 			out.writeInt(inventorySlot);
 			out.writeInt(damageToDeal);
-			CToSMessageComponent packet = new CToSMessageComponent(player.getUniqueID(), out);
+			CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
 			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		}
 	}
 	
+	public static EntityPlayerMP getPlayerFromUsername(String username) {
+		EntityPlayerMP player = null;
+		Iterator iterator = MinecraftServer.getServer().getConfigurationManager().playerEntityList.iterator();
+
+        do
+        {
+            if (!iterator.hasNext())
+            {
+                player = null;
+                break;
+            }
+
+            player = (EntityPlayerMP)iterator.next();
+        }
+        while (!player.getCommandSenderName().equalsIgnoreCase(username));
+        
+        return player;
+	}
 }

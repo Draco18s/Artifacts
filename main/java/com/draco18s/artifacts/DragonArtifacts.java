@@ -51,10 +51,10 @@ import com.draco18s.artifacts.client.*;
 import com.draco18s.artifacts.entity.*;
 import com.draco18s.artifacts.factory.*;
 import com.draco18s.artifacts.item.*;
-import com.draco18s.artifacts.network.CToSMessageComponent;
+import com.draco18s.artifacts.network.CToSMessage;
 import com.draco18s.artifacts.network.PacketHandlerClient;
 import com.draco18s.artifacts.network.PacketHandlerServer;
-import com.draco18s.artifacts.network.SToCMessageGeneral;
+import com.draco18s.artifacts.network.SToCMessage;
 import com.draco18s.artifacts.worldgen.PlaceTraps;
 
 @Mod(modid = "Artifacts", name = "Unique Artifacts", version = "1.0.4")
@@ -139,7 +139,7 @@ public class DragonArtifacts{
 			int[] white = cw.getIntList();
 			int[] black = cb.getIntList();
 			
-			int golemID = config.get("Entities", "Golem ID", 3).getInt();
+			int golemID = config.get("Entities", "Golem ID", EntityRegistry.findGlobalUniqueEntityId()).getInt();
 			
 			Arrays.sort(white);
 			Arrays.sort(black);
@@ -468,9 +468,10 @@ public class DragonArtifacts{
 		GameRegistry.registerTileEntity(TileEntityTrap.class, "artifacts.arrowtrap");
 		GameRegistry.registerTileEntity(TileEntitySpikes.class, "artifacts.spiketrap");
 		GameRegistry.registerTileEntity(TileEntityAntibuilder.class, "artifacts.antibuilder");
-        EntityRegistry.registerModEntity(EntityClayGolem.class, "EntClayGolem", 0, this, 350, 5, false);
+		EntityRegistry.registerGlobalEntityID(EntityClayGolem.class, "ClayGolem", golemID, 13347172, 7033635);
+//        EntityRegistry.registerModEntity(EntityClayGolem.class, "EntClayGolem", 0, this, 350, 5, false);
         EntityRegistry.registerModEntity(EntitySpecialArrow.class, "SpecialArrow", 1, this, 64, 20, true);
-        EntityList.addMapping(EntityClayGolem.class, "ClayGolem", golemID, 13347172, 7033635);//13347172 is pale
+//        EntityList.addMapping(EntityClayGolem.class, "ClayGolem", golemID, 13347172, 7033635);//13347172 is pale
 		
         proxy.registerTickHandlers();
         proxy.registerEventHandlers();
@@ -485,8 +486,8 @@ public class DragonArtifacts{
         
         //Registering the "messages", which are simple packets.
  		artifactNetworkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("Artifacts");
- 		artifactNetworkWrapper.registerMessage(PacketHandlerServer.class, CToSMessageComponent.class, serverMessageID, Side.SERVER);
- 		artifactNetworkWrapper.registerMessage(PacketHandlerClient.class, SToCMessageGeneral.class, clientMessageID, Side.CLIENT);
+ 		artifactNetworkWrapper.registerMessage(PacketHandlerServer.class, CToSMessage.class, serverMessageID, Side.SERVER);
+ 		artifactNetworkWrapper.registerMessage(PacketHandlerClient.class, SToCMessage.class, clientMessageID, Side.CLIENT);
    }
 	
 	@EventHandler

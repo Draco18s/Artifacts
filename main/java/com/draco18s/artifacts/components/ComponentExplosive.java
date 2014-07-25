@@ -12,7 +12,7 @@ import com.google.common.collect.Multimap;
 import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.ArtifactsAPI;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
-import com.draco18s.artifacts.network.CToSMessageComponent;
+import com.draco18s.artifacts.network.CToSMessage;
 import com.draco18s.artifacts.network.PacketHandlerServer;
 
 import net.minecraft.block.Block;
@@ -145,7 +145,7 @@ public class ComponentExplosive implements IArtifactComponent {
 			out.writeInt(iy);
 			out.writeInt(iz);
 			out.writeInt(player.inventory.currentItem);
-			CToSMessageComponent packet = new CToSMessageComponent(player.getUniqueID(), out);
+			CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
 			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 			UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 3);
         }
@@ -161,7 +161,7 @@ public class ComponentExplosive implements IArtifactComponent {
 			out.writeInt(PacketHandlerServer.EXPLOSIONS);
 			out.writeInt(movingobjectposition.entityHit.getEntityId());
 			out.writeInt(player.inventory.currentItem);
-			CToSMessageComponent packet = new CToSMessageComponent(player.getUniqueID(), out);
+			CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
 			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 			UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 3);
         }
@@ -203,7 +203,7 @@ public class ComponentExplosive implements IArtifactComponent {
 			out.writeInt(player.getEntityId());
 			out.writeInt(player.inventory.currentItem);
 			//out.writeFloat(par3EntityPlayer.getHealth()+1);
-			CToSMessageComponent packet = new CToSMessageComponent(player.getUniqueID(), out);
+			CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
 			//System.out.println("Sending packet..." + player);
 			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 			//par1ItemStack.damageItem(1, par2EntityPlayer);

@@ -11,7 +11,7 @@ import java.util.Random;
 import com.google.common.collect.Multimap;
 import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
-import com.draco18s.artifacts.network.CToSMessageComponent;
+import com.draco18s.artifacts.network.CToSMessage;
 import com.draco18s.artifacts.network.PacketHandlerServer;
 
 import net.minecraft.block.Block;
@@ -91,7 +91,7 @@ public class ComponentHeal implements IArtifactComponent {
 			//System.out.println("Building packet...");
 		out.writeInt(PacketHandlerServer.HEALING);
 		out.writeFloat(1);
-		CToSMessageComponent packet = new CToSMessageComponent(player.getUniqueID(), out);
+		CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
 		DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 1);
 		itemStack.stackTagCompound.setInteger("onItemRightClickDelay", 20);

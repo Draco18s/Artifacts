@@ -15,6 +15,6 @@ public class CommonProxy {
 	}
 	
 	public void registerEventHandlers() {
-		MinecraftForge.EVENT_BUS.register(new ArtifactEventHandler());
+		MinecraftForge.EVENT_BUS.register(new ArtifactServerEventHandler());
 	}
 }

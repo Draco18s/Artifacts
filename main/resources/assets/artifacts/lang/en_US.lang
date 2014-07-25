@@ -152,6 +152,12 @@ pre.Sensing=Sensing
 pre.Sighted=Sighted
 pre.Reinvigorating=Reinvigorating
 pre.Sniping=Sniping
+pre.Obscured=Obscured
+pre.Hidden=Hidden
+pre.Baker's=Baker's
+pre.Confectioner's=Confectioner's
+pre.Musical=Musical
+pre.Harmonious=Harmonious
 
 #Postpended adjective names (i.e. "SWORD [of borgles]")
 post.of Rage=of Rage
@@ -202,6 +208,12 @@ post.of Seeing=of Seeing
 post.of Darkvision=of Darkvision
 post.of Wrath=of Wrath
 post.of Fireworks=of Fireworks
+post.of Obscurity=of Obscurity
+post.of Cloaking=of Cloaking
+post.of Baking=of Baking
+post.of Icing=of Icing
+post.of Tunes=of Tunes
+post.of Music=of Music
 
 #Tooltip triggers
 tool.All tools, swords, etc.=All tools, swords, etc.
@@ -251,11 +263,19 @@ effect.Health Boost=Health Boost
 effect.Heals the Player=Heals the Player
 effect.Extra drops from ores=Extra drops from ores
 effect.Food Saturation=Food Saturation
+effect.fills hunger when half empty=fills hunger when half empty
+effect.fills 1 drumstick=fills 1 drumstick
 effect.Shoots fireballs=Shoots fireballs
 effect.Explodes=Explodes
 effect.Digs big holes=Digs big holes
 effect.Repairs other items=Repairs other items
 effect.Water Breathing=Water Breathing
+effect.Invisibility=Invisibility
 #{H} here will use a UTF heart symbol
 effect.Hearts={H}
 effect.Shoots exploding arrows=Shoots exploding arrows
+effect.Reduced vision while invisible.=Reduced vision while invisible.
+effect.Places cakes on solid surfaces=Places cakes on solid surfaces
+effect.Plays the record=Plays the record
+#{Play} is a bunch of coloured music notes
+effect.Play={Play}

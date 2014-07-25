@@ -12,7 +12,7 @@ import java.util.UUID;
 import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.entity.TileEntityDisplayPedestal;
 import com.draco18s.artifacts.network.PacketHandlerClient;
-import com.draco18s.artifacts.network.SToCMessageGeneral;
+import com.draco18s.artifacts.network.SToCMessage;
 
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.block.Block;
@@ -109,7 +109,7 @@ public class BlockPedestal extends BlockContainer {
 					out.writeInt(z);
 					out.writeLong(ted.owner.getLeastSignificantBits());
 					out.writeLong(ted.owner.getMostSignificantBits());
-					SToCMessageGeneral packet = new SToCMessageGeneral(out);
+					SToCMessage packet = new SToCMessage(out);
 					DragonArtifacts.artifactNetworkWrapper.sendToAllAround(packet, new TargetPoint(world.provider.dimensionId, x, y, z, 32));
 				}
 				catch (Exception ex)

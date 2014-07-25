@@ -18,7 +18,7 @@ import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.ArtifactsAPI;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
 import com.draco18s.artifacts.factory.FactoryItemIcons;
-import com.draco18s.artifacts.network.CToSMessageComponent;
+import com.draco18s.artifacts.network.CToSMessage;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -36,6 +36,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
@@ -248,7 +249,7 @@ public class ItemArtifact extends Item {
 					out.writeInt(4096);
 					out.writeInt(d);
 					out.writeInt(player.inventory.currentItem);
-					CToSMessageComponent packet = new CToSMessageComponent(player.getUniqueID(), out);
+					CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
 					DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 				}
 			}
@@ -256,9 +257,9 @@ public class ItemArtifact extends Item {
         return itemStack;
     }
 	
-	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase)
+	public boolean hitEntity(ItemStack itemStack, EntityLivingBase entityVictim, EntityLivingBase entityAttacker)
     {
-		NBTTagCompound data = par1ItemStack.getTagCompound();
+		NBTTagCompound data = itemStack.getTagCompound();
 		int effectID = 0;
 		if(data != null) {
 			//System.out.println("Hitting...");
@@ -267,9 +268,16 @@ public class ItemArtifact extends Item {
 				IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
 				boolean r = false;
 				if(c != null)
-					r = c.hitEntity(par1ItemStack, par2EntityLivingBase, par3EntityLivingBase);
-				par1ItemStack.damageItem(1, par2EntityLivingBase);
+					r = c.hitEntity(itemStack, entityVictim, entityAttacker);
+				itemStack.damageItem(1, entityVictim);
 				return r;
+			}
+			NBTTagList tagList = data.getTagList("AttributeModifiers", 10);
+			for(int i = 0; i < tagList.tagCount(); i++) {
+				if(tagList.getCompoundTagAt(i).getString("AttributeName").equals("generic.attackDamage")) {
+					itemStack.damageItem(1, entityVictim);
+					break; //break out of for loop.
+				}
 			}
 		}
 		return false;
