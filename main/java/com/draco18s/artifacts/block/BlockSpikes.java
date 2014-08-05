@@ -50,14 +50,16 @@ public class BlockSpikes extends BlockContainer {
     }
 	
 	@Override
-	public void onEntityCollidedWithBlock(World par1World, int par2, int par3, int par4, Entity par5Entity)
+	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity)
     {
-		if(par5Entity instanceof EntityLivingBase) {
-	        par5Entity.attackEntityFrom(DamageSource.generic, 2);
-	        par5Entity.motionX *= 0.7D;
-	        par5Entity.motionZ *= 0.7D;
-	        TileEntitySpikes es = (TileEntitySpikes)par1World.getTileEntity(par2, par3, par4);
-	        es.setBloody(2);
+		if(entity instanceof EntityLivingBase) {
+	        entity.attackEntityFrom(DamageSource.generic, 2);
+	        entity.motionX *= 0.7D;
+	        entity.motionZ *= 0.7D;
+	        TileEntity te = world.getTileEntity(x, y, z);
+	        if(te != null && te instanceof TileEntitySpikes) {
+	        	((TileEntitySpikes)te).setBloody(2);
+	        }
 		}
     }
 	
