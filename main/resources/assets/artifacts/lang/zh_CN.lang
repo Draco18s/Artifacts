@@ -1,0 +1,283 @@
+itemGroup.tabGeneral=史前遗迹 - 生成
+itemGroup.tabArtifacts=史前遗迹 - 物品
+
+#Various blocks
+tile.light_block.name=光源方块
+tile.pedestal.name=展示架
+tile.invisible_bedrock.name=隐形基岩
+tile.spike_block.name=钉刺
+tile.arrow_trap.name=箭矢陷阱
+tile.cover_plate.name=绊脚线盖板
+tile.quicksand.name=流沙
+tile.arrow_trap_item.name=箭矢陷阱
+tile.cover_plate_item.name=绊脚线盖板
+tile.fake_block_item.name=错觉方块
+tile.wall_pressure_plate.name=墙压力板
+tile.obsidian_wall_pressure_plate.name=黑曜石墙压力板
+tile.invisible_pressure_plate.name=隐形压力板
+tile.obsidian_invisible_pressure_plate.name=隐形黑曜石压力板
+tile.illusionary_block.name=错觉方块
+tile.invisible_block.name=隐形方块
+tile.fake_tile_entity.name=剑舞方块
+tile.floating_block.name=空气方块
+tile.anti_builder.name=拆迁方块
+tile.anti_anti_builder_stone.name=反拆迁方块
+tile.laser_source.name=激光发射器
+tile.laser_beam.name=激光
+
+#Entities
+entity.EntClayGolem.name=粘土傀儡
+entity.ClayGolem.name=粘土傀儡
+entity.Artifacts.SpecialArrow.name=箭矢
+
+#These names appear in the creative inventory
+item.artifact_leather_armor_generic.name=史前皮革装备 (随机)
+item.artifact_chainmail_armor_generic.name=史前链甲装备 (随机)
+item.artifact_iron_armor_generic.name=史前铁装备 (随机)
+item.artifact_golden_armor_generic.name=史前金装备 (随机)
+item.artifact_diamond_armor_generic.name=史前钻石装备 (随机)
+item.artifact.name=史前圣器 (随机)
+item.dust_orichalcum.name=魔法源质
+item.lunar_calendar.name=月历
+item.trapblade_diamond.name=钻石剑
+item.trapblade_wood.name=木剑
+item.trapblade_stone.name=石剑
+item.trapblade_iron.name=铁剑
+item.trapblade_gold.name=金剑
+
+#Specific armor names. They shouldn't appear, but are here just in case.
+item.artifact_leather_helmet.name=史前皮革帽子
+item.artifact_leather_chestplate.name=史前皮革胸甲
+item.artifact_leather_leggings.name=史前皮革护腿
+item.artifact_leather_boots.name=史前皮革靴子
+item.artifact_chainmail_helmet.name=史前链甲头盔
+item.artifact_chainmail_chestplate.name=史前链甲胸甲
+item.artifact_chainmail_leggings.name=史前链甲护腿
+item.artifact_chainmail_boots.name=史前链甲靴子
+item.artifact_iron_helmet.name=史前铁头盔
+item.artifact_iron_chestplate.name=史前铁胸甲
+item.artifact_iron_leggings.name=史前铁护腿
+item.artifact_iron_boots.name=史前铁靴子
+item.artifact_golden_helmet.name=史前金头盔
+item.artifact_golden_chestplate.name=史前金胸甲
+item.artifact_golden_leggings.name=史前金护腿
+item.artifact_golden_boots.name=史前金靴子
+item.artifact_diamond_helmet.name=史前钻石头盔
+item.artifact_diamond_chestplate.name=史前钻石胸甲
+item.artifact_diamond_leggings.name=史前钻石护腿
+item.artifact_diamond_boots.name=史前钻石靴子
+
+#Death Messages
+death.attack.artifacts.quicksand=%1$s 陷入流沙中窒息而死
+death.attack.artifacts.trapsword=%1$s 被剑砍死
+
+#Material names (mirror vanilla)
+mat.Wood=木
+mat.Leather=皮革
+mat.Chain=链
+mat.Stone=石
+mat.Iron=铁
+mat.Gold=金
+mat.Diamond=钻石
+mat.Raw=原始
+mat.infused=蕴魔
+
+#Item types (reflects the icon)
+type.Amulet=护身符
+type.Boots=靴子
+type.Chestplate=胸甲
+type.Dagger=匕首
+type.Figurine=雕像
+type.Helm=头盔
+type.Leggings=护腿
+type.Ring=指环
+type.Staff=权杖
+type.Sword=剑
+type.Trinket=饰品
+type.Wand=魔杖
+type.Artifact=圣器
+
+#Prepended adjective names (i.e. "[borgly] SWORD")
+pre.Brawling=战乱之
+pre.Floating=不稳定的
+pre.Light=轻巧的
+pre.Aerated=曝气的
+pre.Breathy=助于呼吸的
+pre.Oxygenated=含氧的
+pre.Valuable=贵重的
+pre.Emerald Studded=镶嵌绿宝石的
+pre.Deadly=致命的
+pre.Painful=痛苦的
+pre.Killing=猎杀之
+pre.Excavator's=发掘者的
+pre.Fragmenting=破碎的
+pre.Flaming=火焰之
+pre.Burning=炽烈的
+pre.Incinerating=焚烬之
+pre.Well Fed=助于饱食的
+pre.Shanked=有脊椎的
+pre.Porky=鲁莽的
+pre.Harvesting=丰收之
+pre.Healing=治愈之
+pre.Rejuvenating=振兴之
+pre.Holy=神圣的
+pre.Hardy=坚硬的
+pre.Heavy=沉重的
+pre.Bulky=笨重的
+pre.Sturdy=坚固的
+pre.Jumpy=跳跃的
+pre.Bouncing=活泼的
+pre.Stable=稳定的
+pre.Illuminating=光明的
+pre.Bright=明亮的
+pre.Shocking=可怕的
+pre.Electric=电动的
+pre.Webbing=网状的
+pre.Mob Slowing=缓速生物的
+pre.Staunching=牢固的
+pre.Miner's=矿工的
+pre.Digger's=挖掘者的
+pre.Digging=挖掘的
+pre.Sensitive=灵敏的
+pre.Recharging=充电中的
+pre.Repairing=修复中的
+pre.Refreshing=翻新中的
+pre.Armored=护甲之
+pre.Shielding=保护之
+pre.Guarding=守护之
+pre.Regenerative=再生之
+pre.Swift=迅捷的
+pre.Quick=快速的
+pre.Sensing=敏感的
+pre.Sighted=预测之
+pre.Reinvigorating=重振之
+pre.Sniping=狙击之
+pre.Obscured=伪装的
+pre.Hidden=隐匿的
+pre.Baker's=面包师的
+pre.Confectioner's=甜食师的
+pre.Musical=悦耳的
+pre.Harmonious=协调之
+
+#Postpended adjective names (i.e. "SWORD [of borgles]")
+post.of Rage=- 愤怒
+post.of Hermes=- 赫耳墨斯
+post.of Flight=- 战乱
+post.of Breathing=- 呼吸
+post.of Fresh Air=- 新鲜空气
+post.of Emeralds=- 绿宝石
+post.of Money=- 钱财
+post.of Wealth=- 财富
+post.of Rending=- 破碎
+post.of Pain=- 痛苦
+post.of Excavation=- 开掘
+post.of Explosions=- 爆破
+post.of Flames=- 烈焰
+post.of Fire=- 火焰
+post.of Incineration=- 焚烬
+post.of Saturation=- 饱食
+post.of Noms=- 名誉
+post.of Prospecting=- 勘探
+post.of Healing=- 治疗
+post.of Rejuvenation=- 振兴
+post.of Toughness= 韧性
+post.of Health=- 坚固
+post.of Leaping=- 跳跃
+post.of Lightness=- 轻巧
+post.of Stability=- 稳定
+post.of Light=- 光明
+post.of the Sun=- 曙光
+post.of Thunder=- 雷
+post.of Lightning=- 闪电
+post.of Trapping=- 陷阱
+post.of Quicksand=- 流沙
+post.of First Aid=- 治疗
+post.of Mining=- 挖矿
+post.of Quarrying=- 开采
+post.of Finding=- 寻觅
+post.of Repair=- 修复
+post.of Renew=- 翻新
+post.of Protection=- 保护
+post.of Armor=- 护甲
+post.of Regeneration=- 再生
+post.of Lazarus=- 病患
+post.of Swiftness=- 迅捷
+post.of Movement=- 灵活
+post.of Speed=- 速度
+post.of Seeing=- 观测
+post.of Darkvision=- 黑暗视觉
+post.of Wrath=- 忿怒
+post.of Fireworks=- 烟火
+post.of Obscurity=- 伪装
+post.of Cloaking=- 隐身
+post.of Baking=- 烘焙
+post.of Icing=- 糖衣
+post.of Tunes=- 曲调
+post.of Music=- 乐曲
+
+#Tooltip triggers
+tool.All tools, swords, etc.=所有的工具, 剑, 其它.
+tool.Helms, boots, etc.=头盔, 靴子, 其它.
+tool.when equipped.=(装备上时).
+tool.when not equipped.=(未装备时).
+tool.passively.=(被动).
+tool.after taking damage.=(在受到伤害时).
+tool.after taking lethal damage.=(在受到巨量伤害时).
+tool.when held.=(持有时).
+tool.when used.=(使用时).
+tool.when inflicting damage.=(输出伤害后).
+tool.when destroying blocks.=(破坏方块后).
+tool.when interacting with entities.=(与生物互动时).
+tool.when dropped.=(掉落后).
+tool.after taking drowning damage.=(在受到溺水伤害时).
+
+#Tooltip duration units and associated grammar
+#"5 minute cooldown", "on cooldown: 36 seconds", "8 second fuse" etc.
+time.second=秒
+time.seconds=秒
+time.minute=分
+time.minutes=分
+time.fuse=蕴魔时间
+time.on=冷却时间剩余
+time.cooldown=冷却
+
+#Tooltip effect descriptors
+effect.Activates several potion effects=激活一些药剂的效果
+effect.Allows sneaking on air=潜行可以浮空
+effect.Converts to emeralds=转换绿宝石
+effect.Night Vision=夜视
+effect.Speed Boost=速度
+effect.Restores health=回升生命
+effect.Damage resistance=免疫伤害
+effect.Slowly repairs itself=缓慢的自动修复
+effect.Senses nearby ores=感知附近的矿石
+effect.Effective Pickaxe=有效率的镐
+effect.Heals for a half-heart=治疗半颗心
+effect.Slows down all mobs=放缓所有生物
+effect.Causes lightning=引起闪电
+effect.Provides illumination=提供光源
+effect.Knockback Resistance=免疫击退
+effect.Damage Resistance=抗性提升
+effect.Jump boost=跳跃提升
+effect.Health Boost=生命提升
+effect.Heals the Player=治疗玩家
+effect.Extra drops from ores=更多矿物掉落
+effect.Food Saturation=回升饱食度
+effect.fills hunger when half empty=饥饿度半空时回满
+effect.fills 1 drumstick=回升一格饥饿度
+effect.Shoots fireballs=发射火球
+effect.Explodes=爆破
+effect.Digs big holes=开掘大洞
+effect.Repairs other items=修复其它物件
+effect.Water Breathing=水下呼吸
+effect.Invisibility=隐身
+
+#{H} here will use a UTF heart symbol
+effect.Hearts={H}
+effect.Shoots exploding arrows=发射爆破箭矢
+effect.Reduced vision while invisible.=在隐身时降低可视度
+effect.Places cakes on solid surfaces=在地面放置一块蛋糕
+effect.Plays the record=播放唱片音乐
+
+#{Play} is a bunch of coloured music notes
+effect.Play={Play}
