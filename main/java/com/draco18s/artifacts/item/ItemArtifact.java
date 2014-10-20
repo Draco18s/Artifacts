@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
+
 import com.google.common.collect.Multimap;
 
 import cpw.mods.fml.relauncher.Side;
@@ -42,7 +45,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
-public class ItemArtifact extends Item {
+public class ItemArtifact extends Item implements IBauble {
     public static Item instance;
 	private float weaponDamage;
     //private HashMap icons = new HashMap();
@@ -550,28 +553,28 @@ public class ItemArtifact extends Item {
     }
 
 	@Override
-    public String getItemStackDisplayName(ItemStack par1ItemStack)
+    public String getItemStackDisplayName(ItemStack itemStack)
     {
     	String n = "";
-    	if(par1ItemStack.stackTagCompound != null) {
+    	if(itemStack.stackTagCompound != null) {
     		if(doEnchName) {
-    			if(par1ItemStack.stackTagCompound.getString("enchName").length() > 0)
-					n += StatCollector.translateToLocal(par1ItemStack.stackTagCompound.getString("enchName")) + " ";
+    			if(itemStack.stackTagCompound.getString("enchName").length() > 0)
+					n += StatCollector.translateToLocal(itemStack.stackTagCompound.getString("enchName")) + " ";
 			}
 			if(doAdjName) {
-				if(par1ItemStack.stackTagCompound.getString("preadj").length() > 0)
-					n += StatCollector.translateToLocal("pre."+par1ItemStack.stackTagCompound.getString("preadj")) + " ";
+				if(itemStack.stackTagCompound.getString("preadj").length() > 0)
+					n += StatCollector.translateToLocal("pre."+itemStack.stackTagCompound.getString("preadj")) + " ";
 			}
 			if(doMatName) {
-				n += StatCollector.translateToLocal("mat."+par1ItemStack.stackTagCompound.getString("matName")) + " ";
+				n += StatCollector.translateToLocal("mat."+itemStack.stackTagCompound.getString("matName")) + " ";
 			}
 			if(!(doEnchName || doMatName || doAdjName)) {
 				n += StatCollector.translateToLocal("type.Artifact") + " ";
 			}
-			n += StatCollector.translateToLocal("type."+par1ItemStack.stackTagCompound.getString("iconName"));
+			n += StatCollector.translateToLocal("type."+itemStack.stackTagCompound.getString("iconName"));
 			if(doAdjName) {
-				if(par1ItemStack.stackTagCompound.getString("postadj").length() > 0)
-					n += " " + StatCollector.translateToLocal("post."+par1ItemStack.stackTagCompound.getString("postadj"));
+				if(itemStack.stackTagCompound.getString("postadj").length() > 0)
+					n += " " + StatCollector.translateToLocal("post."+itemStack.stackTagCompound.getString("postadj"));
 			}
     	}
 		if(n.length() < 1) {
@@ -620,4 +623,85 @@ public class ItemArtifact extends Item {
 		//System.out.println("Tool Type is: '"+toolClass+"', and Harvest Level is " + r);
 		return r;
     }
+
+	@Override
+	public BaubleType getBaubleType(ItemStack itemStack) {
+		if(itemStack.stackTagCompound != null) 
+		{
+			String type = itemStack.stackTagCompound.getString("iconName");
+			
+			if(type.equals("Ring")) 
+				return BaubleType.RING;
+			if(type.equals("Amulet"))
+				return BaubleType.AMULET;
+			if(type.equals("Belt"))
+				return BaubleType.BELT;
+		}
+		
+		return null;
+	}
+
+	@Override
+	public void onWornTick(ItemStack itemStack, EntityLivingBase player) {
+		NBTTagCompound data = itemStack.stackTagCompound;
+		int effectID = 0;
+		if(data != null) {
+			if(!player.worldObj.isRemote) {
+	        	if(itemStack.stackTagCompound.getString("matName").length() <= 0) {
+	        		itemStack.stackTagCompound = null;//ArtifactsAPI.artifacts.applyRandomEffects(par1ItemStack.copy()).stackTagCompound;
+	        		return;
+	        	}
+				effectID = data.getInteger("onUpdate");
+				if(effectID != 0) {
+					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(effectID);
+					if(c != null)
+						c.onUpdate(itemStack, player.worldObj, player, -1, false);
+				}
+				//
+			/*}
+			else {*/
+				int d = data.getInteger("onItemRightClickDelay");
+				if(d > 0)
+					d--;
+				else
+					d = 0;
+				data.setInteger("onItemRightClickDelay",d);
+				ArrayList<String> keys = ArtifactsAPI.artifacts.getNBTKeys();
+				String kk = "";
+				int n = 0;
+				for(int k = keys.size() - 1; k >= 0; k--) {
+					kk = keys.get(k);
+					if(data.hasKey(kk)) {
+						n = data.getInteger(kk);
+						if(n > 0)
+							n--;
+						data.setInteger(kk,n);
+					}
+				}
+			}
+		}
+		else if(!player.worldObj.isRemote) {
+			itemStack = ArtifactsAPI.artifacts.applyRandomEffects(itemStack);
+		}
+	}
+
+	@Override
+	public void onEquipped(ItemStack itemStack, EntityLivingBase player) {
+		
+	}
+
+	@Override
+	public void onUnequipped(ItemStack itemStack, EntityLivingBase player) {
+		
+	}
+
+	@Override
+	public boolean canEquip(ItemStack itemStack, EntityLivingBase player) {
+		return true;
+	}
+
+	@Override
+	public boolean canUnequip(ItemStack itemStack, EntityLivingBase player) {
+		return true;
+	}
 }

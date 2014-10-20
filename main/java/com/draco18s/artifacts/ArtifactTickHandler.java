@@ -22,6 +22,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -35,12 +36,14 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import baubles.api.BaublesApi;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 
 import com.draco18s.artifacts.components.ComponentRepair;
+import com.draco18s.artifacts.components.UtilsForComponents;
 import com.draco18s.artifacts.entity.TileEntityAntibuilder;
 import com.draco18s.artifacts.entity.TileEntityAntibuilder.AntibuilderLocation;
 import com.draco18s.artifacts.item.ItemArtifact;
@@ -107,10 +110,15 @@ public class ArtifactTickHandler {
 					//Loop through main inventory.
 					for(int i = 0; i < player.inventory.mainInventory.length; i++) {
 						ItemStack current = player.inventory.mainInventory[i];
+						
+
 						if(current != null && current.getTagCompound() != null && current.getItem() instanceof ItemArtifact) {
-							int effectID = current.getTagCompound().getInteger("onUpdate");
-							if(effectID == 16) { //ComponentHealth
-								artifactHealthBoostCount++;
+							if( !(DragonArtifacts.baublesLoaded && DragonArtifacts.baublesMustBeEquipped &&
+									UtilsForComponents.equipableByBaubles(current.stackTagCompound.getString("iconName")))){
+								int effectID = current.getTagCompound().getInteger("onUpdate");
+								if(effectID == 16) { //ComponentHealth
+									artifactHealthBoostCount++;
+								}
 							}
 						}
 					}
@@ -132,6 +140,22 @@ public class ArtifactTickHandler {
 							//ComponentSpeed
 							if(effectID == 15 || effectID2 == 15) { 
 								artifactSpeedBoostCount++;
+							}
+						}
+					}
+					
+					//Look through Baubles slots if Baubles is loaded.
+					if(DragonArtifacts.baublesLoaded) {
+						IInventory baublesSlots = BaublesApi.getBaubles(player);
+						
+						for(int i = 0; i < baublesSlots.getSizeInventory(); i++) {
+							ItemStack current = baublesSlots.getStackInSlot(i);
+							
+							if(current != null && current.getTagCompound() != null && current.getItem() instanceof ItemArtifact) {
+								int effectID = current.getTagCompound().getInteger("onUpdate");
+								if(effectID == 16) { //ComponentHealth
+									artifactHealthBoostCount++;
+								}
 							}
 						}
 					}

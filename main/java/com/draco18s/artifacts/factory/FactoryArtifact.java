@@ -46,6 +46,9 @@ public class FactoryArtifact implements IArtifactAPI {
 	private int Chestplate;  //1024
 	private int Helm;        //2048
 	private int Leggings;    //4096
+	
+	private int Belt;        //8192
+	
 	private final IArtifactComponent baseDamage = new ComponentNormalDamage();
 	private ArrayList<String> nbtkeys = new ArrayList<String>();
 	
@@ -255,6 +258,7 @@ public class FactoryArtifact implements IArtifactAPI {
 		Chestplate = 1;
 		Helm = 1;
 		Leggings = 1;
+		Belt = 1;
 		if(artifact.getItem() instanceof ItemArtifactArmor) {
 			return applyRandomArmorEffects(artifact);
 		}
@@ -346,6 +350,8 @@ public class FactoryArtifact implements IArtifactAPI {
 			Helm += flags % 2;
 			flags >>= 1;
 			Leggings += flags % 2;
+			flags >>= 1;
+			Belt += flags % 2;
 
 			flags = c.getNegTextureBitflags();
 			Amulet -= flags % 2;
@@ -373,6 +379,9 @@ public class FactoryArtifact implements IArtifactAPI {
 			Helm -= flags % 2;
 			flags >>= 1;
 			Leggings -= flags % 2;
+			flags >>= 1;
+			Belt -= flags % 2;
+			
 			if(rand.nextInt(4) == 0) {
 				numEff--;
 				if(numEff > 0)
@@ -392,8 +401,9 @@ public class FactoryArtifact implements IArtifactAPI {
 		Chestplate = Math.max(Chestplate, 0);
 		Helm = Math.max(Helm, 0);
 		Leggings = Math.max(Leggings, 0);
+		Belt = Math.max(Belt, 0);
 		//end loop
-		int t = Amulet + Dagger + Figurine + Ring + Staff + Sword + Trinket + Wand;
+		int t = Amulet + Dagger + Figurine + Ring + Staff + Sword + Trinket + Wand + Belt;
 		int r = 0;
 		String iconType;
 		artifact.stackTagCompound.setInteger("armorType", -1);
@@ -436,6 +446,10 @@ public class FactoryArtifact implements IArtifactAPI {
 			else if((r -= Wand) <= 0) {
 				iconType = "Wand";
 				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberWands;
+			}
+			else if((r -= Belt) <= 0) {
+				iconType = "Belt";
+				t = ((FactoryItemIcons)(ArtifactsAPI.itemicons)).numberBelts;
 			}
 			else {
 				iconType = "Artifact";

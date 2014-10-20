@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import com.google.common.collect.Multimap;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
+import com.draco18s.artifacts.components.UtilsForComponents.Flags;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -38,117 +39,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-public class ComponentHealth implements IArtifactComponent {
+public class ComponentHealth extends BaseComponent {
 	//private UUID healthID = UUID.fromString("B3766B59-9546-4402-FC1F-2EE2A206D831");
 
-	public ComponentHealth() {
-	}
-	
 	@Override
 	public String getRandomTrigger(Random rand, boolean isArmor) {
 		if(isArmor) {
 			return "onArmorTickUpdate";
 		}
 		return "onUpdate";
-	}
-
-	@Override
-	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
-		return i;
-	}
-	@Override
-	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
-		return true;
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
-		return false;
-	}
-
-	@Override
-	public float getDigSpeed(ItemStack par1ItemStack, Block par2Block, int meta) {
-		return 0;
-	}
-
-	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,	EntityPlayer par3EntityPlayer) {
-		return par1ItemStack;
-	}
-
-	@Override
-	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
-		return false;
-	}
-
-	@Override
-	public boolean onBlockDestroyed(ItemStack par1ItemStack, World par2World, Block block, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase) {
-		return false;
-	}
-
-	@Override
-	public boolean canHarvestBlock(Block par1Block, ItemStack itemStack) {
-		return false;
-	}
-
-	@Override
-	public boolean itemInteractionForEntity(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase) {
-		return false;
-	}
-
-	//works great
-	@Override
-	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
-//		String uu = par1ItemStack.stackTagCompound.getString("HealthUUID");
-//		UUID healthID;
-//		if(uu.equals("")) {
-//			healthID = UUID.randomUUID();
-//			par1ItemStack.stackTagCompound.setString("HealthUUID", healthID.toString());
-//		}
-//		else {
-//			healthID = UUID.fromString(uu);
-//		}
-//		if(par3Entity instanceof EntityPlayer) {
-//			EntityPlayer player = (EntityPlayer)par3Entity;
-//			IAttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
-//			AttributeModifier mod;
-//			mod = new AttributeModifier(healthID,"HealthBoostComponent",5F,0);
-//			if(player.openContainer != null && (player.openContainer != player.inventoryContainer || player.capabilities.isCreativeMode)) {
-//				if(atinst.getModifier(healthID) != null)
-//				{
-//					atinst.removeModifier(mod);
-//					if(player.getHealth() > player.getMaxHealth()) {
-//						player.setHealth(player.getMaxHealth());
-//						//player.attackEntityFrom(DamageSource.generic, 1);
-//					}
-//				}
-//			}
-//			else {
-//				if(atinst.getModifier(healthID) == null)
-//				{
-//					atinst.applyModifier(mod);
-//					if(player.getHealth() < player.getMaxHealth()) {
-//						player.heal(5);
-//					}
-//				}
-//				par1ItemStack.stackTagCompound.setInteger("HealthBoosting", player.getEntityId());
-//			}
-//		}
-//		else {
-//			int eid = par1ItemStack.stackTagCompound.getInteger("HealthBoosting");
-//			EntityPlayer player = (EntityPlayer) par2World.getEntityByID(eid);
-//			IAttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
-//			AttributeModifier mod;
-//			mod = new AttributeModifier(healthID,"HealthBoostComponent",5F,0);
-//			if(atinst.getModifier(healthID) != null)
-//			{
-//				atinst.removeModifier(mod);
-//				if(player.getHealth() > player.getMaxHealth()) {
-//					player.setHealth(player.getMaxHealth());
-//					//player.attackEntityFrom(DamageSource.generic, 1);
-//				}
-//			}	
-//		}
 	}
 	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
@@ -196,115 +95,11 @@ public class ComponentHealth implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 4957;
+		return Flags.AMULET | Flags.FIGURINE | Flags.RING | Flags.TRINKET | Flags.WAND | Flags.ARMOR | Flags.CHESTPLATE | Flags.LEGGINGS | Flags.BELT;
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
-		return 2082;
-	}
-
-	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
-//		if(type == "onUpdate") {
-//			String uu = entityItem.getEntityItem().stackTagCompound.getString("HealthUUID");
-//			UUID healthID;
-//			if(uu.equals("")) {
-//				healthID = UUID.randomUUID();
-//				entityItem.getEntityItem().stackTagCompound.setString("HealthUUID", healthID.toString());
-//			}
-//			else {
-//				healthID = UUID.fromString(uu);
-//			}
-//			int eid = entityItem.getEntityItem().stackTagCompound.getInteger("HealthBoosting");
-//			Entity ent = entityItem.worldObj.getEntityByID(eid);
-//			if(ent instanceof EntityPlayer) {
-//				EntityPlayer player = (EntityPlayer) ent;
-//				IAttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
-//				AttributeModifier mod;
-//				mod = new AttributeModifier(healthID,"HealthBoostComponent",5F,0);
-//				if(atinst.getModifier(healthID) != null)
-//				{
-//					atinst.removeModifier(mod);
-//					if(player.getHealth() > player.getMaxHealth()) {
-//						player.setHealth(player.getMaxHealth());
-//					}
-//				}
-//			}
-//		}
-		return false;
-	}
-
-	@Override
-	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
-		
-	}
-
-	@Override
-	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
-//		if(worn) {
-//			//onUpdate(itemStack, world, player, 0, true);
-//			String uu = itemStack.stackTagCompound.getString("HealthUUID");
-//			UUID healthID;
-//			if(uu.equals("")) {
-//				healthID = UUID.randomUUID();
-//				itemStack.stackTagCompound.setString("HealthUUID", healthID.toString());
-//			}
-//			else {
-//				healthID = UUID.fromString(uu);
-//			}
-//			IAttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
-//			AttributeModifier mod;
-//			mod = new AttributeModifier(healthID,"HealthBoostComponent",5F,0);
-//			if(player.openContainer != null && player.capabilities.isCreativeMode) {
-//				if(atinst.getModifier(healthID) != null)
-//				{
-//					atinst.removeModifier(mod);
-//					if(player.getHealth() > player.getMaxHealth()) {
-//						player.setHealth(player.getMaxHealth());
-//						//player.attackEntityFrom(DamageSource.generic, 1);
-//					}
-//				}
-//			}
-//			else {
-//				if(atinst.getModifier(healthID) == null)
-//				{
-//					atinst.applyModifier(mod);
-//					if(player.getHealth() < player.getMaxHealth()) {
-//						player.heal(5);
-//					}
-//				}
-//				itemStack.stackTagCompound.setInteger("HealthBoosting", player.getEntityId());
-//			}
-//		}
-//		else {
-//			String uu = itemStack.stackTagCompound.getString("HealthUUID");
-//			if(uu.equals("")) {
-//				return;
-//			}
-//			UUID healthID = UUID.fromString(uu);
-//			IAttributeInstance atinst = player.getEntityAttribute(SharedMonsterAttributes.maxHealth);
-//			AttributeModifier mod;
-//			mod = new AttributeModifier(healthID,"HealthBoostComponent",5F,0);
-//			if(atinst.getModifier(healthID) != null)
-//			{
-//				atinst.removeModifier(mod);
-//				if(player.getHealth() > player.getMaxHealth()) {
-//					player.setHealth(player.getMaxHealth());
-//					//player.attackEntityFrom(DamageSource.generic, 1);
-//				}
-//			}
-//		}
-	}
-
-	@Override
-	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
-
-	@Override
-	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
-
-	@Override
-	public int getHarvestLevel(ItemStack stack, String toolClass) {
-		return -1;
+		return Flags.DAGGER | Flags.SWORD | Flags.HELM;
 	}
 }

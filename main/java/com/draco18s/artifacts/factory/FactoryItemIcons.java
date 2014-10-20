@@ -24,6 +24,7 @@ public class FactoryItemIcons implements IItemIconAPI {
 	public int numberChestplates = 0;
 	public int numberHelms = 0;
 	public int numberLeggings = 0;
+	public int numberBelts = 0;
 	private final ArrayList<AbstractIcon> iconList = new ArrayList<AbstractIcon>();
 	private final HashMap<String, HashMap<ArmorMaterial, AbstractModelTexture>> modelMap = new HashMap<String, HashMap<ArmorMaterial, AbstractModelTexture>>();
 
@@ -84,6 +85,10 @@ public class FactoryItemIcons implements IItemIconAPI {
 			registerArtifactIcon("wand","artifacts:wand5","artifacts:wand5_overlay");
 			registerArtifactIcon("wand","artifacts:wand6","artifacts:wand6_overlay");
 			registerArtifactIcon("wand","artifacts:wand7","artifacts:wand7_overlay");
+			registerArtifactIcon("belt","artifacts:belt1","artifacts:belt1_overlay");
+			registerArtifactIcon("belt","artifacts:belt2","artifacts:belt2_overlay");
+			registerArtifactIcon("belt","artifacts:belt3","artifacts:belt3_overlay");
+			registerArtifactIcon("belt","artifacts:belt4","artifacts:belt4_overlay");
 
 			registerArtifactIcon("boots","artifacts:boots1","artifacts:boots1_overlay");
 			registerModelTexture("artifacts:boots1", ArmorMaterial.CLOTH, "artifacts:textures/models/armor/leather1_layer1.png", "artifacts:textures/models/armor/color1_layer1.png");
@@ -262,6 +267,9 @@ public class FactoryItemIcons implements IItemIconAPI {
 		else if(type.toLowerCase().equals("wand")) {
 			iconList.add(new AbstractIcon("wand"+(++numberWands),icon));
 		}
+		else if(type.toLowerCase().equals("belt")) {
+			iconList.add(new AbstractIcon("belt"+(++numberBelts),icon));
+		}
 		else if(type.toLowerCase().equals("boots")) {
 			iconList.add(new AbstractIcon("boots"+(++numberBoots),icon));
 		}
@@ -304,6 +312,9 @@ public class FactoryItemIcons implements IItemIconAPI {
 		}
 		else if(type.toLowerCase().equals("wand")) {
 			iconList.add(new AbstractIcon("wand"+(++numberWands),icon,overlay));
+		}
+		else if(type.toLowerCase().equals("belt")) {
+			iconList.add(new AbstractIcon("belt"+(++numberBelts),icon,overlay));
 		}
 		else if(type.toLowerCase().equals("boots")) {
 			iconList.add(new AbstractIcon("boots"+(++numberBoots),icon,overlay));

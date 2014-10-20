@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Random;
 
 import com.google.common.collect.Multimap;
+import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
 import com.draco18s.artifacts.block.BlockLight;
+import com.draco18s.artifacts.components.UtilsForComponents.Flags;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -37,11 +39,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-public class ComponentLight implements IArtifactComponent {
+public class ComponentLight extends BaseComponent {
 
-	public ComponentLight() {
-	}
-	
 	@Override
 	public String getRandomTrigger(Random rand, boolean isArmor) {
 		if(isArmor) {
@@ -58,57 +57,35 @@ public class ComponentLight implements IArtifactComponent {
 		return i;
 	}
 
-	@Override
-	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
-		return true;
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
-		return false;
-	}
-
-	@Override
-	public float getDigSpeed(ItemStack par1ItemStack, Block par2Block, int meta) {
-		return 0;
-	}
-
-	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,	EntityPlayer par3EntityPlayer) {
-		return par1ItemStack;
-	}
-
-	@Override
-	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
-		return false;
-	}
-
-	@Override
-	public boolean onBlockDestroyed(ItemStack par1ItemStack, World par2World, Block block, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase) {
-		return false;
-	}
-
-	@Override
-	public boolean canHarvestBlock(Block par1Block, ItemStack itemStack) {
-		return false;
-	}
-
-	@Override
-	public boolean itemInteractionForEntity(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase) {
-		return false;
-	}
-
 	//works great
 	@Override
-	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean par5) {
+	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean held) {
+		//Check that the artifact is in a baubles slot if it should be
+		if(DragonArtifacts.baublesLoaded && stack.stackTagCompound != null && 
+				UtilsForComponents.equipableByBaubles(stack.stackTagCompound.getString("iconName")) && 
+				DragonArtifacts.baublesMustBeEquipped && slot >= 0) {
+			return;
+		}
+		
+		//If armor check if equipped
+		if(slot >= 0 && stack.stackTagCompound != null &&
+				UtilsForComponents.isArmor(stack.stackTagCompound.getString("iconName"))) {
+			return;
+		}
+		
 		if(!world.isRemote) {
+			
 			int lx = stack.stackTagCompound.getInteger("lastLightX");
 			int ly = stack.stackTagCompound.getInteger("lastLightY");
 			int lz = stack.stackTagCompound.getInteger("lastLightZ");
+			
 			if(entity instanceof EntityPlayer) {
+				
 				int nlx = MathHelper.floor_double(entity.posX);
 				int nly = MathHelper.floor_double(entity.posY);
 				int nlz = MathHelper.floor_double(entity.posZ);
+				boolean setLightBlock = false;
+				
 				if(nlx != lx || nly != ly || nlz != lz) {
 					int d = (nlx - lx)*(nlx - lx)+(nly - ly)*(nly - ly)+(nlz - lz)*(nlz - lz);
 					if(world.getBlockLightValue(nlx,nly,nlz) < 10) {
@@ -118,25 +95,35 @@ public class ComponentLight implements IArtifactComponent {
 								world.setBlockToAir(lx, ly, lz);
 								//System.out.println("Removed: " + lx + "," + ly + "," + lz);
 							}
-							if(nly >= 0 && nly < 256 && world.isAirBlock(nlx, nly, nlz)) {
-								world.setBlock(nlx, nly, nlz, BlockLight.instance);
-								stack.stackTagCompound.setInteger("lastLightX",nlx);
-								stack.stackTagCompound.setInteger("lastLightY",nly);
-								stack.stackTagCompound.setInteger("lastLightZ",nlz);
-							}
+							//Set the light block at the player's feet (if possible)
+							setLightBlock = true;
 						}
 						else {
-							//Reset the block if it disappeared
 							if(world.getBlock(lx, ly, lz) != BlockLight.instance) {
-								world.setBlock(lx, ly, lz, BlockLight.instance);
+
+								if(world.isAirBlock(lx, ly, lz)) {
+									//Reset the block if it disappeared
+									world.setBlock(lx, ly, lz, BlockLight.instance);
+								}
+								else {
+									//Set the new light block at the player's feet (if possible)
+									setLightBlock = true;
+								}
 							}
 						}
+					}
+					
+					if(setLightBlock && nly >= 0 && nly < 256 && world.isAirBlock(nlx, nly, nlz)) {
+						world.setBlock(nlx, nly, nlz, BlockLight.instance);
+						stack.stackTagCompound.setInteger("lastLightX",nlx);
+						stack.stackTagCompound.setInteger("lastLightY",nly);
+						stack.stackTagCompound.setInteger("lastLightZ",nlz);
 					}
 				}
 			}
 		}
 	}
-	
+
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		par3List.add(StatCollector.translateToLocal("effect.Provides illumination"));
 	}
@@ -176,12 +163,12 @@ public class ComponentLight implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 2559;
+		return Flags.AMULET | Flags.FIGURINE | Flags.RING | Flags.STAFF | Flags.TRINKET | Flags.WAND | Flags.ARMOR | Flags.HELM;
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
-		return 5632;
+		return Flags.BOOTS | Flags.CHESTPLATE | Flags.LEGGINGS;
 	}
 
 	@Override
@@ -219,23 +206,7 @@ public class ComponentLight implements IArtifactComponent {
 	}
 
 	@Override
-	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
-		
-	}
-
-	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
-		onUpdate(itemStack, world, player, 0, worn);
-	}
-
-	@Override
-	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
-
-	@Override
-	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
-
-	@Override
-	public int getHarvestLevel(ItemStack stack, String toolClass) {
-		return -1;
+		onUpdate(itemStack, world, player, worn ? -1 : 0, false);
 	}
 }

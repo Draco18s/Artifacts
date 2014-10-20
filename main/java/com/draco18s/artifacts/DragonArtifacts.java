@@ -28,6 +28,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -57,7 +58,7 @@ import com.draco18s.artifacts.network.PacketHandlerServer;
 import com.draco18s.artifacts.network.SToCMessage;
 import com.draco18s.artifacts.worldgen.PlaceTraps;
 
-@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "1.0.5")
+@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "1.0.6-beta1")
 public class DragonArtifacts{
 	@Instance("Artifacts")
     public static DragonArtifacts instance;
@@ -66,6 +67,9 @@ public class DragonArtifacts{
 	public static boolean renderInvis = false;
 	public static boolean boundingInvis = true;
 	public static PlaceTraps worldGen;
+	
+	public static boolean baublesLoaded = false;
+	public static boolean baublesMustBeEquipped = true;
     
     @SidedProxy(clientSide = "com.draco18s.artifacts.client.ClientProxy", serverSide = "com.draco18s.artifacts.CommonProxy")
     public static CommonProxy proxy;
@@ -133,6 +137,10 @@ public class DragonArtifacts{
 			conf = config.get("WorldGen","dimensionBlacklistEnable",false);
 			conf.comment = "Enables the blacklist for worldgen.  If enabled, world gen objects will never generate in blacklisted dimensions.\nBlacklist will override whitelist.  -1 and 1 (Nether and End) are always blacklisted.";
 			boolean useblack = conf.getBoolean(false);
+			conf = config.get("baubles", "Artifacts must be equipped when Baubles installed?", true);
+			conf.comment = "If true, if Baubles is installed, the continuous effects of artifacts which can go in the\nBaubles slots will only work when the artifacts are in the slots.";
+			baublesMustBeEquipped = conf.getBoolean(true);
+			
 			
 			Property cw = config.get("WorldGen","dimensionWhitelistList", new int[] {0});
 			Property cb = config.get("WorldGen","dimensionBlacklistList", new int[] {-1,1});
@@ -498,5 +506,7 @@ public class DragonArtifacts{
 	@EventHandler
 	public void PostInit(FMLPostInitializationEvent event) 
 	{
+		baublesLoaded = Loader.isModLoaded("Baubles");
+		System.out.println("~~~~~~~~~~~~~~~ Is Baubles Loaded? " + baublesLoaded);
 	}
 }

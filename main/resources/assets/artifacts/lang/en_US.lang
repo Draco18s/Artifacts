@@ -84,6 +84,7 @@ mat.infused=infused
 
 #Item types (reflects the icon)
 type.Amulet=Amulet
+type.Belt=Belt
 type.Boots=Boots
 type.Chestplate=Chestplate
 type.Dagger=Dagger

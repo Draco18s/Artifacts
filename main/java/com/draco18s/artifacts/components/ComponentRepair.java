@@ -9,6 +9,7 @@ import java.util.Random;
 import com.google.common.collect.Multimap;
 import com.draco18s.artifacts.ArtifactTickHandler;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
+import com.draco18s.artifacts.components.UtilsForComponents.Flags;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -35,10 +36,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-public class ComponentRepair implements IArtifactComponent {
-
-	public ComponentRepair() {
-	}
+public class ComponentRepair extends BaseComponent {
 
 	@Override
 	public String getRandomTrigger(Random rand, boolean isArmor) {
@@ -63,51 +61,6 @@ public class ComponentRepair implements IArtifactComponent {
 			break;
 		}
 		return str;
-	}
-
-	@Override
-	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
-		return i;
-	}
-
-	@Override
-	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
-		return true;
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
-		return false;
-	}
-
-	@Override
-	public float getDigSpeed(ItemStack par1ItemStack, Block par2Block, int meta) {
-		return 0;
-	}
-
-	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,	EntityPlayer par3EntityPlayer) {
-		return par1ItemStack;
-	}
-
-	@Override
-	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
-		return false;
-	}
-
-	@Override
-	public boolean onBlockDestroyed(ItemStack par1ItemStack, World par2World, Block block, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase) {
-		return false;
-	}
-
-	@Override
-	public boolean canHarvestBlock(Block par1Block, ItemStack itemStack) {
-		return false;
-	}
-
-	@Override
-	public boolean itemInteractionForEntity(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase) {
-		return false;
 	}
 
 	//works great
@@ -176,17 +129,12 @@ public class ComponentRepair implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 4173;//77;
+		return Flags.AMULET | Flags.FIGURINE | Flags.RING | Flags.TRINKET | Flags.LEGGINGS;
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
 		return 0;
-	}
-
-	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
-		return false;
 	}
 
 	@Override
@@ -198,16 +146,5 @@ public class ComponentRepair implements IArtifactComponent {
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
 		if(!worn)
 			onUpdate(itemStack, world, player, 0, false);
-	}
-
-	@Override
-	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
-
-	@Override
-	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
-
-	@Override
-	public int getHarvestLevel(ItemStack stack, String toolClass) {
-		return -1;
 	}
 }

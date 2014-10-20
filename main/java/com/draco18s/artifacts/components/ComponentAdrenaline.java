@@ -25,105 +25,17 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
+import com.draco18s.artifacts.components.UtilsForComponents.Flags;
 import com.draco18s.artifacts.network.CToSMessage;
 import com.draco18s.artifacts.network.PacketHandlerServer;
 
-public class ComponentAdrenaline implements IArtifactComponent {
+public class ComponentAdrenaline extends BaseComponent {
 
 	@Override
 	public String getRandomTrigger(Random rand, boolean isArmor) {
 		if(isArmor)
 			return "onTakeDamage";
 		return "";
-	}
-
-	@Override
-	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
-		/*NBTTagCompound nbt = i.stackTagCompound;
-		int n = nbt.getInteger("onHeld");
-		nbt.setInteger("onHeld", 0);
-		nbt.removeTag("onHeld");
-		if(!nbt.hasKey("onTakeDamage") && !nbt.hasKey("onArmorTickUpdate")) {
-			nbt.setInteger("onTakeDamage", n);
-			nbt.setInteger("onArmorTickUpdate", n);
-		}*/
-		return i;
-	}
-
-	@Override
-	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
-		
-		return true;
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack par1ItemStack,
-			EntityPlayer par2EntityPlayer, World par3World, int par4, int par5,
-			int par6, int par7, float par8, float par9, float par10) {
-		
-		return false;
-	}
-
-	@Override
-	public float getDigSpeed(ItemStack itemStack, Block block, int meta) {
-		
-		return 0;
-	}
-
-	@Override
-	public ItemStack onItemRightClick(ItemStack itemStack, World world,
-			EntityPlayer player) {
-		
-		return itemStack;
-	}
-
-	@Override
-	public boolean hitEntity(ItemStack par1ItemStack,
-			EntityLivingBase par2EntityLivingBase,
-			EntityLivingBase par3EntityLivingBase) {
-		
-		return false;
-	}
-
-	@Override
-	public boolean onBlockDestroyed(ItemStack itemStack, World world,
-			Block block, int x, int y, int z,
-			EntityLivingBase entityLivingBase) {
-		
-		return false;
-	}
-
-	@Override
-	public boolean canHarvestBlock(Block par1Block, ItemStack itemStack) {
-		
-		return false;
-	}
-
-	@Override
-	public boolean itemInteractionForEntity(ItemStack par1ItemStack,
-			EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase) {
-		
-		return false;
-	}
-
-	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
-		
-		return false;
-	}
-
-	@Override
-	public void onUpdate(ItemStack par1ItemStack, World par2World,
-			Entity par3Entity, int par4, boolean par5) {
-		
-
-	}
-
-	@Override
-	public void onHeld(ItemStack par1ItemStack, World par2World,
-			Entity par3Entity, int par4, boolean par5) {
-		
-
 	}
 
 	@Override
@@ -148,6 +60,26 @@ public class ComponentAdrenaline implements IArtifactComponent {
 		par3List.add(StatCollector.translateToLocal("effect.Activates several potion effects"));
 		par3List.add("   " + StatCollector.translateToLocal("tool."+trigger));
 	}
+	
+	@Override
+	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {
+		//System.out.println("Player has been damaged!");
+		if(isWornArmor && !event.isCanceled()) {
+			if(itemStack.stackTagCompound.getInteger("adrenDelay_armor") <= 0 && event.entity instanceof EntityPlayer) {
+				//System.out.println("Attempting to apply potion effects to player.");
+				EntityPlayer p = (EntityPlayer)event.entity;
+				//if(p.getHealth() <= 4) {
+					//System.out.println("Applying Potion Effects.");
+					itemStack.stackTagCompound.setInteger("adrenDelay_armor", 300);
+					
+					p.addPotionEffect(new PotionEffect(1, 100, 1));
+					p.addPotionEffect(new PotionEffect(5, 100, 1));
+					p.addPotionEffect(new PotionEffect(11, 100, 2));
+					
+				//}
+			}
+		}
+	}
 
 	@Override
 	public String getPreAdj(Random rand) {
@@ -161,43 +93,12 @@ public class ComponentAdrenaline implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 1024;
+		return Flags.CHESTPLATE;//1024
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
 		
-		return 2815;//6911;
-	}
-
-	@Override
-	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {
-		//System.out.println("Player has been damaged!");
-		if(isWornArmor) {
-			if(itemStack.stackTagCompound.getInteger("adrenDelay_armor") <= 0 && event.entity instanceof EntityPlayer) {
-				//System.out.println("Attempting to apply potion effects to player.");
-				EntityPlayer p = (EntityPlayer)event.entity;
-				//if(p.getHealth() <= 4) {
-					//System.out.println("Applying Potion Effects.");
-					itemStack.stackTagCompound.setInteger("adrenDelay_armor", 300);
-					event.setCanceled(true);
-
-					p.addPotionEffect(new PotionEffect(1, 100, 1));
-					p.addPotionEffect(new PotionEffect(5, 100, 1));
-					p.addPotionEffect(new PotionEffect(11, 100, 2));
-					
-				//}
-			}
-		}
-	}
-
-	@Override
-	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {
-		
-	}
-
-	@Override
-	public int getHarvestLevel(ItemStack stack, String toolClass) {
-		return -1;
+		return ~(Flags.CHESTPLATE | Flags.LEGGINGS);//2815;//6911;
 	}
 }

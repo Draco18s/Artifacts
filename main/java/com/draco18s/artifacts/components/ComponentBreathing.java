@@ -8,6 +8,7 @@ import java.util.Random;
 
 import com.google.common.collect.Multimap;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
+import com.draco18s.artifacts.components.UtilsForComponents.Flags;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -37,7 +38,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-public class ComponentBreathing implements IArtifactComponent {
+public class ComponentBreathing extends BaseComponent {
 
 	public String getRandomTrigger(Random rand, boolean isArmor) {
 		if(isArmor) {
@@ -67,26 +68,6 @@ public class ComponentBreathing implements IArtifactComponent {
 	}
 
 	@Override
-	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
-		return i;
-	}
-
-	@Override
-	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
-		return true;
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
-		return false;
-	}
-
-	@Override
-	public float getDigSpeed(ItemStack par1ItemStack, Block par2Block, int meta) {
-		return 0;
-	}
-
-	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world,	EntityPlayer player) {
 		UtilsForComponents.sendPotionPacket(13, 1200, 0, player);
 		UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 1);
@@ -104,27 +85,6 @@ public class ComponentBreathing implements IArtifactComponent {
 		return false;
 	}
 
-	@Override
-	public boolean onBlockDestroyed(ItemStack par1ItemStack, World par2World, Block block, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase) {
-		return false;
-	}
-
-	@Override
-	public boolean canHarvestBlock(Block par1Block, ItemStack itemStack) {
-		return false;
-	}
-
-	@Override
-	public boolean itemInteractionForEntity(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase) {
-		return false;
-	}
-
-	//works great
-	@Override
-	public void onUpdate(ItemStack par1ItemStack, World world, Entity par3Entity, int par4, boolean par5) {
-		
-	}
-	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		int time = 0;
 		if(trigger.equals("when inflicting damage.")) {
@@ -179,17 +139,12 @@ public class ComponentBreathing implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 2397;
+		return Flags.AMULET | Flags.FIGURINE | Flags.RING | Flags.STAFF | Flags.TRINKET | Flags.ARMOR | Flags.HELM;
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
-		return 4738;
-	}
-
-	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
-		return false;
+		return Flags.DAGGER | Flags.WAND | Flags.BOOTS | Flags.LEGGINGS;
 	}
 
 	@Override
@@ -214,13 +169,5 @@ public class ComponentBreathing implements IArtifactComponent {
 		if(isWornArmor && event.source == DamageSource.drown) {
 			event.entityLiving.addPotionEffect(new PotionEffect(13, 40, 0));
 		}
-	}
-
-	@Override
-	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
-
-	@Override
-	public int getHarvestLevel(ItemStack stack, String toolClass) {
-		return -1;
 	}
 }

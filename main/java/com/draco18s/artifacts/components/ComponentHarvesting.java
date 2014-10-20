@@ -8,6 +8,7 @@ import java.util.Random;
 
 import com.google.common.collect.Multimap;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
+import com.draco18s.artifacts.components.UtilsForComponents.Flags;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -36,7 +37,7 @@ import net.minecraftforge.common.IShearable;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-public class ComponentHarvesting implements IArtifactComponent {
+public class ComponentHarvesting extends BaseComponent {
 
 	public ComponentHarvesting() {
 	}
@@ -45,21 +46,6 @@ public class ComponentHarvesting implements IArtifactComponent {
 	public String getRandomTrigger(Random rand, boolean isArmor) {
 		if(isArmor) return "";
 		return "onBlockDestroyed";
-	}
-
-	@Override
-	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
-		return i;
-	}
-
-	@Override
-	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
-		return true;
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
-		return false;
 	}
 
 	@Override
@@ -72,16 +58,6 @@ public class ComponentHarvesting implements IArtifactComponent {
 			return (ToolMaterial.values()[itemStack.stackTagCompound.getInteger("material")].getEfficiencyOnProperMaterial() / 2);
 			//return 15;
 		}
-	}
-
-	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,	EntityPlayer par3EntityPlayer) {
-		return par1ItemStack;
-	}
-
-	@Override
-	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
-		return false;
 	}
 
 	@Override
@@ -112,17 +88,6 @@ public class ComponentHarvesting implements IArtifactComponent {
 		}
 	}
 
-	@Override
-	public boolean itemInteractionForEntity(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase) {
-		return false;
-	}
-
-	//works great
-	@Override
-	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
-		
-	}
-	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		par3List.add(StatCollector.translateToLocal("effect.Extra drops from ores"));
 	}
@@ -144,33 +109,14 @@ public class ComponentHarvesting implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 148;
+		return Flags.DAGGER | Flags.STAFF | Flags.WAND | Flags.TRINKET;
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
-		return 327;
+		return Flags.AMULET | Flags.RING | Flags.ARMOR | Flags.BELT;
 	}
 
-	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
-		return false;
-	}
-
-	@Override
-	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
-		
-	}
-
-	@Override
-	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
-
-	@Override
-	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
-
-	@Override
-	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
-	
 	@Override
 	public int getHarvestLevel(ItemStack stack, String toolClass) {
 		ToolMaterial toolMaterial = ToolMaterial.values()[stack.stackTagCompound.getInteger("material")];

@@ -14,6 +14,23 @@ import com.draco18s.artifacts.network.CToSMessage;
 import com.draco18s.artifacts.network.PacketHandlerServer;
 
 public class UtilsForComponents {
+	
+	public static class Flags {
+		public static final int AMULET = 1;
+		public static final int DAGGER = 2;
+		public static final int FIGURINE = 4;
+		public static final int RING = 8;
+		public static final int STAFF = 16;
+		public static final int SWORD = 32;
+		public static final int TRINKET = 64;
+		public static final int WAND = 128;
+		public static final int ARMOR = 256;
+		public static final int BOOTS = 512;
+		public static final int CHESTPLATE = 1024;
+		public static final int HELM = 2048;
+		public static final int LEGGINGS = 4096;
+		public static final int BELT = 8192;
+	}
 
 	/**
 	 * Sends a packet to the server with potion information.
@@ -67,5 +84,13 @@ public class UtilsForComponents {
         while (!player.getCommandSenderName().equalsIgnoreCase(username));
         
         return player;
+	}
+	
+	public static boolean equipableByBaubles(String iconType) {
+		return iconType.equals("Amulet") || iconType.equals("Ring") || iconType.equals("Belt");
+	}
+	
+	public static boolean isArmor(String iconType) {
+		return iconType.equals("Helm") || iconType.equals("Boots") || iconType.equals("Leggings") || iconType.equals("Chestplate");
 	}
 }

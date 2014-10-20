@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Random;
 
 import com.google.common.collect.Multimap;
+import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
+import com.draco18s.artifacts.components.UtilsForComponents.Flags;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -38,11 +40,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-public class ComponentJumping implements IArtifactComponent {
+public class ComponentJumping extends BaseComponent {
 
-	public ComponentJumping() {
-	}
-	
 	public String getRandomTrigger(Random rand, boolean isArmor) {
 		if(isArmor) {
 			return "onArmorTickUpdate";
@@ -63,26 +62,6 @@ public class ComponentJumping implements IArtifactComponent {
 	}
 
 	@Override
-	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
-		return i;
-	}
-
-	@Override
-	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
-		return true;
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
-		return false;
-	}
-
-	@Override
-	public float getDigSpeed(ItemStack itemStack, Block block, int meta) {
-		return 0;
-	}
-
-	@Override
 	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
 		UtilsForComponents.sendPotionPacket(8, 900, 4, player);
 		UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 1);
@@ -99,27 +78,19 @@ public class ComponentJumping implements IArtifactComponent {
 		return false;
 	}
 
-	@Override
-	public boolean onBlockDestroyed(ItemStack par1ItemStack, World par2World, Block block, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase) {
-		return false;
-	}
-
-	@Override
-	public boolean canHarvestBlock(Block par1Block, ItemStack itemStack) {
-		return false;
-	}
-
-	@Override
-	public boolean itemInteractionForEntity(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase) {
-		return false;
-	}
-
 	//works great
 	@Override
-	public void onUpdate(ItemStack par1ItemStack, World world, Entity par3Entity, int par4, boolean par5) {
+	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean held) {
+		//Check that the artifact is in a baubles slot if it should be
+		if(DragonArtifacts.baublesLoaded && stack.stackTagCompound != null && 
+				UtilsForComponents.equipableByBaubles(stack.stackTagCompound.getString("iconName")) && 
+				DragonArtifacts.baublesMustBeEquipped && slot >= 0) {
+			return;
+		}
+		
 		if(!world.isRemote) {
-			if(par3Entity instanceof EntityLivingBase) {
-				EntityLivingBase ent = (EntityLivingBase) par3Entity;
+			if(entity instanceof EntityLivingBase) {
+				EntityLivingBase ent = (EntityLivingBase) entity;
 				ent.addPotionEffect(new PotionEffect(8, 10, 4));
 			}
 		}
@@ -177,38 +148,17 @@ public class ComponentJumping implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 861;
+		return Flags.AMULET | Flags.RING | Flags.FIGURINE | Flags.TRINKET | Flags.STAFF | Flags.BELT | Flags.ARMOR;
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
-		return 3202;
-	}
-
-	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
-		return false;
-	}
-
-	@Override
-	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
-		
+		return Flags.DAGGER | Flags.SWORD | Flags.HELM | Flags.CHESTPLATE;
 	}
 
 	@Override
 	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) {
 		if(worn)
-			onUpdate(itemStack, world, player, 0, true);
-	}
-
-	@Override
-	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
-
-	@Override
-	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
-
-	@Override
-	public int getHarvestLevel(ItemStack stack, String toolClass) {
-		return -1;
+			onUpdate(itemStack, world, player, 0, false);
 	}
 }

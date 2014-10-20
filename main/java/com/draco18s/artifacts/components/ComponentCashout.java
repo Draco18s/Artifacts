@@ -8,6 +8,7 @@ import java.util.Random;
 
 import com.google.common.collect.Multimap;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
+import com.draco18s.artifacts.components.UtilsForComponents.Flags;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -38,11 +39,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-public class ComponentCashout implements IArtifactComponent {
+public class ComponentCashout extends BaseComponent {
 
-	public ComponentCashout() {
-	}
-	
 	public String getRandomTrigger(Random rand, boolean isArmor) {
 		return "onDropped";
 	}
@@ -62,52 +60,6 @@ public class ComponentCashout implements IArtifactComponent {
 		return i;
 	}
 
-	@Override
-	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
-		return true;
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
-		return false;
-	}
-
-	@Override
-	public float getDigSpeed(ItemStack par1ItemStack, Block par2Block, int meta) {
-		return 0;
-	}
-
-	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,	EntityPlayer par3EntityPlayer) {
-		return par1ItemStack;
-	}
-
-	@Override
-	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
-		return false;
-	}
-
-	@Override
-	public boolean onBlockDestroyed(ItemStack par1ItemStack, World par2World, Block block, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase) {
-		return false;
-	}
-
-	@Override
-	public boolean canHarvestBlock(Block par1Block, ItemStack itemStack) {
-		return false;
-	}
-
-	@Override
-	public boolean itemInteractionForEntity(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase) {
-		return false;
-	}
-
-	//works great
-	@Override
-	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5) {
-		
-	}
-	
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
 		par3List.add(StatCollector.translateToLocal("effect.Converts to emeralds") + " " + StatCollector.translateToLocal("tool."+trigger));
 		if(trigger == "when dropped.") {
@@ -153,12 +105,12 @@ public class ComponentCashout implements IArtifactComponent {
 
 	@Override
 	public int getTextureBitflags() {
-		return 77;
+		return Flags.AMULET | Flags.FIGURINE | Flags.RING | Flags.TRINKET;
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
-		return 256;
+		return Flags.ARMOR;
 	}
 
 	@Override
@@ -176,24 +128,5 @@ public class ComponentCashout implements IArtifactComponent {
 			entityItem.setEntityItemStack(item);
 		}
 		return false;
-	}
-
-	@Override
-	public void onHeld(ItemStack par1ItemStack, World par2World,Entity par3Entity, int par4, boolean par5) {
-		
-	}
-
-	@Override
-	public void onArmorTickUpdate(World world, EntityPlayer player, ItemStack itemStack, boolean worn) { }
-
-	@Override
-	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
-
-	@Override
-	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
-
-	@Override
-	public int getHarvestLevel(ItemStack stack, String toolClass) {
-		return -1;
 	}
 }

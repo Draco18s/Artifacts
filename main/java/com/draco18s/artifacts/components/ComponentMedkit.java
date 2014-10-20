@@ -20,103 +20,15 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
+import com.draco18s.artifacts.components.UtilsForComponents.Flags;
 
-public class ComponentMedkit implements IArtifactComponent {
+public class ComponentMedkit extends BaseComponent {
 
 	@Override
 	public String getRandomTrigger(Random rand, boolean isArmor) {
 		if(isArmor)
 			return "onTakeDamage";
 		return "";
-	}
-
-	@Override
-	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
-		/*NBTTagCompound nbt = i.stackTagCompound;
-		int n = nbt.getInteger("onHeld");
-		nbt.setInteger("onHeld", 0);
-		nbt.removeTag("onHeld");
-		if(!nbt.hasKey("onTakeDamage") && !nbt.hasKey("onArmorTickUpdate")) {
-			nbt.setInteger("onTakeDamage", n);
-			nbt.setInteger("onArmorTickUpdate", n);
-		}*/
-		return i;
-	}
-
-	@Override
-	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
-		
-		return true;
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack par1ItemStack,
-			EntityPlayer par2EntityPlayer, World par3World, int par4, int par5,
-			int par6, int par7, float par8, float par9, float par10) {
-		
-		return false;
-	}
-
-	@Override
-	public float getDigSpeed(ItemStack par1ItemStack, Block par2Block, int meta) {
-		
-		return 0;
-	}
-
-	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
-			EntityPlayer par3EntityPlayer) {
-		
-		return par1ItemStack;
-	}
-
-	@Override
-	public boolean hitEntity(ItemStack par1ItemStack,
-			EntityLivingBase par2EntityLivingBase,
-			EntityLivingBase par3EntityLivingBase) {
-		
-		return false;
-	}
-
-	@Override
-	public boolean onBlockDestroyed(ItemStack par1ItemStack, World par2World,
-			Block block, int par4, int par5, int par6,
-			EntityLivingBase par7EntityLivingBase) {
-		
-		return false;
-	}
-
-	@Override
-	public boolean canHarvestBlock(Block par1Block, ItemStack itemStack) {
-		
-		return false;
-	}
-
-	@Override
-	public boolean itemInteractionForEntity(ItemStack par1ItemStack,
-			EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase) {
-		
-		return false;
-	}
-
-	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
-		
-		return false;
-	}
-
-	@Override
-	public void onUpdate(ItemStack par1ItemStack, World par2World,
-			Entity par3Entity, int par4, boolean par5) {
-		
-
-	}
-
-	@Override
-	public void onHeld(ItemStack par1ItemStack, World par2World,
-			Entity par3Entity, int par4, boolean par5) {
-		
-
 	}
 
 	@Override
@@ -145,7 +57,7 @@ public class ComponentMedkit implements IArtifactComponent {
 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		//par3List.add("Heals for a half-heart ten seconds after taking damage");
+		par3List.add("Heals for a half-heart ten seconds after taking damage");
 	}
 
 	@Override
@@ -191,13 +103,13 @@ public class ComponentMedkit implements IArtifactComponent {
 	@Override
 	public int getTextureBitflags() {
 		
-		return 1024;
+		return Flags.CHESTPLATE;
 	}
 
 	@Override
 	public int getNegTextureBitflags() {
 		
-		return 6911;
+		return ~(Flags.ARMOR | Flags.CHESTPLATE);
 	}
 
 	@Override
@@ -206,17 +118,5 @@ public class ComponentMedkit implements IArtifactComponent {
 			if(itemStack.stackTagCompound.getInteger("medkitDelay_armor") <= 0)
 				itemStack.stackTagCompound.setInteger("medkitDelay_armor", 200);
 		}
-	}
-
-	@Override
-	public void onDeath(ItemStack itemStack, LivingDeathEvent event,
-			boolean isWornArmor) {
-		
-
-	}
-
-	@Override
-	public int getHarvestLevel(ItemStack stack, String toolClass) {
-		return -1;
 	}
 }

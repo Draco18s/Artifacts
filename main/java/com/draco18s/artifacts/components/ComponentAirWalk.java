@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Random;
 
 import com.google.common.collect.Multimap;
+import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
 import com.draco18s.artifacts.block.BlockLight;
 import com.draco18s.artifacts.block.BlockSolidAir;
+import com.draco18s.artifacts.components.UtilsForComponents.Flags;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -40,7 +42,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-public class ComponentAirWalk implements IArtifactComponent {
+public class ComponentAirWalk extends BaseComponent {
 
 	public ComponentAirWalk() {
 	}
@@ -54,126 +56,17 @@ public class ComponentAirWalk implements IArtifactComponent {
 		}
 	}
 
-	@Override
-	public ItemStack attached(ItemStack i, Random rand, int[] eff) {
-		return i;
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, String trigger, boolean advTooltip) {
+		list.add(StatCollector.translateToLocal("effect.Allows sneaking on air") + " " + StatCollector.translateToLocal("tool."+trigger));
 	}
 
 	@Override
-	public boolean onDroppedByPlayer(ItemStack item, EntityPlayer player) {
-		return true;
-	}
-
-	@Override
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
-		return false;
-	}
-
-	@Override
-	public float getDigSpeed(ItemStack par1ItemStack, Block par2Block, int meta) {
-		return 0;
-	}
-
-	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,	EntityPlayer par3EntityPlayer) {
-		return par1ItemStack;
-	}
-
-	@Override
-	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase) {
-		return false;
-	}
-
-	@Override
-	public boolean onBlockDestroyed(ItemStack par1ItemStack, World par2World, Block block, int par4, int par5, int par6, EntityLivingBase par7EntityLivingBase) {
-		return false;
-	}
-
-	@Override
-	public boolean canHarvestBlock(Block par1Block, ItemStack itemStack) {
-		return false;
-	}
-
-	@Override
-	public boolean itemInteractionForEntity(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase) {
-		return false;
-	}
-
-	//works great
-	@Override
-	public void onUpdate(ItemStack itemStack, World world, Entity entity, int par4, boolean par5) {
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean advTooltip) {
+		list.add(StatCollector.translateToLocal("effect.Allows sneaking on air"));
 	}
 	
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip) {
-		par3List.add(StatCollector.translateToLocal("effect.Allows sneaking on air") + " " + StatCollector.translateToLocal("tool."+trigger));
-	}
-
-	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip) {
-		par3List.add(StatCollector.translateToLocal("effect.Allows sneaking on air"));
-	}
-
-	@Override
-	public String getPreAdj(Random rand) {
-		String str = "";
-		switch(rand.nextInt(2)) {
-			case 0:
-				str = "Floating";
-				break;
-			case 1:
-				str = "Light";
-				break;
-		}
-		return str;
-	}
-
-	@Override
-	public String getPostAdj(Random rand) {
-		String str = "";
-		switch(rand.nextInt(2)) {
-			case 0:
-				str = "of Hermes";
-				break;
-			case 1:
-				str = "of Flight";
-				break;
-		}
-		return str;
-	}
-
-	@Override
-	public int getTextureBitflags() {
-		return 985;
-	}
-
-	@Override
-	public int getNegTextureBitflags() {
-		return 2086;
-	}
-
-	@Override
-	public boolean onEntityItemUpdate(EntityItem entityItem, String type) {
-		return false;
-	}
-
 	@Override
 	public void onHeld(ItemStack itemStack, World world,Entity entity, int par4, boolean par5) {
-//		if(!par3Entity.isSneaking()) {
-//			return;
-//		}
-//		double xx = par3Entity.posX;
-//		double yy = par3Entity.posY-1;
-//		double zz = par3Entity.posZ;
-//		Vec3 v = par3Entity.getLookVec();
-//		xx += v.xCoord;
-//		zz += v.zCoord;
-//		int x = (int)xx;
-//		int y = (int)yy;
-//		int z = (int)zz;
-//		if(world.getBlock(x, y, z) == Blocks.air) {
-//			world.setBlock(x, y, z, BlockSolidAir.instance);
-//			world.scheduleBlockUpdate(x, y, z, BlockSolidAir.instance, 10);
-//		}
 		
 		//Similar to the ComponentLight code. Sets the block beneath the player to solid air,
 		//and cleans up any solid air blocks that were there before.
@@ -225,13 +118,41 @@ public class ComponentAirWalk implements IArtifactComponent {
 	}
 
 	@Override
-	public void onTakeDamage(ItemStack itemStack, LivingHurtEvent event, boolean isWornArmor) {	}
-
-	@Override
-	public void onDeath(ItemStack itemStack, LivingDeathEvent event, boolean isWornArmor) {	}
-
-	@Override
-	public int getHarvestLevel(ItemStack stack, String toolClass) {
-		return -1;
+	public String getPreAdj(Random rand) {
+		String str = "";
+		switch(rand.nextInt(2)) {
+			case 0:
+				str = "Floating";
+				break;
+			case 1:
+				str = "Light";
+				break;
+		}
+		return str;
 	}
+
+	@Override
+	public String getPostAdj(Random rand) {
+		String str = "";
+		switch(rand.nextInt(2)) {
+			case 0:
+				str = "of Hermes";
+				break;
+			case 1:
+				str = "of Flight";
+				break;
+		}
+		return str;
+	}
+
+	@Override
+	public int getTextureBitflags() {
+		return Flags.AMULET | Flags.RING | Flags.STAFF | Flags.TRINKET | Flags.WAND | Flags.ARMOR | Flags.BOOTS;
+	}
+
+	@Override
+	public int getNegTextureBitflags() {
+		return Flags.DAGGER | Flags.SWORD | Flags.FIGURINE | Flags.HELM | Flags.BELT;
+	}
+
 }
