@@ -19,15 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
-/*
-		if(DragonArtifacts.baublesLoaded && itemStack.stackTagCompound != null) {
-			NBTTagCompound tag = itemStack.stackTagCompound;
-			if(trigger.equals("passively.") && UtilsForComponents.equipableByBaubles(tag.getString("iconName"))) {
-				trigger = "when equipped.";
-			}
-		}
-*/
-
+//Base component class with all the defaults, which other components can extend
 public abstract class BaseComponent implements IArtifactComponent {
 	@Override
 	public String getRandomTrigger(Random rand, boolean isArmor) {
@@ -48,9 +40,9 @@ public abstract class BaseComponent implements IArtifactComponent {
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack par1ItemStack,
-			EntityPlayer par2EntityPlayer, World par3World, int par4, int par5,
-			int par6, int par7, float par8, float par9, float par10) {
+	public boolean onItemUse(ItemStack itemStack,
+			EntityPlayer player, World world, int x, int y,
+			int z, int side, float hitX, float hitY, float hitZ) {
 		
 		return false;
 	}
@@ -69,9 +61,9 @@ public abstract class BaseComponent implements IArtifactComponent {
 	}
 
 	@Override
-	public boolean hitEntity(ItemStack par1ItemStack,
-			EntityLivingBase par2EntityLivingBase,
-			EntityLivingBase par3EntityLivingBase) {
+	public boolean hitEntity(ItemStack itemStack,
+			EntityLivingBase entityVictim,
+			EntityLivingBase entityAttacker) {
 		
 		return false;
 	}
@@ -79,20 +71,20 @@ public abstract class BaseComponent implements IArtifactComponent {
 	@Override
 	public boolean onBlockDestroyed(ItemStack itemStack, World world,
 			Block block, int x, int y, int z,
-			EntityLivingBase entityLivingBase) {
+			EntityLivingBase entity) {
 		
 		return false;
 	}
 
 	@Override
-	public boolean canHarvestBlock(Block par1Block, ItemStack itemStack) {
+	public boolean canHarvestBlock(Block block, ItemStack itemStack) {
 		
 		return false;
 	}
 
 	@Override
-	public boolean itemInteractionForEntity(ItemStack par1ItemStack,
-			EntityPlayer par2EntityPlayer, EntityLivingBase par3EntityLivingBase) {
+	public boolean itemInteractionForEntity(ItemStack itemStack,
+			EntityPlayer player, EntityLivingBase entity) {
 		
 		return false;
 	}
@@ -104,14 +96,14 @@ public abstract class BaseComponent implements IArtifactComponent {
 	}
 
 	@Override
-	public void onUpdate(ItemStack par1ItemStack, World par2World,
-			Entity par3Entity, int par4, boolean par5) {
+	public void onUpdate(ItemStack itemStack, World world,
+			Entity entity, int slot, boolean held) {
 		
 	}
 
 	@Override
-	public void onHeld(ItemStack par1ItemStack, World par2World,
-			Entity par3Entity, int par4, boolean par5) {
+	public void onHeld(ItemStack itemStack, World world,
+			Entity entity, int slot, boolean held) {
 		
 	}
 
@@ -136,10 +128,10 @@ public abstract class BaseComponent implements IArtifactComponent {
 	}
 	
 	@Override
-	public abstract void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean advTooltip);
+	public abstract void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean advTooltip);
 
 	@Override
-	public abstract void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, String trigger, boolean advTooltip);
+	public abstract void addInformation(ItemStack itemStack, EntityPlayer player, List list, String trigger, boolean advTooltip);
 
 	@Override
 	public abstract String getPreAdj(Random rand);

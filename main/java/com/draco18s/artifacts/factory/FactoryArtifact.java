@@ -60,156 +60,158 @@ public class FactoryArtifact implements IArtifactAPI {
 	public FactoryArtifact() {
 		Configuration config = new Configuration(new File("./config", "ArtifactEffects.cfg"));
 		config.load();
+		
+		ComponentNull nullComponent = new ComponentNull();
 		if(config.get("Effects", "Healing", true).getBoolean(true)) {
 			registerComponent(new ComponentHeal());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "ExtraDamage", true).getBoolean(true)) {
 			registerComponent(new ComponentDamage());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "Fireballs", true).getBoolean(true)) {
 			registerComponent(new ComponentFireball());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "Harvesting", true).getBoolean(true)) {
 			registerComponent(new ComponentHarvesting());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "Lightning", true).getBoolean(true)) {
 			registerComponent(new ComponentLightning());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "Mining", true).getBoolean(true)) {
 			registerComponent(new ComponentMining());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "Exploding", true).getBoolean(true)) {
 			registerComponent(new ComponentExplosive());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "Illumination", true).getBoolean(true)) {
 			registerComponent(new ComponentLight());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "Value", true).getBoolean(true)) {
 			registerComponent(new ComponentCashout());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "Resistance", true).getBoolean(true)) { //#10
 			registerComponent(new ComponentResistance());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "JumpBoost", true).getBoolean(true)) {
 			registerComponent(new ComponentJumping());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "NightVision", true).getBoolean(true)) {
 			registerComponent(new ComponentVision());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "WaterBreathing", true).getBoolean(true)) {
 			registerComponent(new ComponentBreathing());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "FoodSaturation", true).getBoolean(true)) {
 			registerComponent(new ComponentFoodie());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "MoveSpeed", true).getBoolean(true)) {
 			registerComponent(new ComponentSpeed());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "MaxHealth", true).getBoolean(true)) {
 			registerComponent(new ComponentHealth());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "ToolRepair", true).getBoolean(true)) {
 			registerComponent(new ComponentRepair());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "MassWeb", true).getBoolean(true)) {
 			registerComponent(new ComponentMassWeb());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "AirWalking", true).getBoolean(true)) {
 			registerComponent(new ComponentAirWalk());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "Excavation", true).getBoolean(true)) { //#20
 			registerComponent(new ComponentExcavation());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "KnockbackResist", true).getBoolean(true)) {
 			registerComponent(new ComponentKnockbackResist());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "Resurrection", true).getBoolean(true)) {
 			registerComponent(new ComponentResurrect());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "OreFinder", true).getBoolean(true)) {
 			registerComponent(new ComponentOreRadar());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "FirstAidKit", true).getBoolean(true)) {
 			registerComponent(new ComponentMedkit());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "AdrenalinePump", true).getBoolean(true)) {
 			registerComponent(new ComponentAdrenaline());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "RepairOther", true).getBoolean(true)) {
 			registerComponent(new ComponentRepairOther());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "ExplodingArrows", true).getBoolean(true)) {
 			registerComponent(new ComponentExplodingArrows());
 		}else { 
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "Obscurity", true).getBoolean(true)) {
 			registerComponent(new ComponentObscurity());
 		}else {
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "Baking", true).getBoolean(true)) {
 			registerComponent(new ComponentBaking());
 		}else {
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		if(config.get("Effects", "MusicPlayer", true).getBoolean(true)) { //#30
 			registerComponent(new ComponentMusicPlayer());
 		}
 		else {
-			registerComponent(null);
+			registerComponent(nullComponent);
 		}
 		config.save();
 	}

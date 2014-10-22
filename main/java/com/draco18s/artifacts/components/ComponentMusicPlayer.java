@@ -116,7 +116,15 @@ public class ComponentMusicPlayer extends BaseComponent {
 		String play = StatCollector.translateToLocal("effect.Play");
 		if(play.equals("{Play}"))
 			play = "" + EnumChatFormatting.GREEN + ((char) 0x266A) + EnumChatFormatting.LIGHT_PURPLE + ((char) 0x266B) + EnumChatFormatting.GOLD + ((char) 0x266A);
-		list.add(StatCollector.translateToLocal("effect.Plays the record") + " " + StatCollector.translateToLocal("item.record." + itemStack.getTagCompound().getString("record") + ".desc") + " " + StatCollector.translateToLocal("tool." + trigger) + " " + (itemStack.getTagCompound().getBoolean("playing") ? play : ""));
+		
+		//Get the localized record description
+		String recordDescription = "Unknown";
+		ItemRecord record = ItemRecord.getRecord("records."+itemStack.getTagCompound().getString("record"));
+		if(record != null) { //If the record was from a mod that is no longer loaded, the description will stay "Unknown"
+			recordDescription = record.getRecordNameLocal();
+		}
+		
+		list.add(StatCollector.translateToLocal("effect.Plays the record") + " " + recordDescription + " " + StatCollector.translateToLocal("tool." + trigger) + " " + (itemStack.getTagCompound().getBoolean("playing") ? play : ""));
 	}
 
 	@Override

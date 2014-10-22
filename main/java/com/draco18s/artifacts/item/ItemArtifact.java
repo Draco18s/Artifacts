@@ -338,7 +338,8 @@ public class ItemArtifact extends Item implements IBauble {
 			for(int i=ca.length-1; i >= 0; i--) {
 				if(ca[i] != 0) {
 					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(ca[i]);
-					r = r||c.canHarvestBlock(block, itemStack);
+					if(c != null)
+						r = r || c.canHarvestBlock(block, itemStack);
 				}
 			}
 		}
@@ -610,8 +611,10 @@ public class ItemArtifact extends Item implements IBauble {
 			//Loop through the components and find the one with the highest harvest level.
 			for(int i=ca.length-1; i >= 0; i--) {
 				if(ca[i] != 0) {
+					int temp = 0;
 					IArtifactComponent c = ArtifactsAPI.artifacts.getComponent(ca[i]);
-					int temp = c.getHarvestLevel(itemStack, toolClass);
+					if(c != null)
+						temp = c.getHarvestLevel(itemStack, toolClass);
 					if(temp > r) {
 						r = temp;
 					}
