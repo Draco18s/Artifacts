@@ -917,8 +917,7 @@ public class StructureMasterTower extends WorldGenerator
 		world.setBlock(i + 5, j + 13, k + 5, Blocks.air);
 		world.setBlock(i + 5, j + 13, k + 6, Blocks.stonebrick, 0, 2);
 		world.setBlock(i + 5, j + 13, k + 7, Blocks.stonebrick, 0, 2);
-		world.setBlock(i + 5, j + 13, k + 8, Blocks.sticky_piston, 12, 2);
-		world.setBlock(i + 4, j + 13, k + 8, Blocks.piston_extension, 12, 2);
+		world.setBlock(i + 5, j + 13, k + 8, Blocks.sticky_piston, 4, 2);
 		world.setBlock(i + 5, j + 13, k + 9, Blocks.stonebrick, 0, 2);
 		world.setBlock(i + 5, j + 13, k + 10, Blocks.stonebrick, 0, 2);
 		world.setBlock(i + 5, j + 13, k + 11, Blocks.stonebrick, 0, 2);
@@ -1626,6 +1625,9 @@ public class StructureMasterTower extends WorldGenerator
 		world.setBlock(i + 8, j + 9, k + 3, Blocks.stonebrick, 0, 2);
 
 		generate2(world, rand, i, j, k);
+		
+		Blocks.sticky_piston.onBlockAdded(world, i + 5, j + 13, k + 8);
+		
 		return true;
 	}
 
@@ -2264,7 +2266,7 @@ public class StructureMasterTower extends WorldGenerator
 		world.setBlock(i + 9, j + 11, k + 10, BlockAntibuilder.instance, 0, 2);
 		world.setBlock(i + 5, j + 22, k + 8, BlockAntibuilder.instance, 0, 2);
 		world.setBlock(i + 6, j + 33, k + 7, BlockAntibuilder.instance, 0, 2);
-
+		
 		return true;
 	}
 	
