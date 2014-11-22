@@ -14,6 +14,12 @@ import java.util.UUID;
 import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.entity.ArrowEffect;
 import com.draco18s.artifacts.entity.EntitySpecialArrow;
+import com.draco18s.artifacts.worldgen.StructureApprenticeTower;
+import com.draco18s.artifacts.worldgen.StructureApprenticeTowerAncient;
+import com.draco18s.artifacts.worldgen.StructureJourneymanTower;
+import com.draco18s.artifacts.worldgen.StructureJourneymanTowerAncient;
+import com.draco18s.artifacts.worldgen.StructureMasterTower;
+import com.draco18s.artifacts.worldgen.StructureMasterTowerAncient;
 
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -58,6 +64,7 @@ public class PacketHandlerServer implements IMessageHandler<CToSMessage,IMessage
 	public static final int DAMAGE_ITEM = 28;
 	public static final int BAKING = 29;
 	public static final int MUSIC_PLAYER = 30;
+	public static final int PLACE_STRUCTURE = 1000;
 
 	public PacketHandlerServer() {
 		
@@ -341,6 +348,82 @@ public class PacketHandlerServer implements IMessageHandler<CToSMessage,IMessage
 				SToCMessage recordPacket = new SToCMessage(out);
 				DragonArtifacts.artifactNetworkWrapper.sendToDimension(recordPacket, world.provider.dimensionId);
 				break;
+//			case PLACE_STRUCTURE: 
+//				//System.out.println("Placing Structure!");
+//				f = 1.0F;
+//				f1 = p.prevRotationPitch + (p.rotationPitch - p.prevRotationPitch) * f;
+//				f2 = p.prevRotationYaw + (p.rotationYaw - p.prevRotationYaw) * f;
+//				d0 = p.prevPosX + (p.posX - p.prevPosX) * (double)f;
+//				d1 = p.prevPosY + (p.posY - p.prevPosY) * (double)f + 1.62D - (double)p.yOffset;
+//				d2 = p.prevPosZ + (p.posZ - p.prevPosZ) * (double)f;
+//				vec3 = Vec3.createVectorHelper(d0, d1, d2);
+//				f3 = MathHelper.cos(-f2 * 0.017453292F - (float)Math.PI);
+//				f4 = MathHelper.sin(-f2 * 0.017453292F - (float)Math.PI);
+//				f5 = -MathHelper.cos(-f1 * 0.017453292F);
+//				f6 = MathHelper.sin(-f1 * 0.017453292F);
+//				f7 = f4 * f5;
+//				f8 = f3 * f5;
+//				d3 = 5.0D;
+//				vec31 = vec3.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
+//				mop = world.func_147447_a/*rayTraceBlocks_do_do*/(vec3, vec31, false, true, false);
+//				if (mop == null) {
+//					return null;
+//				}
+//				x = -1;
+//				y = -1;
+//				z = -1;
+//				if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
+//				{
+//					x = mop.blockX;
+//					y = mop.blockY;
+//					z = mop.blockZ;
+//					
+//					if (mop.sideHit == 0) --y;
+//		            if (mop.sideHit == 1) ++y;
+//		            if (mop.sideHit == 2) --z;
+//		            if (mop.sideHit == 3) ++z;
+//		            if (mop.sideHit == 4) --x;
+//		            if (mop.sideHit == 5) ++x;
+//				}
+//				if (mop.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
+//					x = MathHelper.floor_double(mop.hitVec.xCoord);
+//					y = MathHelper.floor_double(mop.hitVec.yCoord);
+//					z = MathHelper.floor_double(mop.hitVec.zCoord);
+//				}
+//				
+//				//world.setBlock(x, y, z, Blocks.cake);
+//				
+//				is = p.inventory.getStackInSlot(buff.readInt());
+//				Item item = is.getItem();
+//				if(is != null && is.stackTagCompound != null) {
+//					String type = is.stackTagCompound.getString("Type");
+//					
+//					if(type.equals("Tier1Tower")) {
+//						StructureApprenticeTower.build(world, new Random(), x-3, y-3, z+1);
+//					}
+//					if(type.equals("Tier1TowerAncient")) {
+//						StructureApprenticeTowerAncient.build(world, new Random(), x-3, y-3, z+1);
+//					}
+//					if(type.equals("Tier2Tower")) {
+//						StructureJourneymanTower.build(world, new Random(), x-3, y-1, z+1);
+//					}
+//					if(type.equals("Tier2TowerAncient")) {
+//						StructureJourneymanTowerAncient.build(world, new Random(), x-3, y-1, z+1);
+//					}
+//					if(type.equals("Tier3Tower")) {
+//						StructureMasterTower.build(world, new Random(), x-3, y-3, z+1);
+//					}
+//					if(type.equals("Tier3TowerAncient")) {
+//						StructureMasterTowerAncient.build(world, new Random(), x-3, y-3, z+1);
+//					}
+//					
+//					world.playSoundEffect((double)x + 0.5, (double)y + 0.5, (double)z + 0.5, "portal.trigger", 1.0f, 1.0f);
+//				}
+//				
+//				if(!p.capabilities.isCreativeMode) {
+//					is.stackSize--;
+//				}
+//				break;
 			case 4096:
 				//add right-click delay
 				int d = buff.readInt();

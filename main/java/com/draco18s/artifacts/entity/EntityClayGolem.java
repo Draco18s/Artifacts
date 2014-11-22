@@ -308,7 +308,7 @@ public class EntityClayGolem extends EntityGolem
 
         for (int l = 0; l < k; ++l)
         {
-            this.dropItem(Items.clay_ball, 1);
+            this.dropItem((this.isBurning() ? Items.brick : Items.clay_ball), 1);
         }
     }
 

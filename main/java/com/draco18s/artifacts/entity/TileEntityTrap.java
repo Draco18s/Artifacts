@@ -87,7 +87,7 @@ public class TileEntityTrap extends TileEntityDispenser
             {
                 itemstack = this.dispenserContents[par1].splitStack(par2);
 
-                if (this.dispenserContents[par1].stackSize == 0)
+                if (this.dispenserContents[par1].stackSize <= 0)
                 {
                     this.dispenserContents[par1] = null;
                 }

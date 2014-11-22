@@ -45,6 +45,7 @@ import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -154,13 +155,13 @@ public class BlockTrap extends BlockContainer
     	return getIcon(m,side);
     }
     
-    private IIcon neighborBlockTexture(IBlockAccess world, int x, int y, int z, int side, int mymeta) {
+    public IIcon neighborBlockTexture(IBlockAccess world, int x, int y, int z, int side, int mymeta) {
     	Block[] blocks = {world.getBlock(x, y, z+1),world.getBlock(x, y, z-1),world.getBlock(x+1, y, z),world.getBlock(x-1, y, z)};
         int[] meta = {world.getBlockMetadata(x, y, z+1),world.getBlockMetadata(x, y, z-1),world.getBlockMetadata(x+1, y, z),world.getBlockMetadata(x-1, y, z)};
         for(int i = 0; i < blocks.length; i++) {
         	if(i+2 != mymeta) {
 	        	if(blocks[i] != null) {
-	        		if(blocks[i] != this) {
+	        		if(blocks[i] != this && ! (blocks[i] instanceof BlockWallPlate) && ! (blocks[i] instanceof BlockArtifactsPressurePlate)) {
 	        			IIcon icon = blocks[i].getIcon(side, meta[i]);
 		        		if(icon != null) {
 		        			return icon;
@@ -170,6 +171,58 @@ public class BlockTrap extends BlockContainer
         	}
         }
     	return Blocks.stonebrick.getBlockTextureFromSide(1);
+    }
+    
+    public static int[] getNeighbourBlockPosition(IBlockAccess world, int x, int y, int z, Block block, int blockMeta) {
+    	
+    	int xOffset = 0;
+		int zOffset = 0;
+		switch(blockMeta) {
+			case 0: 
+	        case 2:
+	        case 3:
+	        	xOffset = 1;
+	        	break;
+	        case 1:
+	        case 4:
+	        case 5:
+	        	zOffset = 1;
+	        	break;
+	    }
+		int metaToCopy = 0;
+		Block adjacentBlock1 = world.getBlock(x + xOffset, y, z + zOffset);
+		Block adjacentBlock2 = world.getBlock(x - xOffset, y, z - zOffset);
+		Block blockToCopy = Blocks.stonebrick;
+		if(adjacentBlock1 != block && adjacentBlock1 != null && adjacentBlock1.isOpaqueCube()) {
+			return new int[]{x + xOffset, y, z + zOffset};
+		}
+		else if(adjacentBlock2 != block && adjacentBlock2 != null && adjacentBlock2.isOpaqueCube()) {
+			return new int[]{x - xOffset, y, z - zOffset};
+		}
+		else {
+			if(blockMeta <= 1) {
+				adjacentBlock1 = world.getBlock(x + zOffset, y, z + xOffset);
+				adjacentBlock2 = world.getBlock(x - zOffset, y, z - xOffset);
+				if(adjacentBlock1 != block && adjacentBlock1 != null && adjacentBlock1.isOpaqueCube()) {
+					return new int[]{x + zOffset, y, z + xOffset};
+				}
+				else if(adjacentBlock2 != block && adjacentBlock2 != null && adjacentBlock2.isOpaqueCube()) {
+					return new int[]{x - zOffset, y, z - xOffset};
+				}
+			}
+			else {
+				adjacentBlock1 = world.getBlock(x, y+1, z);
+				adjacentBlock2 = world.getBlock(x, y-1, z);
+				if(adjacentBlock1 != block && adjacentBlock1 != null && adjacentBlock1.isOpaqueCube()) {
+					return new int[]{x, y+1, z};
+				}
+				else if(adjacentBlock2 != block && adjacentBlock2 != null && adjacentBlock2.isOpaqueCube()) {
+					return new int[]{x, y-1, z};
+				}
+			}
+		}
+		
+		return new int[]{x, y, z};
     }
 
     @SideOnly(Side.CLIENT)
@@ -237,7 +290,7 @@ public class BlockTrap extends BlockContainer
                 {
                     //ItemStack itemstack1 = ibehaviordispenseitem.dispense((IBlockSource) blocksourceimpl, itemstack);
                     ItemStack itemstack1 = ibehaviordispenseitem.dispense(blocksourceimpl, itemstack);
-                    tileentitydispenser.setInventorySlotContents(l, itemstack1.stackSize == 0 ? null : itemstack1);
+                    tileentitydispenser.setInventorySlotContents(l, itemstack1.stackSize <= 0 ? null : itemstack1);
                 }
             }
         }

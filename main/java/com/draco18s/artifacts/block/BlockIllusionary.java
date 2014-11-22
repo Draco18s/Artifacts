@@ -60,7 +60,7 @@ public class BlockIllusionary extends Block {
 		        		}
 	        		}
 	        		else if(block == this) {
-	        			IIcon icon = Blocks.grass.getBlockTextureFromSide(1);
+	        			IIcon icon = Blocks.stonebrick.getBlockTextureFromSide(1);
 	        			switch(i) {
 	        				case 0:
 		        				icon = ((BlockIllusionary)block).getBlockTextureDirectional(world, x, y-1, z, side, 0);
@@ -81,13 +81,13 @@ public class BlockIllusionary extends Block {
 		        				icon = ((BlockIllusionary)block).getBlockTextureDirectional(world, x, y+1, z, side, 1);
 		        				break;
 	        			}
-		        		if(icon != null && icon != Blocks.grass.getBlockTextureFromSide(1)) {
+	        			if(icon != null) {
 		        			return icon;
 		        		}
 	        		}
 	        	}
 	        }
-	        return Blocks.grass.getBlockTextureFromSide(1);
+	        return Blocks.stonebrick.getBlockTextureFromSide(1);
 		/*}
 		else {
 			return blockIcon;
@@ -106,7 +106,7 @@ public class BlockIllusionary extends Block {
         		}
 			}
 			else {
-				IIcon icon = Blocks.grass.getBlockTextureFromSide(1);
+				IIcon icon = Blocks.stonebrick.getBlockTextureFromSide(1);
     			switch(direction) {
     				case 0:
         				icon = ((BlockIllusionary)block).getBlockTextureDirectional(world, x, y-1, z, side, 0);
@@ -130,7 +130,7 @@ public class BlockIllusionary extends Block {
     			return icon;
 			}
 		}
-		return Blocks.grass.getBlockTextureFromSide(1);
+		return Blocks.stonebrick.getBlockTextureFromSide(1);
 	}
 
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World par1World, int par2, int par3, int par4)

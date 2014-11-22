@@ -58,7 +58,7 @@ import com.draco18s.artifacts.network.PacketHandlerServer;
 import com.draco18s.artifacts.network.SToCMessage;
 import com.draco18s.artifacts.worldgen.PlaceTraps;
 
-@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "1.0.6")
+@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "1.1.0")
 public class DragonArtifacts{
 	@Instance("Artifacts")
     public static DragonArtifacts instance;
@@ -67,6 +67,7 @@ public class DragonArtifacts{
 	public static boolean renderInvis = false;
 	public static boolean boundingInvis = true;
 	public static PlaceTraps worldGen;
+	public static boolean mystcraftLoaded = false;
 	
 	public static boolean baublesLoaded = false;
 	public static boolean baublesMustBeEquipped = true;
@@ -125,42 +126,70 @@ public class DragonArtifacts{
 			String orichalcumID = "dust_orichalcum";
 			String calendarID = "lunar_calendar";
 			
-			config.addCustomCategoryComment("WorldGen", "By default this mod alters worldgen slightly, adding more and different traps to\npyramids, temples, and strongholds as well as quicksand 'lakes'.\nThese may be disabled individually.");
-			boolean pyrm = config.get("WorldGen","Pyramids",true).getBoolean(true);
-			boolean temp = config.get("WorldGen","Temples",true).getBoolean(true);
-			boolean strn = config.get("WorldGen","Strongholds",true).getBoolean(true);
-			boolean quik = config.get("WorldGen","QuicksandPits",true).getBoolean(true);
-			boolean towers = config.get("WorldGen","WizardTowers",true).getBoolean(true);
-			Property conf = config.get("WorldGen","dimensionWhitelistEnable",false);
+			String structureGenID = "structure_generator";
+			
+			config.addCustomCategoryComment("WorldGen", "By default this mod alters worldgen slightly, adding more and different traps to\npyramids, temples, and strongholds as well as quicksand 'lakes'.\nThese may be disabled individually.\nTo disable the towers, set their weights to 0.");
+			PlaceTraps.genPyramids = config.get("WorldGen","Pyramids ",true).getBoolean(true);
+			PlaceTraps.genTemples = config.get("WorldGen","Temples ",true).getBoolean(true);
+			PlaceTraps.genStrongholds = config.get("WorldGen","Strongholds ",true).getBoolean(true);
+			PlaceTraps.genMystcraftLibraries = config.get("WorldGen","Mystcraft Libraries",true).getBoolean(true);
+			PlaceTraps.genQuicksand = config.get("WorldGen","Quicksand Pits",true).getBoolean(true);
+			PlaceTraps.weightTower1 = config.get("WorldGen","Small Wizard Tower Weight", 5).getInt();
+			if(PlaceTraps.weightTower1 < 0) PlaceTraps.weightTower1 = 0;
+			PlaceTraps.weightTower1A = config.get("WorldGen","Small Wizard Tower Ruins Weight", 5).getInt();
+			if(PlaceTraps.weightTower1A < 0) PlaceTraps.weightTower1A = 0;
+			PlaceTraps.weightTower2 = config.get("WorldGen","Medium Wizard Tower Weight", 4).getInt();
+			if(PlaceTraps.weightTower2 < 0) PlaceTraps.weightTower2 = 0;
+			PlaceTraps.weightTower2A = config.get("WorldGen","Medium Wizard Tower Ruins Weight", 4).getInt();
+			if(PlaceTraps.weightTower2A < 0) PlaceTraps.weightTower2A = 0;
+			PlaceTraps.weightTower3 = config.get("WorldGen","Large Wizard Tower (with anti-builders) Weight", 3).getInt();
+			if(PlaceTraps.weightTower3 < 0) PlaceTraps.weightTower3 = 0;
+			PlaceTraps.weightTower3A = config.get("WorldGen","Large Wizard Tower Ruins Weight", 3).getInt();
+			if(PlaceTraps.weightTower3A < 0) PlaceTraps.weightTower3A = 0;
+			Property conf = config.get("WorldGen", "Wizard Tower Rarity", 30);
+			conf.comment = "The lower the number, the more wizard towers will generate. Minimum is 1.";
+			PlaceTraps.towerRarity = conf.getInt();
+			if(PlaceTraps.towerRarity <= 0) {
+				PlaceTraps.towerRarity = 1;
+				conf.set(1);
+			}
+			conf = config.get("WorldGen", "Quicksand Rarity", 60);
+			conf.comment = "The lower the number, the more quicksand pits will generate. Minimum is 1.";
+			PlaceTraps.quicksandRarity = conf.getInt();
+			if(PlaceTraps.quicksandRarity <= 0) {
+				PlaceTraps.quicksandRarity = 1;
+				conf.set(1);
+			}
+			conf = config.get("WorldGen","Dimension Whitelist Enable",false);
 			conf.comment = "Enables the whitelist for worldgen.  If enabled, world gen objects will only generate in whitelisted dimensions.";
-			boolean usewhite = conf.getBoolean(false);
-			conf = config.get("WorldGen","dimensionBlacklistEnable",false);
+			PlaceTraps.whitelistEnabled = conf.getBoolean(false);
+			conf = config.get("WorldGen","Dimension Blacklist Enable",false);
 			conf.comment = "Enables the blacklist for worldgen.  If enabled, world gen objects will never generate in blacklisted dimensions.\nBlacklist will override whitelist.  -1 and 1 (Nether and End) are always blacklisted.";
-			boolean useblack = conf.getBoolean(false);
+			PlaceTraps.blacklistEnabled = conf.getBoolean(false);
 			conf = config.get("baubles", "Artifacts must be equipped when Baubles installed?", true);
 			conf.comment = "If true, if Baubles is installed, the continuous effects of artifacts which can go in the\nBaubles slots will only work when the artifacts are in the slots.";
 			baublesMustBeEquipped = conf.getBoolean(true);
 			
 			
-			Property cw = config.get("WorldGen","dimensionWhitelistList", new int[] {0});
-			Property cb = config.get("WorldGen","dimensionBlacklistList", new int[] {-1,1});
-			int[] white = cw.getIntList();
-			int[] black = cb.getIntList();
+			Property cw = config.get("WorldGen","Dimension Whitelist List", new int[] {0});
+			Property cb = config.get("WorldGen","Dimension Blacklist List", new int[] {-1,1});
+			PlaceTraps.whitelist = cw.getIntList();
+			PlaceTraps.blacklist = cb.getIntList();
 			
-			int golemID = config.get("Entities", "Golem ID", EntityRegistry.findGlobalUniqueEntityId()).getInt();
+			Arrays.sort(PlaceTraps.whitelist);
+			Arrays.sort(PlaceTraps.blacklist);
 			
-			Arrays.sort(white);
-			Arrays.sort(black);
-			
-			String a=Arrays.toString(white);
+			String a = Arrays.toString(PlaceTraps.whitelist);
 			String whitestring[]=a.substring(1,a.length()-1).split(", ");
-			String b=Arrays.toString(black);
+			String b = Arrays.toString(PlaceTraps.blacklist);
 			String blackstring[]=b.substring(1,b.length()-1).split(", ");
 
 			cw.set(whitestring);
 			cb.set(blackstring);
 			
-    		boolean useAntibuild = config.get("WorldGen","UseAntibuilders",true).getBoolean(true);
+    		PlaceTraps.iDontLikeAntibuilders = ! config.get("WorldGen","Use Antibuilders",true).getBoolean(true);
+    		
+			int golemID = config.get("Entities", "Golem ID", EntityRegistry.findGlobalUniqueEntityId()).getInt();
 			
 			ConfigCategory longNames = config.getCategory("general");
 			longNames.setComment("These settings dictate how item names are displayed.");
@@ -199,9 +228,17 @@ public class DragonArtifacts{
     		String pseudoCPID = "cover_plate_item";
     		String pseudoFBID = "fake_block_item";
     		String wallplateID = "wall_pressure_plate";
+    		String cwallplateID = "camouflaged_wall_pressure_plate";
     		String owallplateID = "obsidian_wall_pressure_plate";
+    		String cowallplateID = "camouflaged_obsidian_wall_pressure_plate";
+    		String wwallplateID = "wooden_wall_pressure_plate";
+    		String cwwallplateID = "camouflaged_wooden_wall_pressure_plate";
     		String invisppID = "invisible_pressure_plate";
     		String oinvisppID = "obsidian_invisible_pressure_plate";
+    		String cppID = "camouflaged_pressure_plate";
+    		String oppID = "obsidian_pressure_plate";
+    		String coppID = "camouflaged_obsidian_pressure_plate";
+    		String cwppID = "camouflaged_wooden_pressure_plate";
     		String fakeID = "illusionary_block";
     		String invisID = "invisible_block";
     		String teSwordID = "fake_tile_entity";
@@ -268,14 +305,20 @@ public class DragonArtifacts{
 		ItemArtifactArmor.doMatName = ItemArtifact.doMatName = matName.getBoolean(true);
 		ItemArtifactArmor.doAdjName = ItemArtifact.doAdjName = adjName.getBoolean(true);
 		
+		ItemStructureGenerator.structureGenItem = new ItemStructureGenerator().setUnlocalizedName(structureGenID);
+		
 		
 		BlockAntibuilder.instance = new BlockAntibuilder().setBlockName(antiID);
 		BlockCoverPlate.instance = new BlockCoverPlate().setBlockName(coverplateID);
 		BlockIllusionary.instance = new BlockIllusionary().setBlockName(fakeID);
 		BlockInvisibleBedrock.instance = new BlockInvisibleBedrock().setBlockName(invis2ID);
 		BlockInvisibleBlock.instance = new BlockInvisibleBlock().setBlockName(invisID);
-		BlockInvisiblePressurePlate.instance = new BlockInvisiblePressurePlate("Invisible Pressure Plate", Material.rock, BlockPressurePlate.Sensitivity.mobs).setBlockName(invisppID);
-		BlockInvisiblePressurePlate.obsidian = new BlockInvisiblePressurePlate("Invisible Obsidiplate", Material.rock, BlockPressurePlate.Sensitivity.players).setBlockName(oinvisppID);
+		BlockArtifactsPressurePlate.invisStone = new BlockArtifactsPressurePlate("Invisible Pressure Plate", Material.circuits, BlockPressurePlate.Sensitivity.mobs, true, false).setBlockName(invisppID);
+		BlockArtifactsPressurePlate.camoStone = new BlockArtifactsPressurePlate("Camo Pressure Plate", Material.circuits, BlockPressurePlate.Sensitivity.mobs, false, true).setBlockName(cppID);
+		BlockArtifactsPressurePlate.invisObsidian = new BlockArtifactsPressurePlate("Invisible Obsidiplate", Material.circuits, BlockPressurePlate.Sensitivity.players, true, false).setBlockName(oinvisppID);
+		BlockArtifactsPressurePlate.obsidian = new BlockArtifactsPressurePlate("Obsidiplate", Material.circuits, BlockPressurePlate.Sensitivity.players, false, false).setBlockName(oppID);
+		BlockArtifactsPressurePlate.camoObsidian = new BlockArtifactsPressurePlate("Camo Obsidiplate", Material.circuits, BlockPressurePlate.Sensitivity.players, false, true).setBlockName(coppID);
+		BlockArtifactsPressurePlate.camoWood = new BlockArtifactsPressurePlate("Camo Wooden Pressure Plate", Material.circuits, BlockPressurePlate.Sensitivity.everything, false, true).setBlockName(cwppID);
 		BlockLaserBeam.instance = new BlockLaserBeam().setBlockName(laserBeamID);
 		BlockLaserBeamSource.instance = (BlockLaserBeamSource) new BlockLaserBeamSource().setBlockName(laserSourceID);
 		BlockLight.instance = new BlockLight().setBlockName(lightID);
@@ -286,8 +329,12 @@ public class DragonArtifacts{
 		BlockStoneBrickMovable.instance = new BlockStoneBrickMovable().setBlockName(ignoreID);
 		BlockSword.instance = new BlockSword().setBlockName(teSwordID);
 		BlockTrap.instance = new BlockTrap().setBlockName(arrowSlotID);
-		BlockWallPlate.instance = new BlockWallPlate("Wallplate", Material.circuits, BlockPressurePlate.Sensitivity.mobs).setBlockName(wallplateID);
-		BlockWallPlate.obsidian = new BlockWallPlate("Wall Obsidiplate", Material.circuits, BlockPressurePlate.Sensitivity.players).setBlockName(owallplateID);
+		BlockWallPlate.stone = new BlockWallPlate("Wallplate", Material.circuits, BlockPressurePlate.Sensitivity.mobs, false).setBlockName(wallplateID);
+		BlockWallPlate.camoStone = new BlockWallPlate("Camo Wallplate", Material.circuits, BlockPressurePlate.Sensitivity.mobs, true).setBlockName(cwallplateID);
+		BlockWallPlate.obsidian = new BlockWallPlate("Wall Obsidiplate", Material.circuits, BlockPressurePlate.Sensitivity.players, false).setBlockName(owallplateID);
+		BlockWallPlate.camoObsidian = new BlockWallPlate("Camo Wall Obsidiplate", Material.circuits, BlockPressurePlate.Sensitivity.players, true).setBlockName(cowallplateID);
+		BlockWallPlate.wood = new BlockWallPlate("Wood Wallplate", Material.circuits, BlockPressurePlate.Sensitivity.everything, false).setBlockName(wwallplateID);
+		BlockWallPlate.camoWood = new BlockWallPlate("Camo Wood Wallplate", Material.circuits, BlockPressurePlate.Sensitivity.everything, true).setBlockName(cwwallplateID);
 		PseudoBlockIllusionary.instance = new PseudoBlockIllusionary().setBlockName(pseudoFBID);
 		PseudoBlockTrap.instance = new PseudoBlockTrap().setBlockName(pseudoATID);
 		PseudoCoverplate.instance = new PseudoCoverplate().setBlockName(pseudoCPID);
@@ -297,8 +344,12 @@ public class DragonArtifacts{
 		GameRegistry.registerBlock(BlockIllusionary.instance, fakeID);
 		GameRegistry.registerBlock(BlockInvisibleBedrock.instance, invis2ID);
 		GameRegistry.registerBlock(BlockInvisibleBlock.instance, invisID);
-		GameRegistry.registerBlock(BlockInvisiblePressurePlate.instance, invisppID);
-		GameRegistry.registerBlock(BlockInvisiblePressurePlate.obsidian, oinvisppID);
+		GameRegistry.registerBlock(BlockArtifactsPressurePlate.invisStone, invisppID);
+		GameRegistry.registerBlock(BlockArtifactsPressurePlate.invisObsidian, oinvisppID);
+		GameRegistry.registerBlock(BlockArtifactsPressurePlate.obsidian, oppID);
+		GameRegistry.registerBlock(BlockArtifactsPressurePlate.camoWood, cwppID);
+		GameRegistry.registerBlock(BlockArtifactsPressurePlate.camoStone, cppID);
+		GameRegistry.registerBlock(BlockArtifactsPressurePlate.camoObsidian, coppID);
 		GameRegistry.registerBlock(BlockLaserBeam.instance, laserBeamID);
 		GameRegistry.registerBlock(BlockLaserBeamSource.instance, laserSourceID);
 		GameRegistry.registerBlock(BlockLight.instance, lightID);
@@ -309,8 +360,12 @@ public class DragonArtifacts{
 		GameRegistry.registerBlock(BlockStoneBrickMovable.instance, ignoreID);
 		GameRegistry.registerBlock(BlockSword.instance, teSwordID);
 		GameRegistry.registerBlock(BlockTrap.instance, arrowSlotID);
-		GameRegistry.registerBlock(BlockWallPlate.instance, wallplateID);
+		GameRegistry.registerBlock(BlockWallPlate.wood, wwallplateID);
+		GameRegistry.registerBlock(BlockWallPlate.stone, wallplateID);
 		GameRegistry.registerBlock(BlockWallPlate.obsidian, owallplateID);
+		GameRegistry.registerBlock(BlockWallPlate.camoWood, cwwallplateID);
+		GameRegistry.registerBlock(BlockWallPlate.camoStone, cwallplateID);
+		GameRegistry.registerBlock(BlockWallPlate.camoObsidian, cowallplateID);
 		GameRegistry.registerBlock(PseudoBlockIllusionary.instance, pseudoFBID);
 		GameRegistry.registerBlock(PseudoBlockTrap.instance, pseudoATID);
 		GameRegistry.registerBlock(PseudoCoverplate.instance, pseudoCPID);
@@ -343,8 +398,9 @@ public class DragonArtifacts{
 		GameRegistry.registerItem(ItemFakeSwordRenderable.iron, tb3);
 		GameRegistry.registerItem(ItemFakeSwordRenderable.gold, tb4);
 		GameRegistry.registerItem(ItemFakeSwordRenderable.diamond, tb5);
+		GameRegistry.registerItem(ItemStructureGenerator.structureGenItem, structureGenID);
 
-        worldGen = new PlaceTraps(pyrm, temp, strn, quik, towers, usewhite, useblack, white, black, useAntibuild);
+        worldGen = new PlaceTraps();//pyrm, temp, strn, lib, quik, towers, usewhite, useblack, white, black, useAntibuild);
         GameRegistry.registerWorldGenerator(worldGen, 10);
         
         ChestGenHooks.getInfo("A_WIZARD_DID_IT").addItem(new WeightedRandomArtifact(ItemArtifact.instance, 0, 1, 1, Math.max(6, wizRare)));
@@ -433,8 +489,17 @@ public class DragonArtifacts{
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockSpikes.instance, 2), "i i","sss", 'i', "ingotIron", 's', new ItemStack(Blocks.stone_slab)));
 		GameRegistry.addShapedRecipe(new ItemStack(BlockSpikes.instance, 2), "i i","sss", 'i', new ItemStack(Items.iron_ingot), 's', new ItemStack(Blocks.stone_slab));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockTrap.instance), new ItemStack(Items.painting), new ItemStack(Blocks.dispenser));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockWallPlate.instance, 2), "s", "s", "s", 's', "stone"));
-		GameRegistry.addShapedRecipe(new ItemStack(BlockWallPlate.obsidian, 2), "s", "s", "s", 's', new ItemStack(Blocks.obsidian));
+		GameRegistry.addShapelessRecipe(new ItemStack(BlockWallPlate.camoStone), new ItemStack(Items.painting), new ItemStack(BlockWallPlate.stone));
+		GameRegistry.addShapelessRecipe(new ItemStack(BlockWallPlate.camoObsidian), new ItemStack(Items.painting), new ItemStack(BlockWallPlate.obsidian));
+		GameRegistry.addShapelessRecipe(new ItemStack(BlockWallPlate.camoWood), new ItemStack(Items.painting), new ItemStack(BlockWallPlate.wood));
+		GameRegistry.addShapelessRecipe(new ItemStack(BlockArtifactsPressurePlate.camoStone), new ItemStack(Items.painting), new ItemStack(Blocks.stone_pressure_plate));
+		GameRegistry.addShapelessRecipe(new ItemStack(BlockArtifactsPressurePlate.camoObsidian), new ItemStack(Items.painting), new ItemStack(BlockArtifactsPressurePlate.obsidian));
+		GameRegistry.addShapelessRecipe(new ItemStack(BlockArtifactsPressurePlate.camoWood), new ItemStack(Items.painting), new ItemStack(Blocks.wooden_pressure_plate));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockWallPlate.stone, 2), "s", "s", "s", 's', "stone"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockWallPlate.wood, 2), "w", "w", "w", 'w', "plankWood"));
+		GameRegistry.addShapedRecipe(new ItemStack(BlockWallPlate.obsidian, 2), "o", "o", "o", 'o', new ItemStack(Blocks.obsidian));
+		GameRegistry.addShapedRecipe(new ItemStack(BlockArtifactsPressurePlate.obsidian, 2), "ooo", 'o', new ItemStack(Blocks.obsidian));
+		GameRegistry.addShapedRecipe(new ItemStack(BlockCoverPlate.instance, 2), "s", "p", 's', new ItemStack(BlockWallPlate.camoStone), 'p', new ItemStack(Items.painting));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemOrichalcumDust.instance, 2, 1), "logWood", new ItemStack(ItemOrichalcumDust.instance, 1, 0), Items.gold_nugget));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemOrichalcumDust.instance, 2, 2), "cobblestone", new ItemStack(ItemOrichalcumDust.instance, 1, 0), Items.gold_nugget));
 		//These oredict recipes don't work with vanilla items
@@ -507,6 +572,8 @@ public class DragonArtifacts{
 	public void PostInit(FMLPostInitializationEvent event) 
 	{
 		baublesLoaded = Loader.isModLoaded("Baubles");
-		//System.out.println("~~~~~~~~~~~~~~~ Is Baubles Loaded? " + baublesLoaded);
+		mystcraftLoaded = Loader.isModLoaded("Mystcraft");
+		//System.out.println("[Artifacts] Is Baubles Loaded? " + baublesLoaded);
+		//System.out.println("[Artifacts] Is Mystcraft Loaded? " + mystcraftLoaded);
 	}
 }

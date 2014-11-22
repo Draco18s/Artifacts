@@ -11,6 +11,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 
@@ -36,74 +37,16 @@ public class RenderArrowTrap implements ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		int blockMeta = world.getBlockMetadata(x, y, z);
-		
 		blockMeta = blockMeta & 7;
-		int xOffset = 0;
-		int zOffset = 0;
-		switch(blockMeta) {
-			case 0: 
-	        case 2:
-	        case 3:
-	        	xOffset = 1;
-	        	break;
-	        case 1:
-	        case 4:
-	        case 5:
-	        	zOffset = 1;
-	        	break;
-	    }
-		int metaToCopy = 0;
-		Block adjacentBlock1 = world.getBlock(x + xOffset, y, z + zOffset);
-		Block adjacentBlock2 = world.getBlock(x - xOffset, y, z - zOffset);
+		
+		int[] blockToCopyLocation = BlockTrap.getNeighbourBlockPosition(world, x, y, z, block, blockMeta);
 		Block blockToCopy = Blocks.stonebrick;
-		if(adjacentBlock1 != block && adjacentBlock1 != null && adjacentBlock1.isOpaqueCube()) {
-			blockToCopy = adjacentBlock1;
-			metaToCopy = world.getBlockMetadata(x + xOffset, y, z + zOffset);
+		int metaToCopy = 0;
+		if(! (blockToCopyLocation[0] == x && blockToCopyLocation[1] == y && blockToCopyLocation[2] == z )) {
+			blockToCopy = world.getBlock(blockToCopyLocation[0], blockToCopyLocation[1], blockToCopyLocation[2]);
+			metaToCopy = world.getBlockMetadata(blockToCopyLocation[0], blockToCopyLocation[1], blockToCopyLocation[2]);
 		}
-		else if(adjacentBlock2 != block && adjacentBlock2 != null && adjacentBlock2.isOpaqueCube()) {
-			blockToCopy = adjacentBlock2;
-			metaToCopy = world.getBlockMetadata(x - xOffset, y, z - zOffset);
-		}
-		else {
-			if(blockMeta <= 1) {
-				adjacentBlock1 = world.getBlock(x + zOffset, y, z + xOffset);
-				adjacentBlock2 = world.getBlock(x - zOffset, y, z - xOffset);
-				if(adjacentBlock1 != block && adjacentBlock1 != null && adjacentBlock1.isOpaqueCube()) {
-					blockToCopy = adjacentBlock1;
-					metaToCopy = world.getBlockMetadata(x + zOffset, y, z + xOffset);
-				}
-				else if(adjacentBlock2 != block && adjacentBlock2 != null && adjacentBlock2.isOpaqueCube()) {
-					blockToCopy = adjacentBlock2;
-					metaToCopy = world.getBlockMetadata(x - zOffset, y, z - xOffset);
-				}
-				else {
-					adjacentBlock1 = world.getBlock(x, y + 1, z);
-					adjacentBlock2 = world.getBlock(x, y - 1, z);
-					if(adjacentBlock1 != block && adjacentBlock1 != null && adjacentBlock1.isOpaqueCube()) {
-						blockToCopy = adjacentBlock1;
-					}
-					else if(adjacentBlock2 != block && adjacentBlock2 != null && adjacentBlock2.isOpaqueCube()) {
-						blockToCopy = adjacentBlock2;
-					}
-					else {
-						blockToCopy = Blocks.stonebrick;
-					}
-				}
-			}
-			else {
-				adjacentBlock1 = world.getBlock(x, y+1, z);
-				adjacentBlock2 = world.getBlock(x, y-1, z);
-				if(adjacentBlock1 != block && adjacentBlock1 != null && adjacentBlock1.isOpaqueCube()) {
-					blockToCopy = adjacentBlock1;
-				}
-				else if(adjacentBlock2 != block && adjacentBlock2 != null && adjacentBlock2.isOpaqueCube()) {
-					blockToCopy = adjacentBlock2;
-				}
-				else {
-					blockToCopy = Blocks.stonebrick;
-				}
-			}
-		}
+			
 		IIcon camo = blockToCopy.getIcon(blockMeta, metaToCopy);
 		IIcon furnace = Blocks.furnace.getIcon(2,3);
 		IIcon top = Blocks.furnace.getIcon(1,0);

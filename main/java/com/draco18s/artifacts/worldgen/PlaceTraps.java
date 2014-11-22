@@ -15,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
@@ -27,47 +28,46 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.common.IWorldGenerator;
 import cpw.mods.fml.common.Loader;
 
+import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.block.*;
 import com.draco18s.artifacts.entity.TileEntityTrap;
 
 public class PlaceTraps implements IWorldGenerator {
 	WorldGenerator quicksandPit;
-	WorldGenerator wizardTowerA;
-	WorldGenerator wizardTowerB;
-	WorldGenerator wizardTowerC;
-	public final boolean genPyramids;
-	public final boolean genTemples;
-	public final boolean genStrongholds;
-	public final boolean genQuicksand;
-	public final boolean genTowers;
-	public final boolean whitelistEnabled;
-	public final boolean blacklistEnabled;
-	public final int[] whitelist;
-	public final int[] blacklist;
-	public final boolean iDontLikeAntibuilders;
+	WorldGenerator wizardTowerTier1;
+	WorldGenerator wizardTowerTier1Ancient;
+	WorldGenerator wizardTowerTier2;
+	WorldGenerator wizardTowerTier2Ancient;
+	WorldGenerator wizardTowerTier3;
+	WorldGenerator wizardTowerTier3Ancient;
+	public static boolean genPyramids;
+	public static boolean genTemples;
+	public static boolean genStrongholds;
+	public static boolean genMystcraftLibraries;
+	public static boolean genQuicksand;
+	public static int weightTower1 = 5;
+	public static int weightTower1A = 5;
+	public static int weightTower2 = 4;
+	public static int weightTower2A = 4;
+	public static int weightTower3 = 3;
+	public static int weightTower3A = 3;
+	public static int quicksandRarity = 2;
+	public static int towerRarity = 3;
+	public static int towerRarityMod = 29;
+	public static boolean whitelistEnabled;
+	public static boolean blacklistEnabled;
+	public static int[] whitelist;
+	public static int[] blacklist;
+	public static boolean iDontLikeAntibuilders;
 
 	public PlaceTraps() {
-		this(true, true, true, true, true, false, false, new int[] {}, new int[] {}, true);
-	}
-
-	public PlaceTraps(boolean pyrm, boolean temp, boolean strn, boolean quik, boolean tow, boolean usewhite, boolean useblack, int[] white, int[] black, boolean antibuild) {
-		//if(quik)
 		quicksandPit = new WorldGenLakes(BlockQuickSand.instance);
-		wizardTowerA = new StructureApprenticeTower();
-		wizardTowerB = new StructureJourneymanTower();
-		wizardTowerC = new StructureMasterTower();
-		genPyramids = pyrm;
-		genTemples = temp;
-		genStrongholds = strn;
-		genQuicksand = quik;
-		genTowers = tow;
-		whitelistEnabled = usewhite;
-		blacklistEnabled = useblack;
-		Arrays.sort(white);
-		Arrays.sort(black);
-		whitelist = white;
-		blacklist = black;
-		iDontLikeAntibuilders = !antibuild;
+		wizardTowerTier1 = new StructureApprenticeTower();
+		wizardTowerTier1Ancient = new StructureApprenticeTowerAncient();
+		wizardTowerTier2 = new StructureJourneymanTower();
+		wizardTowerTier2Ancient = new StructureJourneymanTowerAncient();
+		wizardTowerTier3 = new StructureMasterTower();
+		wizardTowerTier3Ancient = new StructureMasterTowerAncient();
 	}
 
 	@Override
@@ -76,29 +76,25 @@ public class PlaceTraps implements IWorldGenerator {
 		boolean found = false;
 		int tex;
 		int tez;
-		Block bID;
+		Block block;
 		if (dim == 0 && (!whitelistEnabled || Arrays.binarySearch(whitelist, 0) >= 0) && !(blacklistEnabled && Arrays.binarySearch(blacklist, 0) >= 0))
 		{
 			tex = chunkX*16+10;
 			tez = chunkZ*16+10;
-			if(genPyramids && world.getBiomeGenForCoords(tex, tez).biomeName.contains("Desert")) {
+			if(genPyramids && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(tex, tez), BiomeDictionary.Type.SANDY)) {
 				if(world.getBlock(tex, 64, tez) == Blocks.wool) {
 					generatePyramidTrap(rand, world, tex, 64, tez);
 				}
 			}
 			tex = chunkX*16+9;
 			tez = chunkZ*16+11;
-			if(genTemples) {
+			if(genTemples && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(tex, tez), BiomeDictionary.Type.JUNGLE)) {
 				for(int vary=60;vary < 130; vary++) {
-					if(world.getBiomeGenForCoords(tex, tez).biomeName.contains("Jungle")) {
-						if(world.getBlock(tex, vary, tez) == Blocks.dispenser) {
-							generateTempleTrap(rand, world, tex, vary, tez);
-						}
+					if(world.getBlock(tex, vary, tez) == Blocks.dispenser) {
+						generateTempleTrap(rand, world, tex, vary, tez);
 					}
-					if(world.getBiomeGenForCoords(tex, tez).biomeName.contains("Jungle")) {
-						if(world.getBlock(tex+2, vary, tez-2) == Blocks.dispenser) {
-							generateTempleTrap(rand, world, tex+2, vary, tez-2);
-						}
+					if(world.getBlock(tex+2, vary, tez-2) == Blocks.dispenser) {
+						generateTempleTrap(rand, world, tex+2, vary, tez-2);
 					}
 				}
 			}
@@ -106,16 +102,16 @@ public class PlaceTraps implements IWorldGenerator {
 				for(int vary=0;vary < 60; vary++) {
 					tex = chunkX*16+8;
 					tez = chunkZ*16+12;
-					bID = world.getBlock(tex, vary, tez);
-					if(bID == Blocks.stonebrick) {
+					block = world.getBlock(tex, vary, tez);
+					if(block == Blocks.stonebrick) {
 						//locateStrongholdCorridor(world, tex, vary, tez);
 						found = generateStrongholdTrap(rand, world, locateStrongholdCorridor(world, tex, vary, tez));
 						//found = true;
 					}
 					tex = chunkX*16+8;
 					tez = chunkZ*16+4;
-					bID = world.getBlock(tex, vary, tez);
-					if(bID == Blocks.stonebrick) {
+					block = world.getBlock(tex, vary, tez);
+					if(block == Blocks.stonebrick) {
 						//locateStrongholdCorridor(world, tex, vary, tez);
 						found = generateStrongholdTrap(rand, world, locateStrongholdCorridor(world, tex, vary, tez));
 						//found = true;
@@ -123,16 +119,16 @@ public class PlaceTraps implements IWorldGenerator {
 				
 					tex = chunkX*16+4;
 					tez = chunkZ*16+8;
-					bID = world.getBlock(tex, vary, tez);
-					if(bID == Blocks.stonebrick) {
+					block = world.getBlock(tex, vary, tez);
+					if(block == Blocks.stonebrick) {
 						//locateStrongholdCorridor(world, tex, vary, tez);
 						found = generateStrongholdTrap(rand, world, locateStrongholdCorridor(world, tex, vary, tez));
 						//found = true;
 					}
 					tex = chunkX*16+4;
 					tez = chunkZ*16+12;
-					bID = world.getBlock(tex, vary, tez);
-					if(bID == Blocks.stonebrick) {
+					block = world.getBlock(tex, vary, tez);
+					if(block == Blocks.stonebrick) {
 						//locateStrongholdCorridor(world, tex, vary, tez);
 						found = generateStrongholdTrap(rand, world, locateStrongholdCorridor(world, tex, vary, tez));
 						//found = true;
@@ -146,197 +142,127 @@ public class PlaceTraps implements IWorldGenerator {
 			if(bid == 6) {
 				ch = 4;
 			}
-			else if(genQuicksand && !(bid == 2 || bid == 3 || bid == 22 || (bid >= 17 && bid <= 20))) {
-				int R = 2;
-				if(world.provider.terrainType == WorldType.LARGE_BIOMES) {
-					R*=2;
-				}
-				int mX = chunkX/R;
-				int mY = chunkZ/R;
+			else if(genQuicksand && rand.nextInt(quicksandRarity) == 0 && !(bid == 2 || bid == 3 || bid == 22 || (bid >= 17 && bid <= 20))) {
 				
-				ch = (((mX+1) * mX + mY * mY + (int)Math.pow(1 + Math.abs(mX) * mY, 3)) % 29);
+				tex = chunkX*16 + rand.nextInt(16) + 8;
+	            tez = chunkZ*16 + rand.nextInt(16) + 8;
+	            
+				quicksandPit.generate(world, rand, tex, 128, tez);
 				
-				int nx = chunkX % R;
-				int ny = chunkZ % R;
-				int Z = nx + (ny * R);
-				if(mX % 2 == 0 || mY %2 == 0) {
-					Z = -1;
-				}
-				if(ch == Z) {
-					tex = chunkX*16+8;
-					tez = chunkZ*16+12;
-					quicksandPit.generate(world, rand, tex, 128, tez);
-				}
 			}
+			boolean ocean = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.OCEAN);
+			boolean mushroom = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.MUSHROOM);
 			boolean mountain = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.MOUNTAIN);
 			boolean magical = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.MAGICAL);//BiomeGenBase.biomeList[bid].biomeName.toLowerCase().contains("magic");
-			boolean frozen = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.FROZEN);
-			mountain &= !frozen;
-			magical &= !frozen;
-			if(genTowers && (bid == 0 || bid == 3 || bid == 14 || magical || mountain)) {
-				//int R = 6;
-				//int mod = 59;
-				//if(bid == 0) {
-					int mod = 29;
-					int R = 3;
-				//}
-				if(world.provider.terrainType == WorldType.LARGE_BIOMES) {
-					R*=2;
+			boolean frozen = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.SNOWY);
+			boolean flag = (mountain || magical || mushroom || ocean) && !frozen;
+			int weightTotal = weightTower1 + weightTower1A + weightTower2 + weightTower2A + weightTower3 + weightTower3A;
+			if(weightTotal > 0 && (bid == 3 || flag) && rand.nextInt(towerRarity) == 0 && chunkX%3 == 0 && chunkZ%3 == 0) {
+				
+				tex = chunkX*16+rand.nextInt(24);
+				tez = chunkZ*16+rand.nextInt(24);
+				
+				int m = rand.nextInt(weightTotal);
+				if(magical && m >= 3) {
+					m -= 2;
 				}
-				int mX = chunkX/R;
-				int mY = chunkZ/R;
-				ch = (((mX+50) * mX + (mY+100) * mY + (int)Math.pow(1 + Math.abs(mX) * mY, 3)) % mod);
-				int nx = chunkX % R;
-				int ny = chunkZ % R;
-				int Z = nx + (ny * R);
-				if(mX % 2 == 0 || mY %2 == 0) {
-					//Z = -1;
+				
+				if(m < weightTower3) {
+					wizardTowerTier3.generate(world, rand, tex, 128, tez);
 				}
-				else if(ch == Z) {
-					//System.out.println();
-					tex = chunkX*16+8;
-					tez = chunkZ*16+8;
-					//System.out.println(tex + "," + tez);
-					int m = rand.nextInt(12);
-					if(magical && m >= 3) {
-						m -= 2;
-					}
-					//System.out.println("Tower rand: " + m);
-					if(iDontLikeAntibuilders && m < 3) {
-						m += 6;
-					}
-					switch(m) {
-						case 0:
-						case 1:
-						case 2:
-							wizardTowerC.generate(world, rand, tex, 128, tez);
-							break;
-						case 3:
-						case 4:
-						case 5:
-						case 6:
-							wizardTowerB.generate(world, rand, tex, 128, tez);
-							break;
-						case 7:
-						case 8:
-						case 9:
-						case 10:
-						case 11:
-							wizardTowerA.generate(world, rand, tex, 128, tez);
-							break;
-					}
-					//TODO: Get Atlas API Working.
-//					if(Loader.isModLoaded("antiqueatlas")) {
-//						AtlasAPI.getTileAPI().putCustomTile(world, 0, "wizardtower",
-//								chunkX,
-//								chunkZ);
-//					}
+				else if (m < weightTower3A+weightTower3) {
+					wizardTowerTier3Ancient.generate(world, rand, tex, 128, tez);
 				}
+				else if (m < weightTower2+weightTower3A+weightTower3) {
+					wizardTowerTier2.generate(world, rand, tex, 128, tez);
+				}
+				else if (m < weightTower2A+weightTower2+weightTower3A+weightTower3) {
+					wizardTowerTier2Ancient.generate(world, rand, tex, 128, tez);
+				}
+				else if (m < weightTower1+weightTower2A+weightTower2+weightTower3A+weightTower3) {
+					wizardTowerTier1.generate(world, rand, tex, 128, tez);
+				}
+				else {
+					wizardTowerTier1Ancient.generate(world, rand, tex, 128, tez);
+				}
+				//TODO: Get Atlas API Working.
+//				if(Loader.isModLoaded("antiqueatlas")) {
+//					AtlasAPI.getTileAPI().putCustomTile(world, 0, "wizardtower",
+//							chunkX,
+//							chunkZ);
+//				}
 			}
 		}
 		else if(dim != 1 && dim != -1 && (!whitelistEnabled || Arrays.binarySearch(whitelist, dim) >= 0) && !(blacklistEnabled && Arrays.binarySearch(blacklist, dim) >= 0)	){
 			int bid = world.getBiomeGenForCoords(chunkX*16, chunkZ*16).biomeID;
+			boolean ocean = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.OCEAN);
+			boolean mushroom = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.MUSHROOM);
 			boolean mountain = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.MOUNTAIN);
 			boolean magical = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.MAGICAL);//BiomeGenBase.biomeList[bid].biomeName.toLowerCase().contains("magic");
-			boolean frozen = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.FROZEN);
-			mountain &= !frozen;
-			magical &= !frozen;
-			if(genTowers && (bid == 0 || bid == 3 || bid == 14 || magical || mountain)) {
-				//int R = 6;
-				//int mod = 59;
-				//if(bid == 0) {
-					int mod = 29;
-					int R = 3;
-				//}
-				if(world.provider.terrainType == WorldType.LARGE_BIOMES) {
-					R*=4;
-				}
-				int mX = chunkX/R;
-				int mY = chunkZ/R;
-				int ch = (((mX+50) * mX + (mY+100) * mY + (int)Math.pow(dim + Math.abs(mX) * mY, 3)) % mod);
+			boolean frozen = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.SNOWY);
+			boolean flag = (mountain || magical || mushroom || ocean) && !frozen;
+			int weightTotal = weightTower1 + weightTower1A + weightTower2 + weightTower2A + weightTower3 + weightTower3A;
+			if(weightTotal > 0 && (bid == 3 || flag) && rand.nextInt(towerRarity) == 0 && chunkX%3 == 0 && chunkZ%3 == 0) {
+				tex = chunkX*16+rand.nextInt(24);
+				tez = chunkZ*16+rand.nextInt(24);
 				
-				int nx = chunkX % R;
-				int ny = chunkZ % R;
-				int Z = nx + (ny * R);
-				if(mX % 2 == 0 || mY %2 == 0) {
-					//Z = -1;
+				int m = rand.nextInt(weightTotal);
+				if(magical && m >= 3) {
+					m -= 2;
 				}
-				else if(ch == Z) {
-					tex = chunkX*16+8;
-					tez = chunkZ*16+8;
-					int m = rand.nextInt(12);
-					if(iDontLikeAntibuilders && m < 3) {
-						m += 6;
-					}
-					switch(m) {
-						case 0:
-						case 1:
-						case 2:
-							wizardTowerC.generate(world, rand, tex, 128, tez);
-							break;
-						case 3:
-						case 4:
-						case 5:
-						case 6:
-							wizardTowerB.generate(world, rand, tex, 128, tez);
-							break;
-						case 7:
-						case 8:
-						case 9:
-						case 10:
-						case 11:
-							wizardTowerA.generate(world, rand, tex, 128, tez);
-							break;
-					}
-					//TODO: Get Altas API working.
-//					if(Loader.isModLoaded("antiqueatlas")) {
-//						AtlasAPI.getTileAPI().putCustomTile(world, 0, "wizardtower",
-//								chunkX,
-//								chunkZ);
-//					}
+				
+				if(m < weightTower3) {
+					wizardTowerTier3.generate(world, rand, tex, 128, tez);
 				}
+				else if (m < weightTower3A+weightTower3) {
+					wizardTowerTier3Ancient.generate(world, rand, tex, 128, tez);
+				}
+				else if (m < weightTower2+weightTower3A+weightTower3) {
+					wizardTowerTier2.generate(world, rand, tex, 128, tez);
+				}
+				else if (m < weightTower2A+weightTower2+weightTower3A+weightTower3) {
+					wizardTowerTier2Ancient.generate(world, rand, tex, 128, tez);
+				}
+				else if (m < weightTower1+weightTower2A+weightTower2+weightTower3A+weightTower3) {
+					wizardTowerTier1.generate(world, rand, tex, 128, tez);
+				}
+				else {
+					wizardTowerTier1Ancient.generate(world, rand, tex, 128, tez);
+				}
+				//TODO: Get Altas API working.
+//				if(Loader.isModLoaded("antiqueatlas")) {
+//					AtlasAPI.getTileAPI().putCustomTile(world, 0, "wizardtower",
+//							chunkX,
+//							chunkZ);
+//				}
 			}
 			
-			//TODO: Get Mystcraft API working.
-//			try {
-//				Class.forName("com.xcompwiz.mystcraft.api.MystObjects");
-//			} catch(ClassNotFoundException e) {
-//				return;
-//			}
-//			tex = chunkX*16+8;
-//			tez = chunkZ*16+8;
-//			if(MystObjects.book_lectern != null && bid == MystObjects.book_lectern.blockID) {
-//				tex = chunkX*16+8;
-//				tez = chunkZ*16+4;
-//				for(int vary=130;vary > 0; vary--) {
-//					Block l = world.getBlock(tex+1, vary, tez);
-//					Block r = world.getBlock(tex-1, vary, tez);
-//					ForgeDirection o = ForgeDirection.UNKNOWN;
-//					if(l == r) {
-//						l = world.getBlock(tex, vary, tez+1);
-//						r = world.getBlock(tex, vary, tez-1);
-//						if(r == Blocks.cobblestone) {
-//							//te.x, vary, tez+5
-//							o = ForgeDirection.SOUTH;
-//						}
-//						else {
-//							//te.x, vary, tez-5
-//							o = ForgeDirection.NORTH;
-//						}
-//					}
-//					else {
-//						if(r == Blocks.cobblestone) {
-//							//te.x-5, vary, tez
-//							o = ForgeDirection.WEST;
-//						}
-//						else {
-//							//te.x+5, vary, tez
-//							o = ForgeDirection.EAST;
-//						}
-//					}
-//					found = generateLibraryTrap(rand, world, tex, vary-2, tez, o);
-//				}
-//			}
+			
+			if(DragonArtifacts.mystcraftLoaded) {
+				Block mystcraftLectern = Block.getBlockFromName("Mystcraft:BlockLectern");
+				if(mystcraftLectern != null) {
+					for(int vary=130; vary > 0; vary--) {
+						tex = chunkX*16+8;
+						tez = chunkZ*16+4;
+						if(world.getBlock(tex, vary, tez) == mystcraftLectern || world.getBlock(tex, vary, tez+1) == mystcraftLectern) {
+							//System.out.println("Found Mystcraft Library v1. Lecturn is at x = " + tex + ", y = " + vary + ", z = " + tez);
+							Block b = world.getBlock(tex-2, vary-2, tez);
+							if(b == Blocks.cobblestone) {
+								found = generateLibraryTrap(rand, world, tex-2, vary-2, tez, ForgeDirection.WEST);
+							}
+						}
+						tex = chunkX*16+4;
+						tez = chunkZ*16+8;
+						if(!found && (world.getBlock(tex, vary, tez) == mystcraftLectern || world.getBlock(tex+1, vary, tez) == mystcraftLectern)) {
+							//System.out.println("Found Mystcraft Library v2. Lecturn is at x = " + tex + ", y = " + vary + ", z = " + tez);
+							Block b = world.getBlock(tex, vary-2, tez-2);
+							if(b == Blocks.cobblestone) {
+								found = generateLibraryTrap(rand, world, tex, vary-2, tez-2, ForgeDirection.NORTH);
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -372,7 +298,7 @@ public class PlaceTraps implements IWorldGenerator {
 				}
 			}
 			else {
-				System.out.println("Found a temple that does not match schematic A. " + tex + "," + tez);
+				//System.out.println("Found a temple that does not match schematic A. " + tex + "," + tez);
 			}
 		}
 		else {
@@ -392,7 +318,7 @@ public class PlaceTraps implements IWorldGenerator {
 				}
 			}
 			else {
-				System.out.println("Found a temple that does not match schematic B. " + tex + "," + tez);
+				//System.out.println("Found a temple that does not match schematic B. " + tex + "," + tez);
 			}
 		}
 	}
@@ -422,7 +348,7 @@ public class PlaceTraps implements IWorldGenerator {
 		do {
 			ox = rand.nextInt(3) - 1;
 			oz = rand.nextInt(3) - 1;
-			world.setBlock(x+ox, 53, z+oz, BlockInvisiblePressurePlate.obsidian);
+			world.setBlock(x+ox, 53, z+oz, BlockArtifactsPressurePlate.invisObsidian);
 			--l;
 		} while(l >= 0);
 	}
@@ -454,7 +380,7 @@ public class PlaceTraps implements IWorldGenerator {
 					world.setBlock(x+ox, 52, z+oz, BlockSpikes.instance);
 			}
 		}
-		world.setBlock(x, 53, z, BlockInvisiblePressurePlate.obsidian);
+		world.setBlock(x, 53, z, BlockArtifactsPressurePlate.invisObsidian);
 	}
 
 	private Vec3[] locateStrongholdCorridor(World world, int x, int y, int z) {
@@ -523,37 +449,42 @@ public class PlaceTraps implements IWorldGenerator {
 		return null;
 	}
 
-	private boolean generateLibraryTrap(Random rand, World world, int tex, int vary, int tez, ForgeDirection orrientation) {
+	private boolean generateLibraryTrap(Random rand, World world, int tex, int vary, int tez, ForgeDirection orientation) {
 		boolean ret = false;
-		if(rand.nextInt(4) == 0) {
+		
+		//System.out.println("Generating Library Trap.");
+		//if(rand.nextInt(4) == 0) {
 			//ret = true;
-			int r = rand.nextInt(4);
+			int r = rand.nextInt(2);
 			Vec3[] vec = new Vec3[2];
 			vec[0] = Vec3.createVectorHelper(tex, vary, tez);
-			vec[1] = Vec3.createVectorHelper(orrientation.offsetX, orrientation.offsetY, orrientation.offsetZ);
+			vec[1] = Vec3.createVectorHelper(orientation.offsetX, orientation.offsetY, orientation.offsetZ);
 			int ox = 0;
 			int oz = 0;
 			switch(r) {
 				case 0:
-					ox = rand.nextInt(5)-2;
-					oz = rand.nextInt(5)-2;
+					ox = rand.nextInt(3)-1;
+					oz = rand.nextInt(3)-1;
 					vec[0].xCoord += ox;
 					vec[0].zCoord += oz;
 					ret = simpleTrap(rand, world, vec[0]);
+					//System.out.println(" - Simple Trap.");
 					break;
 				case 1:
 					ret = coveredSpikedPit(rand, world, vec[0], Blocks.cobblestone, 0);
+					//System.out.println(" - Covered Spikes.");
 					break;
-				case 2:
-					ret = forwardTrap(rand, world, vec);
-					break;
-				case 3:
-					ret = sideTrapA(world, vec);
-					break;
-				case 4:
-					ret = sideTrapB(world, vec);
-					break;
-			}
+//				case 2:
+//					ret = forwardTrap(rand, world, vec);
+//					break;
+//				case 3:
+//					ret = sideTrapA(world, vec);
+//					break;
+//				case 4:
+//					ret = sideTrapB(world, vec);
+//					break;
+				default:
+			//}
 		}
 		return ret;
 	}
@@ -561,23 +492,23 @@ public class PlaceTraps implements IWorldGenerator {
 	private boolean generateStrongholdTrap(Random rand, World world, Vec3[] center) {
 		boolean ret = false;
 		if(center != null) {
-			int x = (int)(center[0].xCoord);
-			int y = (int)(center[0].yCoord);
-			int z = (int)(center[0].zCoord);
-			// = (int)(center[1].xCoord*2)
-			if((int)(center[1].xCoord) != 0 && world.getBlock(x+(int)(center[1].xCoord*2), y+1, z) == Blocks.stonebrick) {
+			int x = MathHelper.floor_double(center[0].xCoord);
+			int y = MathHelper.floor_double(center[0].yCoord);
+			int z = MathHelper.floor_double(center[0].zCoord);
+			// = MathHelper.floor_double(center[1].xCoord*2)
+			if(MathHelper.floor_double(center[1].xCoord) != 0 && world.getBlock(x+MathHelper.floor_double(center[1].xCoord*2), y+1, z) == Blocks.stonebrick) {
 				
 			}
-			else if((int)(center[1].xCoord) != 0 && world.getBlock(x-(int)(center[1].xCoord*2), y+1, z) == Blocks.stonebrick) {
+			else if(MathHelper.floor_double(center[1].xCoord) != 0 && world.getBlock(x-MathHelper.floor_double(center[1].xCoord*2), y+1, z) == Blocks.stonebrick) {
 				center[1].xCoord *= -1;
 			}
 			else {
 				center[1].xCoord = 0;
 			}
-			if((int)(center[1].zCoord) != 0 && world.getBlock(x, y+1, z+(int)(center[1].zCoord*2)) == Blocks.stonebrick) {
+			if(MathHelper.floor_double(center[1].zCoord) != 0 && world.getBlock(x, y+1, z+MathHelper.floor_double(center[1].zCoord*2)) == Blocks.stonebrick) {
 				
 			}
-			else if((int)(center[1].zCoord) != 0 && world.getBlock(x, y+1, z-(int)(center[1].zCoord*2)) == Blocks.stonebrick) {
+			else if(MathHelper.floor_double(center[1].zCoord) != 0 && world.getBlock(x, y+1, z-MathHelper.floor_double(center[1].zCoord*2)) == Blocks.stonebrick) {
 				center[1].zCoord *= -1;
 			}
 			else {
@@ -585,7 +516,7 @@ public class PlaceTraps implements IWorldGenerator {
 			}
 			int r = rand.nextInt(6);
 			//r = 5;
-			if((int)(center[1].xCoord) == 0 && (int)(center[1].zCoord) == 0 && r > 4) {
+			if(MathHelper.floor_double(center[1].xCoord) == 0 && MathHelper.floor_double(center[1].zCoord) == 0 && r > 4) {
 				r = rand.nextInt(5);
 			}
 			
@@ -606,7 +537,7 @@ public class PlaceTraps implements IWorldGenerator {
 					break;
 			}
 			//if(ret)
-				//System.out.println(r + ":" + ((int)center[0].xCoord) + " " + ((int)center[0].yCoord) + " " + ((int)center[0].zCoord));
+				//System.out.println(r + ":" + MathHelper.floor_double(center[0].xCoord) + " " + MathHelper.floor_double(center[0].yCoord) + " " + MathHelper.floor_double(center[0].zCoord));
 		}
 		return ret;
 	}
@@ -614,9 +545,9 @@ public class PlaceTraps implements IWorldGenerator {
 	private boolean trapChest(Random rand, World world, Vec3[] c) {
 		Vec3 a = Vec3.createVectorHelper(c[0].xCoord, c[0].yCoord, c[0].zCoord);
 		
-		boolean flag = (world.getBlock((int)(a.xCoord+c[1].zCoord*2), (int)a.yCoord, (int)(a.zCoord+c[1].xCoord*2)) != Blocks.air || world.getBlock((int)(a.xCoord-c[1].zCoord*2), (int)a.yCoord, (int)(a.zCoord-c[1].xCoord*2)) != Blocks.air);
+		boolean flag = (world.getBlock(MathHelper.floor_double(a.xCoord+c[1].zCoord*2), MathHelper.floor_double(a.yCoord), MathHelper.floor_double(a.zCoord+c[1].xCoord*2)) != Blocks.air || world.getBlock(MathHelper.floor_double(a.xCoord-c[1].zCoord*2), MathHelper.floor_double(a.yCoord), MathHelper.floor_double(a.zCoord-c[1].xCoord*2)) != Blocks.air);
 		if(!flag) {
-			if((int)c[1].xCoord != 0 && (int)c[1].zCoord != 0) {
+			if(MathHelper.floor_double(c[1].xCoord) != 0 && MathHelper.floor_double(c[1].zCoord) != 0) {
 				if(rand.nextBoolean()) {
 					c[1].xCoord = 0;
 				}
@@ -625,67 +556,67 @@ public class PlaceTraps implements IWorldGenerator {
 				}
 			}
 			
-			world.setBlock((int)a.xCoord, (int)a.yCoord, (int)a.zCoord, Blocks.stone_slab, 5, 3);
-			world.setBlock((int)(a.xCoord+c[1].zCoord), (int)a.yCoord, (int)(a.zCoord+c[1].xCoord), Blocks.stone_slab, 5, 3);
-			world.setBlock((int)(a.xCoord-c[1].zCoord), (int)a.yCoord, (int)(a.zCoord-c[1].xCoord), Blocks.stone_slab, 5, 3);
+			world.setBlock(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord), MathHelper.floor_double(a.zCoord), Blocks.stone_slab, 5, 3);
+			world.setBlock(MathHelper.floor_double(a.xCoord+c[1].zCoord), MathHelper.floor_double(a.yCoord), MathHelper.floor_double(a.zCoord+c[1].xCoord), Blocks.stone_slab, 5, 3);
+			world.setBlock(MathHelper.floor_double(a.xCoord-c[1].zCoord), MathHelper.floor_double(a.yCoord), MathHelper.floor_double(a.zCoord-c[1].xCoord), Blocks.stone_slab, 5, 3);
 			
 			a.xCoord += c[1].xCoord;
 			a.zCoord += c[1].zCoord;
 			
-			world.setBlock((int)a.xCoord, (int)a.yCoord, (int)a.zCoord, Blocks.stonebrick);
-			world.setBlock((int)(a.xCoord+c[1].zCoord), (int)a.yCoord, (int)(a.zCoord+c[1].xCoord), Blocks.stonebrick);
-			world.setBlock((int)(a.xCoord-c[1].zCoord), (int)a.yCoord, (int)(a.zCoord-c[1].xCoord), Blocks.stonebrick);
-			world.setBlock((int)(a.xCoord+c[1].zCoord*2), (int)a.yCoord, (int)(a.zCoord+c[1].xCoord*2), Blocks.stone_slab, 5, 3);
-			world.setBlock((int)(a.xCoord-c[1].zCoord*2), (int)a.yCoord, (int)(a.zCoord-c[1].xCoord*2), Blocks.stone_slab, 5, 3);
+			world.setBlock(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord), MathHelper.floor_double(a.zCoord), Blocks.stonebrick);
+			world.setBlock(MathHelper.floor_double(a.xCoord+c[1].zCoord), MathHelper.floor_double(a.yCoord), MathHelper.floor_double(a.zCoord+c[1].xCoord), Blocks.stonebrick);
+			world.setBlock(MathHelper.floor_double(a.xCoord-c[1].zCoord), MathHelper.floor_double(a.yCoord), MathHelper.floor_double(a.zCoord-c[1].xCoord), Blocks.stonebrick);
+			world.setBlock(MathHelper.floor_double(a.xCoord+c[1].zCoord*2), MathHelper.floor_double(a.yCoord), MathHelper.floor_double(a.zCoord+c[1].xCoord*2), Blocks.stone_slab, 5, 3);
+			world.setBlock(MathHelper.floor_double(a.xCoord-c[1].zCoord*2), MathHelper.floor_double(a.yCoord), MathHelper.floor_double(a.zCoord-c[1].xCoord*2), Blocks.stone_slab, 5, 3);
 	
-			world.setBlock((int)(a.xCoord+c[1].zCoord), (int)a.yCoord+1, (int)(a.zCoord+c[1].xCoord), Blocks.stonebrick);
-			world.setBlock((int)a.xCoord, (int)a.yCoord+1, (int)a.zCoord, Blocks.trapped_chest);
-			world.setBlock((int)(a.xCoord-c[1].zCoord), (int)a.yCoord+1, (int)(a.zCoord-c[1].xCoord), Blocks.stonebrick);
+			world.setBlock(MathHelper.floor_double(a.xCoord+c[1].zCoord), MathHelper.floor_double(a.yCoord+1), MathHelper.floor_double(a.zCoord+c[1].xCoord), Blocks.stonebrick);
+			world.setBlock(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord+1), MathHelper.floor_double(a.zCoord), Blocks.trapped_chest);
+			world.setBlock(MathHelper.floor_double(a.xCoord-c[1].zCoord), MathHelper.floor_double(a.yCoord+1), MathHelper.floor_double(a.zCoord-c[1].xCoord), Blocks.stonebrick);
 			
-			if((int)a.xCoord == 1) {
-				world.setBlockMetadataWithNotify((int)a.xCoord, (int)a.yCoord+1, (int)a.zCoord, 2, 3);
+			if(MathHelper.floor_double(a.xCoord) == 1) {
+				world.setBlockMetadataWithNotify(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord+1), MathHelper.floor_double(a.zCoord), 2, 3);
 			}
-			else if((int)a.xCoord == -1) {
-				world.setBlockMetadataWithNotify((int)a.xCoord, (int)a.yCoord+1, (int)a.zCoord, 3, 3);//not 4
+			else if(MathHelper.floor_double(a.xCoord) == -1) {
+				world.setBlockMetadataWithNotify(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord+1), MathHelper.floor_double(a.zCoord), 3, 3);//not 4
 			}
-			else if((int)a.zCoord == 1){
-				world.setBlockMetadataWithNotify((int)a.xCoord, (int)a.yCoord+1, (int)a.zCoord, 4, 3);//not 4
+			else if(MathHelper.floor_double(a.zCoord) == 1){
+				world.setBlockMetadataWithNotify(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord+1), MathHelper.floor_double(a.zCoord), 4, 3);//not 4
 			}
 			else {
-				world.setBlockMetadataWithNotify((int)a.xCoord, (int)a.yCoord+1, (int)a.zCoord, 5, 3);
+				world.setBlockMetadataWithNotify(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord+1), MathHelper.floor_double(a.zCoord), 5, 3);
 			}
 
 			a.xCoord += c[1].xCoord;
 			a.zCoord += c[1].zCoord;
 
-			world.setBlock((int)a.xCoord, (int)a.yCoord, (int)a.zCoord, Blocks.redstone_wire);
-			world.setBlock((int)a.xCoord, (int)a.yCoord+2, (int)a.zCoord, BlockIllusionary.instance);
+			world.setBlock(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord), MathHelper.floor_double(a.zCoord), Blocks.redstone_wire);
+			world.setBlock(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord+2), MathHelper.floor_double(a.zCoord), BlockIllusionary.instance);
 
 			a.xCoord += c[1].xCoord;
 			a.zCoord += c[1].zCoord;
 
-			world.setBlock((int)a.xCoord, (int)a.yCoord+1, (int)a.zCoord, Blocks.redstone_torch, 5, 3);
-			world.setBlock((int)a.xCoord, (int)a.yCoord+2, (int)a.zCoord, BlockTrap.instance);
+			world.setBlock(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord+1), MathHelper.floor_double(a.zCoord), Blocks.redstone_torch, 5, 3);
+			world.setBlock(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord+2), MathHelper.floor_double(a.zCoord), BlockTrap.instance);
 			
-			if((int)a.xCoord == 1) {
-				world.setBlockMetadataWithNotify((int)a.xCoord, (int)a.yCoord+2, (int)a.zCoord, 2, 3);
+			if(MathHelper.floor_double(a.xCoord) == 1) {
+				world.setBlockMetadataWithNotify(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord+2), MathHelper.floor_double(a.zCoord), 2, 3);
 			}
-			else if((int)a.xCoord == -1) {
-				world.setBlockMetadataWithNotify((int)a.xCoord, (int)a.yCoord+2, (int)a.zCoord, 3, 3);
+			else if(MathHelper.floor_double(a.xCoord) == -1) {
+				world.setBlockMetadataWithNotify(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord+2), MathHelper.floor_double(a.zCoord), 3, 3);
 			}
-			else if((int)a.zCoord == 1){
-				world.setBlockMetadataWithNotify((int)a.xCoord, (int)a.yCoord+2, (int)a.zCoord, 4, 3);
+			else if(MathHelper.floor_double(a.zCoord) == 1){
+				world.setBlockMetadataWithNotify(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord+2), MathHelper.floor_double(a.zCoord), 4, 3);
 			}
 			else {
-				world.setBlockMetadataWithNotify((int)a.xCoord, (int)a.yCoord+2, (int)a.zCoord, 5, 3);
+				world.setBlockMetadataWithNotify(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord+2), MathHelper.floor_double(a.zCoord), 5, 3);
 			}
 			
-			TileEntityTrap dis = (TileEntityTrap)world.getTileEntity((int)a.xCoord, (int)a.yCoord+2, (int)a.zCoord);
+			TileEntityTrap dis = (TileEntityTrap)world.getTileEntity(MathHelper.floor_double(a.xCoord), MathHelper.floor_double(a.yCoord+2), MathHelper.floor_double(a.zCoord));
 			if(dis != null) {
 				addTrapItem(rand, dis);
 			}
 			else {
-				TileEntityDispenser dis2 = (TileEntityDispenser)world.getTileEntity((int)a.xCoord+2, (int)a.yCoord, (int)a.zCoord);
+				TileEntityDispenser dis2 = (TileEntityDispenser)world.getTileEntity(MathHelper.floor_double(a.xCoord+2), MathHelper.floor_double(a.yCoord), MathHelper.floor_double(a.zCoord));
 				if(dis2 != null) {
 					addTrapItem(rand, dis);
 				}
@@ -700,13 +631,13 @@ public class PlaceTraps implements IWorldGenerator {
 		for(int i=-2; i<=2; i++) {
 			for(int j=-2; j<=2; j++) {
 				if(i > -2 && i < 2 && j > -2 && j < 2) {
-					world.setBlock((int)c.xCoord+i, (int)c.yCoord, (int)c.zCoord+j, Blocks.air, 0, 3);
-					world.setBlock((int)c.xCoord+i, (int)c.yCoord-1, (int)c.zCoord+j, BlockSpikes.instance, 0, 3);
-					world.setBlock((int)c.xCoord+i, (int)c.yCoord-2, (int)c.zCoord+j, Blocks.stonebrick, rand.nextInt(3), 3);
+					world.setBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord), MathHelper.floor_double(c.zCoord+j), Blocks.air, 0, 3);
+					world.setBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord-1), MathHelper.floor_double(c.zCoord+j), BlockSpikes.instance, 0, 3);
+					world.setBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord-2), MathHelper.floor_double(c.zCoord+j), Blocks.stonebrick, rand.nextInt(3), 3);
 				}
 				else {
-					if(world.getBlock((int)c.xCoord+i, (int)c.yCoord-1, (int)c.zCoord+j).isOpaqueCube())
-						world.setBlock((int)c.xCoord+i, (int)c.yCoord-1, (int)c.zCoord+j, Blocks.stonebrick, rand.nextInt(3), 3);
+					if(world.getBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord-1), MathHelper.floor_double(c.zCoord+j)).isOpaqueCube())
+						world.setBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord-1), MathHelper.floor_double(c.zCoord+j), Blocks.stonebrick, rand.nextInt(3), 3);
 				}
 			}
 		}
@@ -720,19 +651,19 @@ public class PlaceTraps implements IWorldGenerator {
 		for(int i=-2; i<=2; i++) {
 			for(int j=-2; j<=2; j++) {
 				if(i > -2 && i < 2 && j > -2 && j < 2) {
-					world.setBlock((int)c.xCoord+i, (int)c.yCoord, (int)c.zCoord+j, BlockIllusionary.instance, 0, 3);
-					world.setBlock((int)c.xCoord+i, (int)c.yCoord-1, (int)c.zCoord+j, Blocks.air, 0, 3);
-					world.setBlock((int)c.xCoord+i, (int)c.yCoord-2, (int)c.zCoord+j, Blocks.air, 0, 3);
-					world.setBlock((int)c.xCoord+i, (int)c.yCoord-3, (int)c.zCoord+j, BlockSpikes.instance, 0, 3);
-					world.setBlock((int)c.xCoord+i, (int)c.yCoord-4, (int)c.zCoord+j, blockID, meta, 3);
+					world.setBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord), MathHelper.floor_double(c.zCoord+j), BlockIllusionary.instance, 0, 3);
+					world.setBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord-1), MathHelper.floor_double(c.zCoord+j), Blocks.air, 0, 3);
+					world.setBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord-2), MathHelper.floor_double(c.zCoord+j), Blocks.air, 0, 3);
+					world.setBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord-3), MathHelper.floor_double(c.zCoord+j), BlockSpikes.instance, 0, 3);
+					world.setBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord-4), MathHelper.floor_double(c.zCoord+j), blockID, meta, 3);
 				}
 				else {
-					if(world.getBlock((int)c.xCoord+i, (int)c.yCoord-1, (int)c.zCoord+j).isOpaqueCube())
-						world.setBlock((int)c.xCoord+i, (int)c.yCoord-1, (int)c.zCoord+j, blockID, meta, 3);
-					if(world.getBlock((int)c.xCoord+i, (int)c.yCoord-2, (int)c.zCoord+j).isOpaqueCube())
-						world.setBlock((int)c.xCoord+i, (int)c.yCoord-2, (int)c.zCoord+j, blockID, meta, 3);
-					if(world.getBlock((int)c.xCoord+i, (int)c.yCoord-3, (int)c.zCoord+j).isOpaqueCube())
-						world.setBlock((int)c.xCoord+i, (int)c.yCoord-3, (int)c.zCoord+j, blockID, meta, 3);
+					if(world.getBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord-1), MathHelper.floor_double(c.zCoord+j)).isOpaqueCube())
+						world.setBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord-1), MathHelper.floor_double(c.zCoord+j), blockID, meta, 3);
+					if(world.getBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord-2), MathHelper.floor_double(c.zCoord+j)).isOpaqueCube())
+						world.setBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord-2), MathHelper.floor_double(c.zCoord+j), blockID, meta, 3);
+					if(world.getBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord-3), MathHelper.floor_double(c.zCoord+j)).isOpaqueCube())
+						world.setBlock(MathHelper.floor_double(c.xCoord+i), MathHelper.floor_double(c.yCoord-3), MathHelper.floor_double(c.zCoord+j), blockID, meta, 3);
 				}
 			}
 		}
@@ -741,21 +672,21 @@ public class PlaceTraps implements IWorldGenerator {
 
 	private boolean simpleTrap(Random rand, World world, Vec3 c) {
 		boolean nn = false; 
-		if(world.isAirBlock((int)c.xCoord, (int)c.yCoord, (int)c.zCoord)) {
+		if(world.isAirBlock(MathHelper.floor_double(c.xCoord), MathHelper.floor_double(c.yCoord), MathHelper.floor_double(c.zCoord))) {
 			c.yCoord -=1;
 			nn = true;
 		}
-		world.setBlock((int)c.xCoord, (int)c.yCoord, (int)c.zCoord, BlockTrap.instance, 1, 3);
-		world.setBlockMetadataWithNotify((int)c.xCoord, (int)c.yCoord, (int)c.zCoord, 1, 3);
-		world.setBlock((int)c.xCoord, (int)c.yCoord+1, (int)c.zCoord, BlockInvisiblePressurePlate.obsidian);
+		world.setBlock(MathHelper.floor_double(c.xCoord), MathHelper.floor_double(c.yCoord), MathHelper.floor_double(c.zCoord), BlockTrap.instance, 1, 3);
+		world.setBlockMetadataWithNotify(MathHelper.floor_double(c.xCoord), MathHelper.floor_double(c.yCoord), MathHelper.floor_double(c.zCoord), 1, 3);
+		world.setBlock(MathHelper.floor_double(c.xCoord), MathHelper.floor_double(c.yCoord+1), MathHelper.floor_double(c.zCoord), rand.nextInt(5) == 0 ? BlockArtifactsPressurePlate.camoObsidian : BlockArtifactsPressurePlate.invisObsidian);
 		
 		
-		TileEntityTrap dis = (TileEntityTrap)world.getTileEntity((int)c.xCoord, (int)c.yCoord, (int)c.zCoord);
+		TileEntityTrap dis = (TileEntityTrap)world.getTileEntity(MathHelper.floor_double(c.xCoord), MathHelper.floor_double(c.yCoord), MathHelper.floor_double(c.zCoord));
 		if(dis != null) {
 			addTrapItem(rand, dis);
 		}
 		else {
-			TileEntityDispenser dis2 = (TileEntityDispenser)world.getTileEntity((int)c.xCoord, (int)c.yCoord, (int)c.zCoord);
+			TileEntityDispenser dis2 = (TileEntityDispenser)world.getTileEntity(MathHelper.floor_double(c.xCoord), MathHelper.floor_double(c.yCoord), MathHelper.floor_double(c.zCoord));
 			if(dis2 != null) {
 				addTrapItem(rand, dis);
 			}
@@ -816,7 +747,7 @@ public class PlaceTraps implements IWorldGenerator {
 		case 8:
 		case 9:
 		case 10:
-			dis.func_146019_a/*addItem*/(new ItemStack(Items.arrow, 32));
+			dis.func_146019_a/*addItem*/(new ItemStack(Items.arrow, rand.nextInt(20)));
 			break;
 		case 11:
 		case 12:
@@ -825,14 +756,14 @@ public class PlaceTraps implements IWorldGenerator {
 			break;
 		case 14:
 		case 15:
-			dis.func_146019_a/*addItem*/(new ItemStack(Items.iron_sword));
+			dis.func_146019_a/*addItem*/(new ItemStack(Items.iron_sword, 1, 245));
 			break;
 		}
 	}
 
 	private boolean forwardTrap(Random rand, World world, Vec3[] c) {
 		Vec3 pos = Vec3.createVectorHelper(c[0].xCoord, c[0].yCoord, c[0].zCoord);
-		world.setBlock((int)pos.xCoord, (int)pos.yCoord, (int)pos.zCoord+1, BlockTrap.instance, 0, 3);
+		world.setBlock(MathHelper.floor_double(pos.xCoord), MathHelper.floor_double(pos.yCoord), MathHelper.floor_double(pos.zCoord+1), BlockTrap.instance, 0, 3);
 		int m = 0;
 		if(c[1].xCoord == 0) {
 			if(c[1].zCoord == 1) {
@@ -850,25 +781,25 @@ public class PlaceTraps implements IWorldGenerator {
 				m = 4;
 			}
 		}
-		world.setBlockMetadataWithNotify((int)pos.xCoord, (int)pos.yCoord+1, (int)pos.zCoord, m, 3);
-		TileEntityTrap dis = (TileEntityTrap)world.getTileEntity((int)pos.xCoord, (int)pos.yCoord+1, (int)pos.zCoord);
+		world.setBlockMetadataWithNotify(MathHelper.floor_double(pos.xCoord), MathHelper.floor_double(pos.yCoord+1), MathHelper.floor_double(pos.zCoord), m, 3);
+		TileEntityTrap dis = (TileEntityTrap)world.getTileEntity(MathHelper.floor_double(pos.xCoord), MathHelper.floor_double(pos.yCoord+1), MathHelper.floor_double(pos.zCoord));
 		if(dis != null) {
 			addTrapItem(rand, dis);
 		}
 		else {
-			TileEntityDispenser dis2 = (TileEntityDispenser)world.getTileEntity((int)pos.xCoord, (int)pos.yCoord+1, (int)pos.zCoord);
+			TileEntityDispenser dis2 = (TileEntityDispenser)world.getTileEntity(MathHelper.floor_double(pos.xCoord), MathHelper.floor_double(pos.yCoord+1), MathHelper.floor_double(pos.zCoord));
 			if(dis2 != null) {
 				addTrapItem(rand, dis);
 			}
 		}
-		world.setBlock((int)pos.xCoord, (int)pos.yCoord, (int)pos.zCoord, Blocks.unlit_redstone_torch, 5, 3);
+		world.setBlock(MathHelper.floor_double(pos.xCoord), MathHelper.floor_double(pos.yCoord), MathHelper.floor_double(pos.zCoord), Blocks.unlit_redstone_torch, 5, 3);
 		pos.xCoord += c[1].xCoord;
 		pos.zCoord += c[1].zCoord;
-		world.setBlock((int)pos.xCoord, (int)pos.yCoord-1, (int)pos.zCoord, Blocks.redstone_wire, 15, 3);
+		world.setBlock(MathHelper.floor_double(pos.xCoord), MathHelper.floor_double(pos.yCoord-1), MathHelper.floor_double(pos.zCoord), Blocks.redstone_wire, 15, 3);
 		pos.xCoord += c[1].xCoord;
 		pos.zCoord += c[1].zCoord;
-		world.setBlock((int)pos.xCoord, (int)pos.yCoord-1, (int)pos.zCoord, Blocks.air, 0, 3);
-		world.setBlock((int)pos.xCoord, (int)pos.yCoord-2, (int)pos.zCoord, Blocks.redstone_wire, 14, 3);
+		world.setBlock(MathHelper.floor_double(pos.xCoord), MathHelper.floor_double(pos.yCoord-1), MathHelper.floor_double(pos.zCoord), Blocks.air, 0, 3);
+		world.setBlock(MathHelper.floor_double(pos.xCoord), MathHelper.floor_double(pos.yCoord-2), MathHelper.floor_double(pos.zCoord), Blocks.redstone_wire, 14, 3);
 		pos.xCoord += c[1].xCoord;
 		pos.zCoord += c[1].zCoord;
 		m = 0;
@@ -888,11 +819,11 @@ public class PlaceTraps implements IWorldGenerator {
 				m = 2;
 			}
 		}
-		world.setBlock((int)pos.xCoord, (int)pos.yCoord-2, (int)pos.zCoord, Blocks.redstone_torch, m, 3);
+		world.setBlock(MathHelper.floor_double(pos.xCoord), MathHelper.floor_double(pos.yCoord-2), MathHelper.floor_double(pos.zCoord), Blocks.redstone_torch, m, 3);
 		pos.xCoord += c[1].xCoord;
 		pos.zCoord += c[1].zCoord;
-		world.setBlock((int)pos.xCoord, (int)pos.yCoord-1, (int)pos.zCoord, Blocks.redstone_wire, 0, 3);
-		world.setBlock((int)pos.xCoord, (int)pos.yCoord+1, (int)pos.zCoord, BlockInvisiblePressurePlate.obsidian, 0, 3);
+		world.setBlock(MathHelper.floor_double(pos.xCoord), MathHelper.floor_double(pos.yCoord-1), MathHelper.floor_double(pos.zCoord), Blocks.redstone_wire, 0, 3);
+		world.setBlock(MathHelper.floor_double(pos.xCoord), MathHelper.floor_double(pos.yCoord+1), MathHelper.floor_double(pos.zCoord), BlockArtifactsPressurePlate.invisObsidian, 0, 3);
 		return true;
 	}
 

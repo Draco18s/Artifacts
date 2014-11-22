@@ -52,7 +52,7 @@ public class ComponentObscurity extends BaseComponent {
 		UtilsForComponents.sendPotionPacket(14, 600, 0, player);
 		player.addPotionEffect(new PotionEffect(14, 600, 0));
 		ArtifactClientEventHandler.cloaked = true;
-		System.out.println("Cloaking player.");
+		//System.out.println("Cloaking player.");
 		UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 1); //itemStack.damageItem(1, player);
 		itemStack.stackTagCompound.setInteger("onItemRightClickDelay", 200);
 		return itemStack;
@@ -71,7 +71,7 @@ public class ComponentObscurity extends BaseComponent {
 			SToCMessage packet = new SToCMessage(out);
 			DragonArtifacts.artifactNetworkWrapper.sendTo(packet, player);
 			
-			System.out.println("Cloaking player.");
+			//System.out.println("Cloaking player.");
 			itemStack.damageItem(1, player);
 //			UtilsForComponents.sendItemDamagePacket(entityAttacker, entityAttacker.inventory.currentItem, 1); //itemStack.damageItem(1, player);
 //			itemStack.stackTagCompound.setInteger("onItemRightClickDelay", 200);

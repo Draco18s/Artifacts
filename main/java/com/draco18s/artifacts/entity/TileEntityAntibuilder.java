@@ -208,52 +208,52 @@ public class TileEntityAntibuilder extends TileEntity {
 									|| Block.getBlockById(blocks[ox*121+oy*11+oz]).getUnlocalizedName().toLowerCase().contains("leaf")
 									|| Block.getBlockById(blocks[ox*121+oy*11+oz]) instanceof BlockFalling) {
 
-								Block wBlock = worldObj.getBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5);
-								int wMeta = worldObj.getBlockMetadata(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5);
-								if(blocks[ox*121+oy*11+oz] == Block.getIdFromBlock(BlockStoneBrickMovable.instance) && wBlock == Blocks.air) {
-									Block a1 = worldObj.getBlock(xCoord+ox-4, yCoord+oy-5, zCoord+oz-5);
-									Block a2 = worldObj.getBlock(xCoord+ox-6, yCoord+oy-5, zCoord+oz-5);
-									Block a3 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-4, zCoord+oz-5);
-									Block a4 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-6, zCoord+oz-5);
-									Block a5 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-4);
-									Block a6 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-6);
-									
-									Block b1 = worldObj.getBlock(xCoord+ox-3, yCoord+oy-5, zCoord+oz-5);
-									Block b2 = worldObj.getBlock(xCoord+ox-7, yCoord+oy-5, zCoord+oz-5);
-									Block b3 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-3, zCoord+oz-5);
-									Block b4 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-7, zCoord+oz-5);
-									Block b5 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-3);
-									Block b6 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-7);
-									if((a1 == BlockStoneBrickMovable.instance && b1 == Blocks.sticky_piston)
-											|| (a2 == BlockStoneBrickMovable.instance && b2 == Blocks.sticky_piston)
-											|| (a3 == BlockStoneBrickMovable.instance && b3 == Blocks.sticky_piston)
-											|| (a4 == BlockStoneBrickMovable.instance && b4 == Blocks.sticky_piston)
-											|| (a5 == BlockStoneBrickMovable.instance && b5 == Blocks.sticky_piston)
-											|| (a6 == BlockStoneBrickMovable.instance && b6 == Blocks.sticky_piston)) {
-										blocks[ox*121+oy*11+oz] = (short) Block.getIdFromBlock(wBlock);
-										metas[ox*121+oy*11+oz] = (byte)wMeta;
-									}
-									else {
-										//System.out.println("Bad Block ID (B)");
-										worldObj.setBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, Block.getBlockById(blocks[ox*121+oy*11+oz]), metas[ox*121+oy*11+oz], 3);
-										drawParticleLine(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5, xCoord+0.5, yCoord+0.5, zCoord+0.5);
-										//particles.add(Vec3.createVectorHelper(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5));
-									}
-									/*if(a1 != BlockStoneBrickMovable.instance.blockID 
-											&& a2 != BlockStoneBrickMovable.instance.blockID 
-											&& a3 != BlockStoneBrickMovable.instance.blockID 
-											&& a4 != BlockStoneBrickMovable.instance.blockID 
-											&& a5 != BlockStoneBrickMovable.instance.blockID 
-											&& a6 != BlockStoneBrickMovable.instance.blockID) {
-										worldObj.setBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, blocks[ox*121+oy*11+oz], metas[ox*121+oy*11+oz], 3);
-										drawParticleLine(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5, xCoord+0.5, yCoord+0.5, zCoord+0.5);
-										particles.add(Vec3.createVectorHelper(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5));
-									}
-									else {
-										blocks[ox*121+oy*11+oz] = (short) wid;
-										metas[ox*121+oy*11+oz] = (byte)wmd;
-									}*/
-								}
+//								Block wBlock = worldObj.getBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5);
+//								int wMeta = worldObj.getBlockMetadata(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5);
+//								if(blocks[ox*121+oy*11+oz] == Block.getIdFromBlock(BlockStoneBrickMovable.instance) && wBlock == Blocks.air) {
+//									Block a1 = worldObj.getBlock(xCoord+ox-4, yCoord+oy-5, zCoord+oz-5);
+//									Block a2 = worldObj.getBlock(xCoord+ox-6, yCoord+oy-5, zCoord+oz-5);
+//									Block a3 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-4, zCoord+oz-5);
+//									Block a4 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-6, zCoord+oz-5);
+//									Block a5 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-4);
+//									Block a6 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-6);
+//									
+//									Block b1 = worldObj.getBlock(xCoord+ox-3, yCoord+oy-5, zCoord+oz-5);
+//									Block b2 = worldObj.getBlock(xCoord+ox-7, yCoord+oy-5, zCoord+oz-5);
+//									Block b3 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-3, zCoord+oz-5);
+//									Block b4 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-7, zCoord+oz-5);
+//									Block b5 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-3);
+//									Block b6 = worldObj.getBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-7);
+//									if((a1 == BlockStoneBrickMovable.instance && b1 == Blocks.sticky_piston)
+//											|| (a2 == BlockStoneBrickMovable.instance && b2 == Blocks.sticky_piston)
+//											|| (a3 == BlockStoneBrickMovable.instance && b3 == Blocks.sticky_piston)
+//											|| (a4 == BlockStoneBrickMovable.instance && b4 == Blocks.sticky_piston)
+//											|| (a5 == BlockStoneBrickMovable.instance && b5 == Blocks.sticky_piston)
+//											|| (a6 == BlockStoneBrickMovable.instance && b6 == Blocks.sticky_piston)) {
+//										blocks[ox*121+oy*11+oz] = (short) Block.getIdFromBlock(wBlock);
+//										metas[ox*121+oy*11+oz] = (byte)wMeta;
+//									}
+//									else {
+//										//System.out.println("Bad Block ID (B)");
+//										worldObj.setBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, Block.getBlockById(blocks[ox*121+oy*11+oz]), metas[ox*121+oy*11+oz], 3);
+//										drawParticleLine(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5, xCoord+0.5, yCoord+0.5, zCoord+0.5);
+//										//particles.add(Vec3.createVectorHelper(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5));
+//									}
+//									/*if(a1 != BlockStoneBrickMovable.instance.blockID 
+//											&& a2 != BlockStoneBrickMovable.instance.blockID 
+//											&& a3 != BlockStoneBrickMovable.instance.blockID 
+//											&& a4 != BlockStoneBrickMovable.instance.blockID 
+//											&& a5 != BlockStoneBrickMovable.instance.blockID 
+//											&& a6 != BlockStoneBrickMovable.instance.blockID) {
+//										worldObj.setBlock(xCoord+ox-5, yCoord+oy-5, zCoord+oz-5, blocks[ox*121+oy*11+oz], metas[ox*121+oy*11+oz], 3);
+//										drawParticleLine(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5, xCoord+0.5, yCoord+0.5, zCoord+0.5);
+//										particles.add(Vec3.createVectorHelper(xCoord+ox-5+0.5, yCoord+oy-5+0.5, zCoord+oz-5+0.5));
+//									}
+//									else {
+//										blocks[ox*121+oy*11+oz] = (short) wid;
+//										metas[ox*121+oy*11+oz] = (byte)wmd;
+//									}*/
+//								}
 							}
 							else {
 								//System.out.println("Bad Block ID (A)");
