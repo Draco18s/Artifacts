@@ -1,0 +1,298 @@
+itemGroup.tabGeneral=Unique Artifacts - Geral
+itemGroup.tabArtifacts=Unique Artifacts - Artefatos
+
+#Blocos Variados
+tile.light_block.name=Bloco de Luz
+tile.pedestal.name=Pedestal de Exibição
+tile.invisible_bedrock.name=Rocha Matriz Invisível
+tile.spike_block.name=Pontas Verticais
+tile.arrow_trap.name=Armadilha de Flechas
+tile.cover_plate.name=Cobertura de Armadilha
+tile.quicksand.name=Areia Movediça
+tile.arrow_trap_item.name=Armadilha de Flechas
+tile.cover_plate_item.name=Cobertura de Armadilha
+tile.fake_block_item.name=Bloco Ilusório
+tile.wall_pressure_plate.name=Chapa de Pedra
+tile.obsidian_wall_pressure_plate.name=Chapa de Obsidiana
+tile.wooden_wall_pressure_plate.name=Chapa de Madeira
+tile.camouflaged_wooden_wall_pressure_plate.name=Chapa de Madeira Camuflada
+tile.camouflaged_wall_pressure_plate.name=Chapa de Pedra Camuflada
+tile.camouflaged_obsidian_wall_pressure_plate.name=Chapa de Obsidiana Camuflada
+tile.invisible_pressure_plate.name=Placa de Pressão Invisível
+tile.obsidian_invisible_pressure_plate.name=Placa de Pressão Invisível de Obsidiana
+tile.obsidian_pressure_plate.name=Placa de Pressão de Obsidiana
+tile.camouflaged_wooden_pressure_plate.name=Placa de Pressão Camuflada de Madeira
+tile.camouflaged_pressure_plate.name=Placa de Pressão Camuflada de Pedra
+tile.camouflaged_obsidian_pressure_plate.name=Placa de Pressão Camuflada de Obsidiana
+tile.illusionary_block.name=Bloco Ilusório
+tile.invisible_block.name=Bloco Invisível
+tile.fake_tile_entity.name=Bloco de Espada Balançando
+tile.floating_block.name=Ar Sólido
+tile.anti_builder.name=Anti-Construtor
+tile.anti_anti_builder_stone.name=Bloco Anti Anti-Construtor
+tile.laser_source.name=Fonte de Laser
+tile.laser_beam.name=Raio Laser
+
+#Entities
+entity.EntClayGolem.name=Golem de Argila
+entity.ClayGolem.name=Golem de Argila
+entity.Artifacts.SpecialArrow.name=Flecha
+
+#These names appear in the creative inventory
+item.artifact_leather_armor_generic.name=Armadura de Couro do Artifact
+item.artifact_chainmail_armor_generic.name=Cota de Malha do Artifact
+item.artifact_iron_armor_generic.name=Armadura de Ferro do Artifact
+item.artifact_golden_armor_generic.name=Armadura de Ouro do Artifact
+item.artifact_diamond_armor_generic.name=Armadura de Diamante do Artifact
+item.artifact.name=Artefato
+item.dust_orichalcum.name=Manaesence
+item.lunar_calendar.name=Calendário Lunar
+item.structure_generator.Tier1Tower.name=Gerador de Estrutura - Torre Pequena do Feiticeiro
+item.structure_generator.Tier1TowerAncient.name=Gerador de Estrutura - Torre Pequena do Feiticeiro em Ruinas
+item.structure_generator.Tier2Tower.name=Gerador de Estrutura - Torre Média do Feiticeiro
+item.structure_generator.Tier2TowerAncient.name=Gerador de Estrutura - Torre Média do Feiticeiro em Ruinas
+item.structure_generator.Tier3Tower.name=Gerador de Estrutura - Torre Grande do Feiticeiro
+item.structure_generator.Tier3TowerAncient.name=Gerador de Estrutura - Torre Grande do Feiticeiro em Ruinas
+
+#These normally won't be seen.
+item.trapblade_diamond.name=Bloco de Espada de Diamante Balançando
+item.trapblade_wood.name=Bloco de Espada de Madeira Balançando
+item.trapblade_stone.name=Bloco de Espada de Pedra Balançando
+item.trapblade_iron.name=Bloco de Espada de Ferro Balançando
+item.trapblade_gold.name=Bloco de Espada de Ouro Balançando
+
+#Specific armor names. They shouldn't appear, but are here just in case.
+item.artifact_leather_helmet.name=Capuz de Couro do Artifact
+item.artifact_leather_chestplate.name=Túnica de Couro do Artifact
+item.artifact_leather_leggings.name=Claça de Couro do Artifact
+item.artifact_leather_boots.name=Botas de Couro do Artifact
+item.artifact_chainmail_helmet.name=Coifa de Cota de Malha do Artifact
+item.artifact_chainmail_chestplate.name=Peitora de Cota de Malha do Artifact
+item.artifact_chainmail_leggings.name=Calça de Cota de Malha do Artifact
+item.artifact_chainmail_boots.name=Botas de Cota de Malha do Artifact
+item.artifact_iron_helmet.name=Elmo de Ferro do Artifact
+item.artifact_iron_chestplate.name=Peitoral de Ferro do Artifact
+item.artifact_iron_leggings.name=Calça de Ferro do Artifact
+item.artifact_iron_boots.name=Iron Boots do Artifact
+item.artifact_golden_helmet.name=Elmo de Ouro do Artifact
+item.artifact_golden_chestplate.name=Peitoral de Ouro do Artifact
+item.artifact_golden_leggings.name=Calça de Ouro do Artifact
+item.artifact_golden_boots.name=Botas de Ouro do Artifact
+item.artifact_diamond_helmet.name=Elmo de Diamante do Artifact
+item.artifact_diamond_chestplate.name=Peitodal de Diamante do Artifact
+item.artifact_diamond_leggings.name=Calça de Diamante do Artifact
+item.artifact_diamond_boots.name=Botas de Diamante do Artifact
+
+#Death Messages
+death.attack.artifacts.quicksand=%1$s sufocou na areia movediça
+death.attack.artifacts.trapsword=%1$s foi cortado por uma espada
+
+#Material names (mirror vanilla)
+mat.Wood=Madeira
+mat.Leather=Couro
+mat.Chain=Cota de Malha
+mat.Stone=Pedra
+mat.Iron=Ferro
+mat.Gold=Ouro
+mat.Diamond=Diamante
+mat.Raw=Cru
+mat.infused=infundido
+
+#Item types (reflects the icon)
+type.Amulet=Amuleta
+type.Belt=Cinto
+type.Boots=Botas
+type.Chestplate=Peitoral
+type.Dagger=Punhal
+type.Figurine=Estatueta
+type.Helm=Elmo
+type.Leggings=Pants
+type.Ring=Anel
+type.Staff=Cajado
+type.Sword=Espada
+type.Trinket=Bijuteria
+type.Wand=Varinha
+type.Artifact=Artefato
+
+#Prepended adjective names (i.e. "[borgly] SWORD")
+pre.Brawling=Brawling
+pre.Floating=Flutuante
+pre.Light=Luz
+pre.Aerated=Geseificado
+pre.Breathy=Soporosa
+pre.Oxygenated=Oxigenado
+pre.Valuable=Valioso
+pre.Emerald Studded=Esmeralda Cravejada
+pre.Deadly=Mortal
+pre.Painful=Doloroso
+pre.Killing=Matador
+pre.Excavator's=de Escavador
+pre.Fragmenting=Fragmentação
+pre.Flaming=Em Chamas
+pre.Burning=Queimando
+pre.Incinerating=Incinerando
+pre.Well Fed=Bem Alimentado
+pre.Shanked=Atacado
+pre.Porky=Porky
+pre.Harvesting=Colheita
+pre.Healing=Cura
+pre.Rejuvenating=Rejuvenecimento
+pre.Holy=Santo
+pre.Hardy=Ousado
+pre.Heavy=Pesado
+pre.Bulky=Volumoso
+pre.Sturdy=Resistente
+pre.Jumpy=Nervoso
+pre.Bouncing=Saltitante
+pre.Stable=Estável
+pre.Illuminating=Iluminado
+pre.Bright=Brilhante
+pre.Shocking=Chocante
+pre.Electric=Elétrico
+pre.Webbing=Webbing
+pre.Mob Slowing=Lentidão de Mob
+pre.Staunching=Encancar
+pre.Miner's=do Minerador
+pre.Digger's=do Escavador
+pre.Digging=Escavação
+pre.Sensitive=Sensível
+pre.Recharging=Recarregar
+pre.Repairing=Reparação
+pre.Refreshing=Refrescante
+pre.Armored=Bindado
+pre.Shielding=Blindagem
+pre.Guarding=Guardião
+pre.Regenerative=Regenerativo
+pre.Swift=Swift
+pre.Quick=Rápido
+pre.Sensing=Sensoriamento
+pre.Sighted=Avistado
+pre.Reinvigorating=Revitalização
+pre.Sniping=Sniping
+pre.Obscured=Obscurecido
+pre.Hidden=Escondido
+pre.Baker's=do Padeiro
+pre.Confectioner's=do Confeiteiro
+pre.Musical=Musical
+pre.Harmonious=Harmonioso
+
+#Postpended adjective names (i.e. "SWORD [of borgles]")
+post.of Rage=da Raiva
+post.of Hermes=do Hermes
+post.of Flight=do Voo
+post.of Breathing=da Repiração
+post.of Fresh Air=do Ar Fresco
+post.of Emeralds=das Esmeraldas
+post.of Money=do Dinheiro
+post.of Wealth=da Riqueza
+post.of Rending=de Rending
+post.of Pain=da dor
+post.of Excavation=da Escavação
+post.of Explosions=das Explosões
+post.of Flames=das Chamas
+post.of Fire=do Fogo
+post.of Incineration=da Incineração
+post.of Saturation=da Saturação
+post.of Noms=dos Noms
+post.of Prospecting=da Prospecção
+post.of Healing=da Cura
+post.of Rejuvenation=do Rejuvenecimento
+post.of Toughness=de Dureza
+post.of Health=de Saúde
+post.of Leaping=do Pulo
+post.of Lightness=da Levesa
+post.of Stability=da Estabilidade
+post.of Light=de Luz
+post.of the Sun=do Sol
+post.of Thunder=do Trovão
+post.of Lightning=do Relâmpago
+post.of Trapping=de Interceptação
+post.of Quicksand=da Areia Movediça
+post.of First Aid=dos Primeiro Socorros
+post.of Mining=da Mineração
+post.of Quarrying=da Extração
+post.of Finding=da Procura
+post.of Repair=de Reparação
+post.of Renew=de Renovação
+post.of Protection=de Proteção
+post.of Armor=de Armadura
+post.of Regeneration=de Regeneração
+post.of Lazarus=de Lazarus
+post.of Swiftness=da Rapidez
+post.of Movement=do Movimento
+post.of Speed=de Velocidade
+post.of Seeing=da Visão
+post.of Darkvision=da Visão Noturna
+post.of Wrath=da Ira
+post.of Fireworks=dos Fogos de Artifício
+post.of Obscurity=da Obscuridade
+post.of Cloaking=de Camuflagem
+post.of Baking=do Padeiro
+post.of Icing=do Confeiteiro
+post.of Tunes=da Melodia
+post.of Music=da Música
+
+#Tooltip triggers
+tool.All tools, swords, etc.=Tudo ferrmentas, espadas, etc.
+tool.Helms, boots, etc.=Elmos, botas, etc.
+tool.when equipped.=quando equipado.
+tool.when not equipped.=quando não equipado.
+tool.passively.=passivamente.
+tool.after taking damage.=depois de tomar dano.
+tool.after taking lethal damage.=depois de tomar dano letal.
+tool.when held.=quando realizada.
+tool.when used.=quando utilizada.
+tool.when inflicting damage.=quando infligir danos.
+tool.when destroying blocks.=quando destruir blocos..
+tool.when interacting with entities.=quando interagir com entidades.
+tool.when dropped.=quando largado.
+tool.after taking drowning damage.=depois de tomar danos afogamento.
+
+#Tooltip duration units and associated grammar
+#"5 minute cooldown", "on cooldown: 36 seconds", "8 second fuse" etc.
+time.second=segundo
+time.seconds=segundos
+time.minute=minuto
+time.minutes=minutos
+time.fuse=rastilho
+time.on=ligado
+time.cooldown=contagem regressiva
+
+#Tooltip effect descriptors
+effect.Activates several potion effects=Ativa vários efeitos de poção
+effect.Allows sneaking on air=Permite esqueirar-se no ar
+effect.Converts to emeralds=Converte em esmeraldas
+effect.Night Vision=Visão noturna
+effect.Speed Boost=Aumento de velocidade
+effect.Restores health=Restaura a saúde
+effect.Damage resistance=Resistência de dano
+effect.Slowly repairs itself=Lentamente se repara
+effect.Senses nearby ores=Detecta minérios nas proximidades
+effect.Effective Pickaxe=Picareta eficaz
+effect.Heals for a half-heart=Cura para meio coração
+effect.Slows down all mobs=Retarda todos os mobs
+effect.Causes lightning=Causa relâmpagos
+effect.Provides illumination=Fornece iluminação
+effect.Knockback Resistance=Resistência a tranco
+effect.Damage Resistance=Resistência de dano
+effect.Jump boost=Impulso do salto
+effect.Health Boost=Melhorar a saúde
+effect.Heals the Player=Cura o jogador
+effect.Extra drops from ores=´Drops´ extras de minérios
+effect.Food Saturation=Saciedade de Comida
+effect.fills hunger when half empty=enche a fome quando meio vazio
+effect.fills 1 drumstick=preenche uma coxinha
+effect.Shoots fireballs=atira bolas de fogo
+effect.Explodes=Explode
+effect.Digs big holes=Cava grandes buracos
+effect.Repairs other items=Repara outros itens
+effect.Water Breathing=Respiração aquática
+effect.Invisibility=Invisibilidade
+#{H} here will use a UTF heart symbol
+effect.Hearts={H}
+effect.Shoots exploding arrows=Dispara flechas explosivas
+effect.Reduced vision while invisible.=A diminuição da visão, enquanto invisível.
+effect.Places cakes on solid surfaces=Põe bolos em superfícies sólidas
+effect.Plays the record=Toca uma música
+#{Play} is a bunch of coloured music notes
+effect.Play={Play}
