@@ -81,7 +81,7 @@ public class PlaceTraps implements IWorldGenerator {
 		{
 			tex = chunkX*16+10;
 			tez = chunkZ*16+10;
-			if(genPyramids && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(tex, tez), BiomeDictionary.Type.SANDY)) {
+			if(genPyramids && BiomeDictionary.isBiomeOfType(world.getBiomeGenForCoords(tex, tez), BiomeDictionary.Type.DESERT)) {
 				if(world.getBlock(tex, 64, tez) == Blocks.wool) {
 					generatePyramidTrap(rand, world, tex, 64, tez);
 				}
@@ -150,11 +150,11 @@ public class PlaceTraps implements IWorldGenerator {
 				quicksandPit.generate(world, rand, tex, 128, tez);
 				
 			}
-			boolean ocean = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.OCEAN);
+			boolean ocean = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.WATER);
 			boolean mushroom = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.MUSHROOM);
 			boolean mountain = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.MOUNTAIN);
 			boolean magical = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.MAGICAL);//BiomeGenBase.biomeList[bid].biomeName.toLowerCase().contains("magic");
-			boolean frozen = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.SNOWY);
+			boolean frozen = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.FROZEN);
 			boolean flag = (mountain || magical || mushroom || ocean) && !frozen;
 			int weightTotal = weightTower1 + weightTower1A + weightTower2 + weightTower2A + weightTower3 + weightTower3A;
 			if(weightTotal > 0 && (bid == 3 || flag) && rand.nextInt(towerRarity) == 0 && chunkX%3 == 0 && chunkZ%3 == 0) {
@@ -195,11 +195,11 @@ public class PlaceTraps implements IWorldGenerator {
 		}
 		else if(dim != 1 && dim != -1 && (!whitelistEnabled || Arrays.binarySearch(whitelist, dim) >= 0) && !(blacklistEnabled && Arrays.binarySearch(blacklist, dim) >= 0)	){
 			int bid = world.getBiomeGenForCoords(chunkX*16, chunkZ*16).biomeID;
-			boolean ocean = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.OCEAN);
+			boolean ocean = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.WATER);
 			boolean mushroom = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.MUSHROOM);
 			boolean mountain = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.MOUNTAIN);
 			boolean magical = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.MAGICAL);//BiomeGenBase.biomeList[bid].biomeName.toLowerCase().contains("magic");
-			boolean frozen = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.SNOWY);
+			boolean frozen = BiomeDictionary.isBiomeOfType(BiomeGenBase.getBiome(bid), BiomeDictionary.Type.FROZEN);
 			boolean flag = (mountain || magical || mushroom || ocean) && !frozen;
 			int weightTotal = weightTower1 + weightTower1A + weightTower2 + weightTower2A + weightTower3 + weightTower3A;
 			if(weightTotal > 0 && (bid == 3 || flag) && rand.nextInt(towerRarity) == 0 && chunkX%3 == 0 && chunkZ%3 == 0) {
