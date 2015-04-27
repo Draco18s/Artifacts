@@ -58,7 +58,6 @@ public class ItemArtifact extends Item implements IBauble {
 		super();
 		this.setHasSubtypes(true);
 		setMaxStackSize(1);
-		setNoRepair();
 		weaponDamage = 0.0F;
 		setMaxDamage(128);
 		setCreativeTab(DragonArtifacts.tabArtifacts);
