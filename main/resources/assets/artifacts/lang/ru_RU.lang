@@ -1,0 +1,221 @@
+itemGroup.tabTraps=Ловушки
+
+#Various blocks
+tile.Upright Spikes.name=Вертикальные шипы
+tile.Arrow Trap.name=Капкан со стрелами
+tile.Tripwire Cover.name=Скрытый капкан со стрелами
+tile.Quicksand.name=Зыбучая земля
+tile.Wallplate.name=Настенная нажимная плита
+tile.Wall Obsidiplate.name=Обсидиановая настенная нажимная плита
+tile.Invisible Pressure Plate.name=Невидимая нажимная плита
+tile.Invisible Obsidiplate.name=Невидимая обсидиановая нажимная плита
+tile.Anti-Builder.name=Антистроительный блок
+tile.Anti Anti-Builder Stone.name=Анти-анти строительный блок
+tile.Display Pedestal.name=Пьедестал для артефактов
+tile.Laser Beam Source.name=Лазер
+tile.Invisible Bedrock.name=Невидимая коренная порода
+tile.Invisible Block.name=Невидимый блок
+tile.Illusionary Block.name=Иллюзорный блок
+
+#Entities
+entity.Clay Golem.name=Глиняный голем
+entity.Artifacts.SpecialArrow.name=Стрела
+
+#These names appear in the creative inventory
+item.artifact.armorCLOTH.name=Кожанный доспех
+item.artifact.armorCHAIN.name=Металлический доспех
+item.artifact.armorIRON.name=Железный доспех
+item.artifact.armorGOLD.name=Золотой доспех
+item.artifact.armorDIAMOND.name=Алмазный доспех
+item.orichalcum_dust=Даст
+item.Moon Calendar.name=Лунный календарь
+
+#Material names (mirror vanilla)
+mat.Wood=Деревянный
+mat.Leather=Кожаный
+mat.Chain=Металлический
+mat.Stone=Каменный
+mat.Iron=Железный
+mat.Gold=Золотой
+mat.Diamond=Алмазный
+mat.Raw=Сырой
+mat.infused=Заряженный
+
+#Item types (reflects the icon)
+type.Amulet=Амулет
+type.Boots=Ботинок
+type.Chestplate=Нагрудник
+type.Dagger=Кинжал
+type.Figurine=Тотем
+type.Helm=Шлем
+type.Leggings=Бридж
+type.Ring=Браслет
+type.Staff=Посох
+type.Sword=Меч
+type.Trinket=Аксессуар
+type.Wand=Жезл
+type.Artifact=Артефакт
+
+#Prepended adjective names (i.e. "[borgly] SWORD")
+pre.Digger's=Землекопный
+pre.Brawling=Убойный
+pre.Floating=Плавучий
+pre.Light=Светлый
+pre.Aerated=Летательный
+pre.Breathy=Хриплый
+pre.Oxygenated=Кислородный
+pre.Valuable=Ценный
+pre.Emerald Studded=Изумрудный
+pre.Deadly=Смертельный
+pre.Painful=Болевой
+pre.Killing=Убийственный
+pre.Excavator's=Шахтёрный
+pre.Fragmenting=Фрагментный
+pre.Flaming=Пылающий
+pre.Burning=Горящий
+pre.Incinerating=Сжигающий
+pre.Well Fed=Утробный
+pre.Shanked=Хвостатый
+pre.Porky=Толстый
+pre.Harvesting=Убирающий
+pre.Healing=Исцеляющий
+pre.Rejuvenating=Омолаживающий
+pre.Holy=Святой
+pre.Hardy=Утяжелённый
+pre.Heavy=Тяжёлый
+pre.Bulky=Громоздкий
+pre.Sturdy=Крепкий
+pre.Jumpy=Прыгучий
+pre.Bouncing=Отскакивающий
+pre.Stable=Стабильный
+pre.Illuminating=Светящий
+pre.Bright=Яркий
+pre.Shocking=Парализующий
+pre.Electric=Электрический
+pre.Webbing=Жестокий
+pre.Mob Slowing=Замедляющий
+pre.Staunching=Останавливающий
+pre.Miner's=Шахтёрный
+pre.Digging=Шахтёрный
+pre.Sensitive=Чувствительный
+pre.Recharging=Заряжающий
+pre.Repairing=Ремонтирующий
+pre.Refreshing=Освежающий
+pre.Armored=Бронированный
+pre.Shielding=Экранированный
+pre.Guarding=Защитный
+pre.Regenerative=Регенерируемый
+pre.Swift=Стремительный
+pre.Quick=Быстрый
+pre.Sensing=Резкий
+pre.Sighted=Зримый
+pre.Reinvigorating=Активированный
+pre.Sniping=Снайперский
+
+#Postpended adjective names (i.e. "SWORD [of borgles]")
+post.of Rage=Ярости
+post.of Hermes=Гермеса
+post.of Flight=Полёта
+post.of Breathing=Дыхания
+post.of Fresh Air=Свежего воздуха
+post.of Emeralds=Изумрудов
+post.of Money=Денег
+post.of Wealth=Богатства
+post.of Rending=Раздирающих
+post.of Pain=Боли
+post.of Excavation=Раскопок
+post.of Explosions=Взрывов
+post.of Flames=Пылающих
+post.of Fire=Огненных
+post.of Incineration=Сжигающих
+post.of Saturation=Насыщения
+post.of Noms=Нома
+post.of Prospecting=Разведки
+post.of Healing=Исцеления
+post.of Rejuvenation=Омоложения
+post.of Toughness=Вязкости
+post.of Health=Здоровья
+post.of Leaping=Зайца
+post.of Lightness=Лёгкости
+post.of Stability=Стабильности
+post.of Light=Света
+post.of the Sun=Солнца
+post.of Thunder=Грома
+post.of Lightning=Молнии
+post.of Trapping=Прилипания
+post.of Quicksand=Зыбучих песков
+post.of First Aid=Скорой помощи
+post.of Mining=Шахтёра
+post.of Quarrying=Добытчика
+post.of Finding=Разведчика
+post.of Repair=Ремонтника
+post.of Renew=Обновления
+post.of Protection=Защиты
+post.of Armor=Брони
+post.of Regeneration=Регенерации
+post.of Lazarus=Лазаря
+post.of Swiftness=Стремительности
+post.of Movement=Движения
+post.of Speed=Скорости
+post.of Seeing=Зоркости
+post.of Darkvision=Ночной зоркости
+post.of Wrath=Смерти
+post.of Fireworks=Феерверков
+
+#Tooltip triggers
+tool.All tools, swords, etc.=Все инструменты, мечи и тд
+tool.Helms, boots, etc.=Шлемы, ботинки и тд
+tool.when equipped.=когда экипирован
+tool.when not equipped.=когда не экипирован
+tool.passively.=пассивно
+tool.after taking damage.=после получения урона
+tool.after taking lethal damage.=после смертельного повреждения
+tool.when held.=при удерживании
+tool.when used.=при использовании
+tool.when inflicting damage.=при нанесении урона
+tool.when destroying blocks.=при разрушении блоков
+tool.when interacting with entities.=при взаимодействии с субъектами
+tool.when dropped.=при сбрасывании
+tool.after taking drowning damage.=при захлебывании в воде
+
+#Tooltip duration units and associated grammar
+#"5 minute cooldown", "on cooldown: 36 seconds", "8 second fuse" etc.
+time.second=сек.
+time.seconds=сек.
+time.minute=мин.
+time.minutes=мин.
+time.fuse=перезарядки
+time.on=вкл
+time.cooldown=перезарядка
+
+#Tooltip effect descriptors
+effect.Activates several potion effects=Активирует несколько эффектов зелий
+effect.Allows sneaking on air=Ход по воздушной лестнице
+effect.Converts to emeralds=Преобразование в изумруды
+effect.Night Vision=Ночное виденье
+effect.Speed Boost=Ускорение
+effect.Restores health=Восстановление здоровья
+effect.Damage resistance=Сопротивление повреждениям
+effect.Slowly repairs itself=Медленное восстановление
+effect.Senses nearby ores=Радар ископаемых
+effect.Effective Pickaxe=Эффективная кирка
+effect.Heals for a half-heart=Лечение 1\2 сердечка
+effect.Slows down all mobs=Замедление монстров
+effect.Causes lightning=Вызов молнии
+effect.Provides illumination=Освещение
+effect.Knockback Resistance=Отдача
+effect.Damage Resistance=Сопротивление повреждениям
+effect.Jump boost=Высокий прыжок
+effect.Health Boost=Улучшенное здоровье
+effect.Heals the Player=Лечение игрока
+effect.Extra drops from ores=Дополнительные ресурсы из руд
+effect.Food Saturation=Нет голода
+effect.Shoots fireballs=Стрельба файрболлами
+effect.Explodes=Взрывы
+effect.Digs big holes=Шахтёрное мастерство
+effect.Repairs other items=Ремонт других вещей
+effect.Water Breathing=Подводное дыхание
+#{H} here will use a UTF heart symbol
+effect.Hearts={H}
+effect.Shoots exploding arrows=Стрелы
+effect.Damage Resistance=Сопротивление урону
