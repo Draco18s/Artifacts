@@ -55,7 +55,6 @@ public class ArtifactClientEventHandler {
 		Minecraft mc = Minecraft.getMinecraft();
 		if((cloaked && !mc.thePlayer.isPotionActive(Potion.invisibility)) || mc.thePlayer.isPotionActive(Potion.blindness)) {
 			cloaked = false;
-			System.out.println("Uncloaking player.");
 		}
 		
 		//Make the fog max depend on the render distance.
