@@ -45,7 +45,7 @@ public class ComponentBaking extends BaseComponent {
 		PacketBuffer out = new PacketBuffer(Unpooled.buffer());
 		out.writeInt(PacketHandlerServer.BAKING);
 		out.writeInt(player.inventory.currentItem);
-		CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
+		CToSMessage packet = new CToSMessage(out);
 		DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		itemStack.stackTagCompound.setInteger("onItemRightClickDelay", 20);
 		return itemStack;

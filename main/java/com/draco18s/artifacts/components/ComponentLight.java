@@ -10,6 +10,7 @@ import com.google.common.collect.Multimap;
 import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.api.interfaces.IArtifactComponent;
 import com.draco18s.artifacts.block.BlockLight;
+import com.draco18s.artifacts.block.BlockSolidAir;
 import com.draco18s.artifacts.components.UtilsForComponents.Flags;
 
 import net.minecraft.block.Block;
@@ -101,7 +102,7 @@ public class ComponentLight extends BaseComponent {
 						else {
 							if(world.getBlock(lx, ly, lz) != BlockLight.instance) {
 
-								if(world.isAirBlock(lx, ly, lz)) {
+								if(world.isAirBlock(lx, ly, lz) && world.getBlock(lx, ly, lz) != BlockSolidAir.instance) {
 									//Reset the block if it disappeared
 									world.setBlock(lx, ly, lz, BlockLight.instance);
 								}
@@ -113,7 +114,7 @@ public class ComponentLight extends BaseComponent {
 						}
 					}
 					
-					if(setLightBlock && nly >= 0 && nly < 256 && world.isAirBlock(nlx, nly, nlz)) {
+					if(setLightBlock && nly >= 0 && nly < 256 && world.isAirBlock(nlx, nly, nlz) && world.getBlock(nlx, nly, nlz) != BlockSolidAir.instance) {
 						world.setBlock(nlx, nly, nlz, BlockLight.instance);
 						stack.stackTagCompound.setInteger("lastLightX",nlx);
 						stack.stackTagCompound.setInteger("lastLightY",nly);

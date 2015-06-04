@@ -14,7 +14,7 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockLight extends Block {
+public class BlockLight extends IInvisibleBlock {
 
 	public static Block instance;
 
@@ -23,16 +23,13 @@ public class BlockLight extends Block {
 		this.setLightLevel(1);
 		this.setHardness(0);
 		this.setResistance(0);
+		setCreativeTab(null);
 		this.setTickRandomly(true); //So it destroys itself over time.
 	}
 	
 	@Override
 	public void updateTick(World world, int x, int y, int z, Random rand) {
-		if(world.getBlock(x, y, z) == BlockLight.instance) {
-			
-			world.setBlockToAir(x, y, z);
-			
-		}
+		world.setBlockToAir(x, y, z);
 	}
 	
 	@Override
@@ -64,6 +61,12 @@ public class BlockLight extends Block {
     public MovingObjectPosition collisionRayTrace(World par1World, int par2, int par3, int par4, Vec3 par5Vec3, Vec3 par6Vec3)
     {
     	return null;
+    }
+	
+	@Override
+	public boolean isReplaceable(IBlockAccess world, int x, int y, int z)
+    {
+        return true;
     }
     
     public int quantityDropped(Random par1Random)

@@ -81,7 +81,7 @@ public class ComponentRepairOther extends BaseComponent {
 			out.writeInt(PacketHandlerServer.REPAIRING);
 			out.writeInt(i);
 			out.writeInt(player.inventory.currentItem);
-			CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
+			CToSMessage packet = new CToSMessage(out);
 			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		
 			//par1ItemStack.setItemDamage(par1ItemStack.getItemDamage()+1);

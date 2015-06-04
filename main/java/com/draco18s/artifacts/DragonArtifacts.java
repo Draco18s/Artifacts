@@ -58,7 +58,7 @@ import com.draco18s.artifacts.network.PacketHandlerServer;
 import com.draco18s.artifacts.network.SToCMessage;
 import com.draco18s.artifacts.worldgen.PlaceTraps;
 
-@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "1.1.1")
+@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "1.1.2")
 public class DragonArtifacts{
 	@Instance("Artifacts")
     public static DragonArtifacts instance;
@@ -127,6 +127,7 @@ public class DragonArtifacts{
 			String calendarID = "lunar_calendar";
 			
 			String structureGenID = "structure_generator";
+			String pedestalKeyID = "pedestal_key";
 			
 			config.addCustomCategoryComment("WorldGen", "By default this mod alters worldgen slightly, adding more and different traps to\npyramids, temples, and strongholds as well as quicksand 'lakes'.\nThese may be disabled individually.\nTo disable the towers, set their weights to 0.");
 			PlaceTraps.genPyramids = config.get("WorldGen","Pyramids ",true).getBoolean(true);
@@ -306,7 +307,7 @@ public class DragonArtifacts{
 		ItemArtifactArmor.doAdjName = ItemArtifact.doAdjName = adjName.getBoolean(true);
 		
 		ItemStructureGenerator.structureGenItem = new ItemStructureGenerator().setUnlocalizedName(structureGenID);
-		
+		ItemPedestalKey.pedestalKeyItem = new ItemPedestalKey().setUnlocalizedName(pedestalKeyID).setCreativeTab(tabGeneral);
 		
 		BlockAntibuilder.instance = new BlockAntibuilder().setBlockName(antiID);
 		BlockCoverPlate.instance = new BlockCoverPlate().setBlockName(coverplateID);
@@ -399,6 +400,7 @@ public class DragonArtifacts{
 		GameRegistry.registerItem(ItemFakeSwordRenderable.gold, tb4);
 		GameRegistry.registerItem(ItemFakeSwordRenderable.diamond, tb5);
 		GameRegistry.registerItem(ItemStructureGenerator.structureGenItem, structureGenID);
+		GameRegistry.registerItem(ItemPedestalKey.pedestalKeyItem, pedestalKeyID);
 
         worldGen = new PlaceTraps();//pyrm, temp, strn, lib, quik, towers, usewhite, useblack, white, black, useAntibuild);
         GameRegistry.registerWorldGenerator(worldGen, 10);

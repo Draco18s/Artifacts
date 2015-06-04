@@ -133,7 +133,7 @@ public class ComponentExplosive extends BaseComponent {
 			out.writeInt(iy);
 			out.writeInt(iz);
 			out.writeInt(player.inventory.currentItem);
-			CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
+			CToSMessage packet = new CToSMessage(out);
 			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 			UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 3);
         }
@@ -149,7 +149,7 @@ public class ComponentExplosive extends BaseComponent {
 			out.writeInt(PacketHandlerServer.EXPLOSIONS);
 			out.writeInt(movingobjectposition.entityHit.getEntityId());
 			out.writeInt(player.inventory.currentItem);
-			CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
+			CToSMessage packet = new CToSMessage(out);
 			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 			UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 3);
         }
@@ -186,7 +186,7 @@ public class ComponentExplosive extends BaseComponent {
 			out.writeInt(player.getEntityId());
 			out.writeInt(player.inventory.currentItem);
 			//out.writeFloat(par3EntityPlayer.getHealth()+1);
-			CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
+			CToSMessage packet = new CToSMessage(out);
 			//System.out.println("Sending packet..." + player);
 			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 			//par1ItemStack.damageItem(1, par2EntityPlayer);

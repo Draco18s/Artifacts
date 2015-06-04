@@ -69,7 +69,7 @@ public class ComponentFireball extends BaseComponent {
 		out.writeInt(PacketHandlerServer.FIREBALLS);
 		out.writeInt(player.getEntityId());
 		out.writeInt(player.inventory.currentItem);
-		CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
+		CToSMessage packet = new CToSMessage(out);
 		DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 1);
 		itemStack.stackTagCompound.setInteger("onItemRightClickDelay", 20);

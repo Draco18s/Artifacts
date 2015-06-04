@@ -56,7 +56,7 @@ public class ComponentExplodingArrows extends BaseComponent {
 		out.writeInt(PacketHandlerServer.EXPLODING_ARROWS);
 		out.writeInt(player.getEntityId());
 		out.writeInt(player.inventory.currentItem);
-		CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
+		CToSMessage packet = new CToSMessage(out);
 		DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		itemStack.stackTagCompound.setInteger("onItemRightClickDelay", 15);
 		

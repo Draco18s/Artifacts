@@ -35,37 +35,42 @@ public class ContainerPedestal extends Container {
 		return tileEntity.isUseableByPlayer(entityplayer);
 	}
 
+	/**
+     * Called when a player shift-clicks on a slot. You must override this or you will crash when someone does that.
+     */
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotNum) {
 		ItemStack stack = null;
-		Slot slotObject = (Slot) inventorySlots.get(slot);
+		Slot slot = (Slot) inventorySlots.get(slotNum);
 
 		//null checks and checks if the item can be stacked (maxStackSize > 1)
-		if (slotObject != null && slotObject.getHasStack()) {
-			ItemStack stackInSlot = slotObject.getStack();
+		if (slot != null && slot.getHasStack()) {
+			ItemStack stackInSlot = slot.getStack();
 			stack = stackInSlot.copy();
 
 			//merges the item into player inventory since its in the tileEntity
-			if (slot < 9) {
-				if (!this.mergeItemStack(stackInSlot, 0, 35, true)) {
+			if (slotNum == 0) {
+				if (!this.mergeItemStack(stackInSlot, 1, 37, true)) {
+					
 					return null;
 				}
 			}
 			//places it into the tileEntity is possible since its in the player inventory
-			else if (!this.mergeItemStack(stackInSlot, 0, 9, false)) {
+			else if (!this.mergeItemStack(stackInSlot, 0, 1, false)) {
+				
 				return null;
 			}
 
 			if (stackInSlot.stackSize == 0) {
-				slotObject.putStack(null);
+				slot.putStack(null);
 			} else {
-				slotObject.onSlotChanged();
+				slot.onSlotChanged();
 			}
 
 			if (stackInSlot.stackSize == stack.stackSize) {
 				return null;
 			}
-			slotObject.onPickupFromSlot(player, stackInSlot);
+			slot.onPickupFromSlot(player, stackInSlot);
 		}
 		return stack;
 	}

@@ -6,6 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import java.io.IOException;
 import java.util.UUID;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.Packet;
@@ -16,20 +17,20 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class CToSMessage implements IMessage {
-	private UUID playerID;
-	private byte[] data;
+	private String playerName = "";
+	private byte[] data = new byte[0];
 	
 	public CToSMessage() 
 	{
-		this(new UUID(0,0), new byte[]{0});
+		this(new byte[0]);
 	}
 
-	public CToSMessage(UUID playerUUID, ByteBuf dataToSet)
+	public CToSMessage(ByteBuf dataToSet)
     {
-        this(playerUUID, dataToSet.array());
+        this(dataToSet.array());
     }
 
-    public CToSMessage(UUID playerUUID, byte[] dataToSet)
+    public CToSMessage(byte[] dataToSet)
     {
         
         if (dataToSet.length > 0x1ffff0)
@@ -37,7 +38,7 @@ public class CToSMessage implements IMessage {
             throw new IllegalArgumentException("Payload may not be larger than 2097136 (0x1ffff0) bytes");
         }
         
-        this.playerID = playerUUID;
+        playerName = Minecraft.getMinecraft().thePlayer.getCommandSenderName();
         this.data = dataToSet;
 
     }
@@ -54,8 +55,10 @@ public class CToSMessage implements IMessage {
             throw new IllegalArgumentException("Payload may not be larger than 2097136 (0x1ffff0) bytes");
         }
 		
-		buffer.writeLong(playerID.getLeastSignificantBits());
-		buffer.writeLong(playerID.getMostSignificantBits());
+		buffer.writeInt(this.playerName.length());
+		for(int i = 0; i < this.playerName.length(); i++) {
+			buffer.writeChar(this.playerName.charAt(i));
+		}
         buffer.writeShort(this.data.length);
         buffer.writeBytes(this.data);
 	}
@@ -68,9 +71,11 @@ public class CToSMessage implements IMessage {
 	public void fromBytes(ByteBuf buffer) {
 //		System.out.println("Decoding");
 		
-		long uuidLeastBits = buffer.readLong();
-		long uuidMostBits = buffer.readLong();
-		this.playerID = new UUID(uuidMostBits, uuidLeastBits);
+		int nameLength = buffer.readInt();
+		this.playerName = "";
+		for(int i = 0; i < nameLength; i++) {
+			playerName += buffer.readChar();
+		}
 		this.data = new byte[buffer.readShort()];
         buffer.readBytes(this.data);
 	}
@@ -79,8 +84,8 @@ public class CToSMessage implements IMessage {
         return this.data;
     }
 	
-	public UUID getUUID() {
-		return this.playerID;
+	public String getPlayerName() {
+		return this.playerName;
 	}
 
 }

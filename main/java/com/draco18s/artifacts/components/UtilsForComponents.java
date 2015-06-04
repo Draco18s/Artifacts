@@ -49,7 +49,7 @@ public class UtilsForComponents {
 			out.writeInt(potionID);
 			out.writeInt(duration);
 			out.writeInt(level);
-			CToSMessage packet = new CToSMessage(entity.getUniqueID(), out);
+			CToSMessage packet = new CToSMessage(out);
 			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		}
 	}
@@ -62,7 +62,7 @@ public class UtilsForComponents {
 			out.writeInt(player.getEntityId());
 			out.writeInt(inventorySlot);
 			out.writeInt(damageToDeal);
-			CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
+			CToSMessage packet = new CToSMessage(out);
 			DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		}
 	}

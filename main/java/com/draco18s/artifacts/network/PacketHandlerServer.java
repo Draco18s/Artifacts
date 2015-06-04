@@ -83,20 +83,20 @@ public class PacketHandlerServer implements IMessageHandler<CToSMessage,IMessage
 		try
 		{
 			int effectID = buff.readInt();
-			UUID uuid = packet.getUUID();
+			String name = packet.getPlayerName();
 			EntityPlayerMP p = null;
 			
 			List<EntityPlayerMP> playerList = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
 			
 			for(EntityPlayerMP entityPlayer : playerList) {
-				if(entityPlayer.getUniqueID().equals(uuid)) {
+				if(entityPlayer.getCommandSenderName().equals(name)) {
 					p = entityPlayer;
 					break;
 				}
 			}
 	        
 	        if(p == null) {
-	        	System.out.println("Couldn't find a player with UUID " + uuid.toString());
+	        	System.out.println("Couldn't find a player with name " + name);
 	        	return null;
 	        }
 	        

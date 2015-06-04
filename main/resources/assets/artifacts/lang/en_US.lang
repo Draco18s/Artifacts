@@ -53,6 +53,7 @@ item.structure_generator.Tier2Tower.name=Structure Generator - Medium Wizard Tow
 item.structure_generator.Tier2TowerAncient.name=Structure Generator - Medium Wizard Tower Ruins
 item.structure_generator.Tier3Tower.name=Structure Generator - Large Wizard Tower
 item.structure_generator.Tier3TowerAncient.name=Structure Generator - Large Wizard Tower Ruins
+item.pedestal_key.name=Pedestal Key
 
 #These normally won't be seen.
 item.trapblade_diamond.name=Swinging Diamond Blade Block
@@ -296,3 +297,8 @@ effect.Places cakes on solid surfaces=Places cakes on solid surfaces
 effect.Plays the record=Plays the record
 #{Play} is a bunch of coloured music notes
 effect.Play={Play}
+
+#Containers
+container.pedestal=Display Pedestal
+
+misc.Owned by:=Owned by:

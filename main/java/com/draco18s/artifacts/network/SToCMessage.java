@@ -19,7 +19,7 @@ public class SToCMessage implements IMessage{
 	
 	public SToCMessage() 
 	{
-		this(new byte[]{0});
+		this(new byte[0]);
 	}
 	
 	public SToCMessage(ByteBuf dataToSet)

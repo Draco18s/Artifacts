@@ -104,7 +104,7 @@ public class ComponentMusicPlayer extends BaseComponent {
 				out.writeChar(record.charAt(i));
 			}
 		}
-		CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
+		CToSMessage packet = new CToSMessage(out);
 		DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		
 		tag.setInteger("onItemRightClickDelay", 10);

@@ -34,9 +34,10 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityDisplayPedestal extends TileEntity implements IInventory {
 
-	private ItemStack[] contents = new ItemStack[1];
+	private ItemStack contents = null;
 	public EntityItem itemEnt = null;
-	public UUID owner = new UUID(0,0);
+	public UUID ownerUUID = new UUID(0, 0);
+	public String ownerName = "";
 	public int rotation = 0;
 
 	public TileEntityDisplayPedestal() {
@@ -52,7 +53,7 @@ public class TileEntityDisplayPedestal extends TileEntity implements IInventory 
 		if(i > 0)
 			return null;
 		else
-			return contents[0];
+			return contents;
 	}
 
 	@Override
@@ -67,24 +68,24 @@ public class TileEntityDisplayPedestal extends TileEntity implements IInventory 
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
-		if (this.contents[i] != null)
+		if (this.contents != null)
 		{
 			ItemStack itemstack;
 
-			if (this.contents[i].stackSize <= j)
+			if (this.contents.stackSize <= j)
 			{
-				itemstack = this.contents[i];
-				this.contents[i] = null;
+				itemstack = this.contents;
+				this.contents = null;
 				this.markDirty();
 				return itemstack;
 			}
 			else
 			{
-				itemstack = this.contents[i].splitStack(j);
+				itemstack = this.contents.splitStack(j);
 
-				if (this.contents[i].stackSize == 0)
+				if (this.contents.stackSize == 0)
 				{
-					this.contents[i] = null;
+					this.contents = null;
 				}
 
 				this.markDirty();
@@ -99,10 +100,10 @@ public class TileEntityDisplayPedestal extends TileEntity implements IInventory 
 
 	@Override
 	public ItemStack getStackInSlotOnClosing(int i) {
-		if (this.contents[i] != null)
+		if (this.contents != null)
 		{
-			ItemStack itemstack = this.contents[i];
-			this.contents[i] = null;
+			ItemStack itemstack = this.contents;
+			this.contents = null;
 			return itemstack;
 		}
 		else
@@ -113,7 +114,7 @@ public class TileEntityDisplayPedestal extends TileEntity implements IInventory 
 
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		this.contents[i] = itemstack;
+		this.contents = itemstack;
 
 		if (itemstack != null && itemstack.stackSize > this.getInventoryStackLimit())
 		{
@@ -140,30 +141,48 @@ public class TileEntityDisplayPedestal extends TileEntity implements IInventory 
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		if(owner == null || owner.equals(new UUID(0, 0))) {
-			owner = entityplayer.getPersistentID();
-			
-			try
-			{
-				PacketBuffer out = new PacketBuffer(Unpooled.buffer());
-				out.writeInt(PacketHandlerClient.PEDESTAL);
-				out.writeInt(this.xCoord);
-				out.writeInt(this.yCoord);
-				out.writeInt(this.zCoord);
-				out.writeLong(owner.getLeastSignificantBits());
-				out.writeLong(owner.getMostSignificantBits());
-				SToCMessage packet = new SToCMessage(out);
-				DragonArtifacts.artifactNetworkWrapper.sendToAllAround(packet, new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 32));
-			}
-			catch (Exception ex)
-			{
-				System.out.println("couldnt send packet!");
-				ex.printStackTrace();
-			}
-		}
-		else if(!owner.equals(entityplayer.getPersistentID())) {
+		boolean sendNamePacket = false;
+		
+		if(entityplayer.worldObj.isRemote) {
 			return false;
 		}
+		
+		if( (ownerName == null || ownerName.equals("")) && (ownerUUID == null || ownerUUID.equals(new UUID(0, 0))) ) {
+			ownerName = entityplayer.getCommandSenderName();
+			ownerUUID = entityplayer.getUniqueID();
+			this.markDirty();
+			sendNamePacket = true;
+		}
+		
+		if(ownerName.equals(entityplayer.getCommandSenderName()) && (ownerName == null || !ownerUUID.equals(entityplayer.getUniqueID()))) {
+			ownerUUID = entityplayer.getUniqueID();
+			this.markDirty();
+		}
+		
+		if((ownerName == null || !ownerName.equals(entityplayer.getCommandSenderName())) && ownerUUID.equals(entityplayer.getUniqueID())) {
+			ownerName = entityplayer.getCommandSenderName();
+			this.markDirty();
+			sendNamePacket = true;
+		}
+		
+		if(sendNamePacket) {
+			PacketBuffer out = new PacketBuffer(Unpooled.buffer());
+			out.writeInt(PacketHandlerClient.PEDESTAL);
+			out.writeInt(xCoord);
+			out.writeInt(yCoord);
+			out.writeInt(zCoord);
+			out.writeInt(ownerName.length());
+			for(int i = 0; i < ownerName.length(); i++) {
+				out.writeChar(ownerName.charAt(i));
+			}
+			SToCMessage namePacket = new SToCMessage(out);
+			DragonArtifacts.artifactNetworkWrapper.sendToAll(namePacket);
+		}
+		
+		if(!(ownerName.equals(entityplayer.getCommandSenderName()) && ownerUUID.equals(entityplayer.getUniqueID()))) {
+			return false;
+		}
+		
 		return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && entityplayer.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
 	}
 
@@ -183,48 +202,44 @@ public class TileEntityDisplayPedestal extends TileEntity implements IInventory 
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tagCompound)
+	public void readFromNBT(NBTTagCompound tag)
 	{
-		super.readFromNBT(tagCompound);
-		NBTTagList nbttaglist = tagCompound.getTagList("Items", 10);
-		this.contents = new ItemStack[this.getSizeInventory()];
+		super.readFromNBT(tag);
+		NBTTagList nbttaglist = tag.getTagList("Items", 10);
+		this.contents = null;
 
 		for (int i = 0; i < nbttaglist.tagCount(); ++i)
 		{
 			NBTTagCompound nbttagcompound1 = (NBTTagCompound)nbttaglist.getCompoundTagAt(i);
 			int j = nbttagcompound1.getByte("Slot") & 255;
 
-			if (j >= 0 && j < this.contents.length)
-			{
-				this.contents[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
-			}
+			this.contents = ItemStack.loadItemStackFromNBT(nbttagcompound1);
 		}
-		owner = new UUID(tagCompound.getLong("OwnerUUIDMost"), tagCompound.getLong("OwnerUUIDLeast"));
-		rotation = tagCompound.getInteger("rotation");
+		ownerName = tag.getString("OwnerName");
+		ownerUUID = new UUID(tag.getLong("OwnerUUIDMost"), tag.getLong("OwnerUUIDLeast"));
+		rotation = tag.getInteger("rotation");
 		markDirty();
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound par1NBTTagCompound)
+	public void writeToNBT(NBTTagCompound tag)
 	{
-		super.writeToNBT(par1NBTTagCompound);
+		super.writeToNBT(tag);
 		NBTTagList nbttaglist = new NBTTagList();
 
-		for (int i = 0; i < this.contents.length; ++i)
+		if (this.contents != null)
 		{
-			if (this.contents[i] != null)
-			{
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte)i);
-				this.contents[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
-			}
+			NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+			nbttagcompound1.setByte("Slot", (byte) 0);
+			this.contents.writeToNBT(nbttagcompound1);
+			nbttaglist.appendTag(nbttagcompound1);
 		}
 
-		par1NBTTagCompound.setTag("Items", nbttaglist);
-		par1NBTTagCompound.setLong("OwnerUUIDLeast", owner.getLeastSignificantBits());
-		par1NBTTagCompound.setLong("OwnerUUIDMost", owner.getMostSignificantBits());
-		par1NBTTagCompound.setInteger("rotation", rotation);
+		tag.setTag("Items", nbttaglist);
+		tag.setString("OwnerName", ownerName);
+		tag.setLong("OwnerUUIDLeast", ownerUUID.getLeastSignificantBits());
+		tag.setLong("OwnerUUIDMost", ownerUUID.getMostSignificantBits());
+		tag.setInteger("rotation", rotation);
 	}
 
 	public String getModelTexture() {
@@ -235,8 +250,8 @@ public class TileEntityDisplayPedestal extends TileEntity implements IInventory 
 	//Used to be onInventoryChanged
 	public void markDirty() {
 		super.markDirty();
-		if(worldObj != null && contents[0] != null) {
-			itemEnt = new EntityItem(this.worldObj, this.xCoord, this.yCoord, this.zCoord, contents[0]);
+		if(worldObj != null && contents != null) {
+			itemEnt = new EntityItem(this.worldObj, this.xCoord, this.yCoord, this.zCoord, contents);
 			itemEnt.hoverStart = 0;
 			itemEnt.rotationYaw = 0;
 			itemEnt.motionX = 0;

@@ -88,7 +88,8 @@ public class ComponentAirWalk extends BaseComponent {
 					}
 					if(newY >= 0 && newY < 256 && world.isAirBlock(newX, newY, newZ)) {
 						//System.out.println("Creating solid air at x="+newX+", y="+newY+", z="+newZ+".");
-						world.setBlock(newX, newY, newZ, BlockSolidAir.instance);
+						boolean worked = world.setBlock(newX, newY, newZ, BlockSolidAir.instance);
+						System.out.println(worked);
 						itemStack.stackTagCompound.setInteger("lastAirX",newX);
 						itemStack.stackTagCompound.setInteger("lastAirY",newY);
 						itemStack.stackTagCompound.setInteger("lastAirZ",newZ);

@@ -72,7 +72,7 @@ public class ComponentHeal extends BaseComponent {
 			//System.out.println("Building packet...");
 		out.writeInt(PacketHandlerServer.HEALING);
 		out.writeFloat(1);
-		CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
+		CToSMessage packet = new CToSMessage(out);
 		DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 1);
 		itemStack.stackTagCompound.setInteger("onItemRightClickDelay", 20);

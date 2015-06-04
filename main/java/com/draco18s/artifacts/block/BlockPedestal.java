@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import com.draco18s.artifacts.DragonArtifacts;
 import com.draco18s.artifacts.entity.TileEntityDisplayPedestal;
+import com.draco18s.artifacts.item.ItemPedestalKey;
 import com.draco18s.artifacts.network.PacketHandlerClient;
 import com.draco18s.artifacts.network.SToCMessage;
 
@@ -18,6 +19,7 @@ import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -31,6 +33,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -98,25 +101,12 @@ public class BlockPedestal extends BlockContainer {
 		        }
 		        while (!player.getCommandSenderName().equalsIgnoreCase(entityLivingBase.getCommandSenderName()));
 		        
-				ted.owner = player.getPersistentID();
-
-				try
-				{
-					PacketBuffer out = new PacketBuffer(Unpooled.buffer());
-					out.writeInt(PacketHandlerClient.PEDESTAL);
-					out.writeInt(x);
-					out.writeInt(y);
-					out.writeInt(z);
-					out.writeLong(ted.owner.getLeastSignificantBits());
-					out.writeLong(ted.owner.getMostSignificantBits());
-					SToCMessage packet = new SToCMessage(out);
-					DragonArtifacts.artifactNetworkWrapper.sendToAllAround(packet, new TargetPoint(world.provider.dimensionId, x, y, z, 32));
-				}
-				catch (Exception ex)
-				{
-					System.out.println("couldnt send packet!");
-					ex.printStackTrace();
-				}	
+		        if(player == null) {
+		        	ted.ownerName = entityLivingBase.getCommandSenderName();
+		        }
+		        else {
+		        	ted.ownerName = player.getCommandSenderName();
+		        }	
 				
 				ted.rotation = ((int) ((MathHelper.floor_double((double)((player.rotationYaw) * 16.0F / 360.0F) + 0.5D) & 15) / 4)) * 90;
 			}
@@ -126,8 +116,23 @@ public class BlockPedestal extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9)
 	{
+		//Don't activate the block if the player is holding a key
+		if(player.getHeldItem() != null && player.getHeldItem().getItem() == ItemPedestalKey.pedestalKeyItem) {
+			return false;
+		}
+		
+		world.playSoundEffect((double)x + 0.5, (double)y + 0.5, (double)z + 0.5, "random.door_open", 1.0f, 1.2f);
+		
 		if (world.isRemote)
 		{
+			TileEntity te = world.getTileEntity(x, y, z);
+			
+			if(te instanceof TileEntityDisplayPedestal) {
+				String ownerName = ((TileEntityDisplayPedestal) te).ownerName;
+				if(ownerName != null && !ownerName.equals("") && !ownerName.equals(player.getCommandSenderName())) {
+					Minecraft.getMinecraft().ingameGUI.func_110326_a(StatCollector.translateToLocal("misc.Owned by:") + " " + ownerName, false);
+				}
+			}
 			return true;
 		}
 		else
@@ -183,18 +188,13 @@ public class BlockPedestal extends BlockContainer {
     {
 		TileEntity te = world.getTileEntity(x, y, z);
 		TileEntityDisplayPedestal ted = (TileEntityDisplayPedestal)te;
-		/*if(!world.isRemote) {
-			System.out.println("owner?" + par1EntityPlayer.username.equals(ted.owner));
-			System.out.println(" - " + ted.owner);
-		}*/
-		if(world.isRemote) {
-			//System.out.println(ted.owner);
-		}
-		if((ted.owner.getLeastSignificantBits() == player.getUniqueID().getLeastSignificantBits() &&
-				ted.owner.getMostSignificantBits() == player.getUniqueID().getMostSignificantBits()) ||
-				ted.owner == null || ted.owner.equals(new UUID(0,0))) {
-			//if(world.isRemote)
-				//System.out.println("breaking");
+
+		if((ted.ownerUUID.getLeastSignificantBits() == player.getUniqueID().getLeastSignificantBits() &&
+				ted.ownerUUID.getMostSignificantBits() == player.getUniqueID().getMostSignificantBits()) ||
+				ted.ownerName.equals(player.getCommandSenderName()) ||
+				ted.ownerName == null || ted.ownerName.equals("") ||
+				ted.ownerUUID == null || ted.ownerUUID.equals(new UUID(0,0))) {
+
 			float f = this.getBlockHardness(world, x, y, z);
 			return ForgeHooks.blockStrength(this, player, world, x, y, z);
 		}

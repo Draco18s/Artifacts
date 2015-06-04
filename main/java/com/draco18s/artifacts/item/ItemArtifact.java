@@ -251,7 +251,7 @@ public class ItemArtifact extends Item implements IBauble {
 					out.writeInt(4096);
 					out.writeInt(d);
 					out.writeInt(player.inventory.currentItem);
-					CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
+					CToSMessage packet = new CToSMessage(out);
 					DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 				}
 			}

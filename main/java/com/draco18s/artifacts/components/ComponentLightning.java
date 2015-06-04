@@ -72,7 +72,7 @@ public class ComponentLightning extends BaseComponent {
 		out.writeInt(PacketHandlerServer.LIGHTNING);
 		out.writeInt(player.getEntityId());
 		out.writeInt(player.inventory.currentItem);
-		CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
+		CToSMessage packet = new CToSMessage(out);
 		DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 		UtilsForComponents.sendItemDamagePacket(player, player.inventory.currentItem, 1);
 		itemStack.stackTagCompound.setInteger("onItemRightClickDelay", 5);
@@ -99,7 +99,7 @@ public class ComponentLightning extends BaseComponent {
 				//EntityPlayer par3EntityPlayer = (EntityPlayer) par3EntityLivingBase;
 				out.writeInt(player.inventory.currentItem);
 				//out.writeFloat(par3EntityPlayer.getHealth()+1);
-				CToSMessage packet = new CToSMessage(player.getUniqueID(), out);
+				CToSMessage packet = new CToSMessage(out);
 				DragonArtifacts.artifactNetworkWrapper.sendToServer(packet);
 				//par1ItemStack.damageItem(1, par2EntityPlayer);
 				return true;

@@ -60,4 +60,9 @@ public class BlockSolidAir extends IInvisibleBlock {
     {
 		return false;
     }
+    
+    public int quantityDropped(Random par1Random)
+    {
+        return 0;
+    }
 }

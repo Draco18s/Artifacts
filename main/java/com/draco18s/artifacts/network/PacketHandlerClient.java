@@ -82,18 +82,20 @@ public class PacketHandlerClient implements IMessageHandler<SToCMessage, IMessag
 	        		ArtifactClientEventHandler.cloaked = true;
 	        		break;
             	case PEDESTAL:
+            		//Update the display pedestal name on the client
+
             		te = world.getTileEntity(dis.readInt(), dis.readInt(), dis.readInt());
             		if(te instanceof TileEntityDisplayPedestal) {
             			TileEntityDisplayPedestal ted = (TileEntityDisplayPedestal)te;
-            			/*InputStreamReader reader = new InputStreamReader(stream);
-            			BufferedReader br = new BufferedReader(reader);
-            			String str = br.readLine();*/
-            			String str = "";
-            			for(int s = dis.readInt()-1; s >= 0; s--) {
-            				str += dis.readChar();
+            			
+            			int nameLength = dis.readInt();
+            			String name = "";
+            			
+            			for(int s = 0; s < nameLength; s++) {
+            				name += dis.readChar();
             			}
-            			//String str = dis.readLine();
-            			//System.out.println("New owner: " + str);
+            			
+            			ted.ownerName = name;
             		}
             		break;
             	case CAKE_PARTICLES:
