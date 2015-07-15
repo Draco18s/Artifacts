@@ -177,7 +177,7 @@ public class PacketHandlerServer implements IMessageHandler<CToSMessage,IMessage
 						int ix = movingobjectposition.blockX;
 						int iy = movingobjectposition.blockY;
 						int iz = movingobjectposition.blockZ;
-						if (!world.getBlock(ix, iy, iz).isBlockNormalCube())
+						if (!world.getBlock(ix, iy, iz).isNormalCube())
 						{
 							--iy;
 						}
