@@ -22,7 +22,7 @@ public class CToSMessage implements IMessage {
 	
 	public CToSMessage() 
 	{
-		this(new byte[0]);
+		//Used internally on the server by Netty. Don't call client-side code here.
 	}
 
 	public CToSMessage(ByteBuf dataToSet)
@@ -37,8 +37,7 @@ public class CToSMessage implements IMessage {
         {
             throw new IllegalArgumentException("Payload may not be larger than 2097136 (0x1ffff0) bytes");
         }
-        
-        playerName = Minecraft.getMinecraft().thePlayer.getCommandSenderName();
+
         this.data = dataToSet;
 
     }
@@ -54,11 +53,6 @@ public class CToSMessage implements IMessage {
         {
             throw new IllegalArgumentException("Payload may not be larger than 2097136 (0x1ffff0) bytes");
         }
-		
-		buffer.writeInt(this.playerName.length());
-		for(int i = 0; i < this.playerName.length(); i++) {
-			buffer.writeChar(this.playerName.charAt(i));
-		}
         buffer.writeShort(this.data.length);
         buffer.writeBytes(this.data);
 	}
@@ -70,12 +64,6 @@ public class CToSMessage implements IMessage {
 	@Override
 	public void fromBytes(ByteBuf buffer) {
 //		System.out.println("Decoding");
-		
-		int nameLength = buffer.readInt();
-		this.playerName = "";
-		for(int i = 0; i < nameLength; i++) {
-			playerName += buffer.readChar();
-		}
 		this.data = new byte[buffer.readShort()];
         buffer.readBytes(this.data);
 	}
@@ -86,6 +74,10 @@ public class CToSMessage implements IMessage {
 	
 	public String getPlayerName() {
 		return this.playerName;
+	}
+	
+	public void setPlayerName(String name){
+		this.playerName=name;
 	}
 
 }

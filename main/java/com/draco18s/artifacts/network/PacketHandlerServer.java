@@ -76,6 +76,8 @@ public class PacketHandlerServer implements IMessageHandler<CToSMessage,IMessage
 	@Override
 	public IMessage onMessage(CToSMessage packet, MessageContext context)
 	{
+		packet.setPlayerName(context.getServerHandler().playerEntity.getCommandSenderName());
+		
 //		System.out.println("Caught a packet " + packet.getData() + " for player " + packet.getUUID());
 
 		ByteBuf buff = Unpooled.wrappedBuffer(packet.getData());
@@ -175,7 +177,7 @@ public class PacketHandlerServer implements IMessageHandler<CToSMessage,IMessage
 						int ix = movingobjectposition.blockX;
 						int iy = movingobjectposition.blockY;
 						int iz = movingobjectposition.blockZ;
-						if (!world.getBlock(ix, iy, iz).isBlockNormalCube())
+						if (!world.getBlock(ix, iy, iz).isNormalCube())
 						{
 							--iy;
 						}
