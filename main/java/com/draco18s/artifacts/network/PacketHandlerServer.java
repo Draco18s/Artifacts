@@ -76,6 +76,8 @@ public class PacketHandlerServer implements IMessageHandler<CToSMessage,IMessage
 	@Override
 	public IMessage onMessage(CToSMessage packet, MessageContext context)
 	{
+		packet.setPlayerName(context.getServerHandler().playerEntity.getCommandSenderName());
+		
 //		System.out.println("Caught a packet " + packet.getData() + " for player " + packet.getUUID());
 
 		ByteBuf buff = Unpooled.wrappedBuffer(packet.getData());
