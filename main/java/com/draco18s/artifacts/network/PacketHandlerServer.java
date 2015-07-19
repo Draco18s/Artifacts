@@ -83,20 +83,11 @@ public class PacketHandlerServer implements IMessageHandler<CToSMessage,IMessage
 		try
 		{
 			int effectID = buff.readInt();
-			String name = packet.getPlayerName();
-			EntityPlayerMP p = null;
-			
-			List<EntityPlayerMP> playerList = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
-			
-			for(EntityPlayerMP entityPlayer : playerList) {
-				if(entityPlayer.getCommandSenderName().equals(name)) {
-					p = entityPlayer;
-					break;
-				}
-			}
+						
+	        EntityPlayerMP p = context.getServerHandler().playerEntity;
 	        
 	        if(p == null) {
-	        	System.out.println("Couldn't find a player with name " + name);
+	        	System.out.println("Couldn't find the player.");
 	        	return null;
 	        }
 	        
@@ -175,7 +166,7 @@ public class PacketHandlerServer implements IMessageHandler<CToSMessage,IMessage
 						int ix = movingobjectposition.blockX;
 						int iy = movingobjectposition.blockY;
 						int iz = movingobjectposition.blockZ;
-						if (!world.getBlock(ix, iy, iz).isBlockNormalCube())
+						if (!world.getBlock(ix, iy, iz).isNormalCube())
 						{
 							--iy;
 						}

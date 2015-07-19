@@ -58,7 +58,7 @@ import com.draco18s.artifacts.network.PacketHandlerServer;
 import com.draco18s.artifacts.network.SToCMessage;
 import com.draco18s.artifacts.worldgen.PlaceTraps;
 
-@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "1.1.2")
+@Mod(modid = "Artifacts", name = "Unique Artifacts", version = "1.1.3")
 public class DragonArtifacts{
 	@Instance("Artifacts")
     public static DragonArtifacts instance;

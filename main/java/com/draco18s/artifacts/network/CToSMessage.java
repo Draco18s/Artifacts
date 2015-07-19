@@ -17,7 +17,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class CToSMessage implements IMessage {
-	private String playerName = "";
 	private byte[] data = new byte[0];
 	
 	public CToSMessage() 
@@ -38,7 +37,6 @@ public class CToSMessage implements IMessage {
             throw new IllegalArgumentException("Payload may not be larger than 2097136 (0x1ffff0) bytes");
         }
         
-        playerName = Minecraft.getMinecraft().thePlayer.getCommandSenderName();
         this.data = dataToSet;
 
     }
@@ -55,11 +53,7 @@ public class CToSMessage implements IMessage {
             throw new IllegalArgumentException("Payload may not be larger than 2097136 (0x1ffff0) bytes");
         }
 		
-		buffer.writeInt(this.playerName.length());
-		for(int i = 0; i < this.playerName.length(); i++) {
-			buffer.writeChar(this.playerName.charAt(i));
-		}
-        buffer.writeShort(this.data.length);
+		buffer.writeShort(this.data.length);
         buffer.writeBytes(this.data);
 	}
 
@@ -71,11 +65,6 @@ public class CToSMessage implements IMessage {
 	public void fromBytes(ByteBuf buffer) {
 //		System.out.println("Decoding");
 		
-		int nameLength = buffer.readInt();
-		this.playerName = "";
-		for(int i = 0; i < nameLength; i++) {
-			playerName += buffer.readChar();
-		}
 		this.data = new byte[buffer.readShort()];
         buffer.readBytes(this.data);
 	}
@@ -83,9 +72,5 @@ public class CToSMessage implements IMessage {
     public byte[] getData() {
         return this.data;
     }
-	
-	public String getPlayerName() {
-		return this.playerName;
-	}
 
 }
