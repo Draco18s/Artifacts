@@ -1,0 +1,304 @@
+itemGroup.tabGeneral=Unique Artifacts - Général
+itemGroup.tabArtifacts=Unique Artifacts - Artefacts
+
+#Various blocks
+tile.light_block.name=Bloc de lumière
+tile.pedestal.name=Piédestal de présentation
+tile.invisible_bedrock.name=Socle rocheux invisible
+tile.spike_block.name=Pointes toutes droites
+tile.arrow_trap.name=Piège à flèches
+tile.cover_plate.name=Cache de fil de détente
+tile.quicksand.name=Sable mouvant
+tile.arrow_trap_item.name=Piège à flèches
+tile.cover_plate_item.name=Cache de fil de détente
+tile.fake_block_item.name=Bloc illusoire
+tile.wall_pressure_plate.name=Plaque de mur en pierre
+tile.obsidian_wall_pressure_plate.name=Plaque de mur en obsidienne
+tile.wooden_wall_pressure_plate.name=Plaque de mur en bois
+tile.camouflaged_wooden_wall_pressure_plate.name=Plaque de mur camouflée en bois
+tile.camouflaged_wall_pressure_plate.name=Plaque de mur camouflée en pierre
+tile.camouflaged_obsidian_wall_pressure_plate.name=Plaque de mur camouflée en obsidienne
+tile.invisible_pressure_plate.name=Plaque de pression invisible
+tile.obsidian_invisible_pressure_plate.name=Plaque de pression invisible en obsidienne
+tile.obsidian_pressure_plate.name=Plaque de pression en obsidienne
+tile.camouflaged_wooden_pressure_plate.name=Plaque de pression camouflée en bois
+tile.camouflaged_pressure_plate.name=Plaque de pression camouflée en pierre
+tile.camouflaged_obsidian_pressure_plate.name=Plaque de pression camouflée en obsidienne
+tile.illusionary_block.name=Bloc illusoire
+tile.invisible_block.name=Bloc invisible
+tile.fake_tile_entity.name=Bloc d'épée volante
+tile.floating_block.name=Air solide
+tile.anti_builder.name=Anti-construction
+tile.anti_anti_builder_stone.name=Bloc d'anti Anti-construction
+tile.laser_source.name=Source Laser
+tile.laser_beam.name=Rayon Laser
+
+#Entities
+entity.EntClayGolem.name=Golem d'argile
+entity.ClayGolem.name=Golem d'argile
+entity.Artifacts.SpecialArrow.name=Flèche
+
+#These names appear in the creative inventory
+item.artifact_leather_armor_generic.name=Armure en cuir d'artefact
+item.artifact_chainmail_armor_generic.name=Armure en maille d'artefact
+item.artifact_iron_armor_generic.name=Armure en fer d'artefact
+item.artifact_golden_armor_generic.name=Armure en or d'artefact
+item.artifact_diamond_armor_generic.name=Armure en diamant d'artefact
+item.artifact.name=Artefact
+item.dust_orichalcum.name=Manaesence
+item.lunar_calendar.name=Calendrier lunaire
+item.structure_generator.Tier1Tower.name=Générateur de structure - Petite tour de magicien
+item.structure_generator.Tier1TowerAncient.name=Générateur de structure - Ruines de petite tour de magicien
+item.structure_generator.Tier2Tower.name=Générateur de structure - Tour moyenne de magicien
+item.structure_generator.Tier2TowerAncient.name=Générateur de structure - Ruines de tour moyenne de magicien
+item.structure_generator.Tier3Tower.name=Générateur de structure - Grande tour de magicien
+item.structure_generator.Tier3TowerAncient.name=Générateur de structure - Ruines de grande tour de magicien
+item.pedestal_key.name=Clef de piédestal
+
+#These normally won't be seen.
+item.trapblade_diamond.name=Bloc d'épée volante en diamant
+item.trapblade_wood.name=Bloc d'épée volante en bois
+item.trapblade_stone.name=Bloc d'épée volante en pierre
+item.trapblade_iron.name=Bloc d'épée volante en fer
+item.trapblade_gold.name=Bloc d'épée volante en or
+
+#Specific armor names. They shouldn't appear, but are here just in case.
+item.artifact_leather_helmet.name=Casque en cuir d'artefact
+item.artifact_leather_chestplate.name=Plastron en cuir d'artefact
+item.artifact_leather_leggings.name=Jambières en cuir d'artefact
+item.artifact_leather_boots.name=Bottes en cuir d'artefact
+item.artifact_chainmail_helmet.name=Casque en maille d'artefact
+item.artifact_chainmail_chestplate.name=Plastron en maille d'artefact
+item.artifact_chainmail_leggings.name=Jambières en maille d'artefact
+item.artifact_chainmail_boots.name=Bottes en maille d'artefact
+item.artifact_iron_helmet.name=Casque en fer d'artefact
+item.artifact_iron_chestplate.name=Plastron en fer d'artefact
+item.artifact_iron_leggings.name=Jambières en fer d'artefact
+item.artifact_iron_boots.name=Bottes en fer d'artefact
+item.artifact_golden_helmet.name=Casque en or d'artefact
+item.artifact_golden_chestplate.name=Plastron en or d'artefact
+item.artifact_golden_leggings.name=Jambières en or d'artefact
+item.artifact_golden_boots.name=Bottes en or d'artefact
+item.artifact_diamond_helmet.name=Casque en diamant d'artefact
+item.artifact_diamond_chestplate.name=Plastron en diamant d'artefact
+item.artifact_diamond_leggings.name=Jambières en diamant d'artefact
+item.artifact_diamond_boots.name=Bottes en diamant d'artefact
+
+#Death Messages
+death.attack.artifacts.quicksand=%1$s a suffoqué dans les sables mouvants
+death.attack.artifacts.trapsword=%1$s a été tranché par une épée
+
+#Material names (mirror vanilla)
+mat.Wood=Bois
+mat.Leather=Cuir
+mat.Chain=Maille
+mat.Stone=Pierre
+mat.Iron=Fer
+mat.Gold=Or
+mat.Diamond=Diamant
+mat.Raw=Brut
+mat.infused=infusé
+
+#Item types (reflects the icon)
+type.Amulet=Amulette
+type.Belt=Ceinture
+type.Boots=Bottes
+type.Chestplate=Plastron
+type.Dagger=Poignard
+type.Figurine=Figurine
+type.Helm=Casque
+type.Leggings=Jambières
+type.Ring=Anneau
+type.Staff=Bâton
+type.Sword=Épée
+type.Trinket=Bibelot
+type.Wand=Baguette
+type.Artifact=Artefact
+
+#Prepended adjective names (i.e. "[borgly] SWORD") in french "Épée [merdique]" ^^
+pre.Brawling=Bagareux(se)
+pre.Floating=Flottant(e)
+pre.Light=Lumineux(se)
+pre.Aerated=Gazeux(se)
+pre.Breathy=Voilé(e)
+pre.Oxygenated=Oxygéné(e)
+pre.Valuable=Précieux(se)
+pre.Emerald Studded=Serti(e) d'émeraude
+pre.Deadly=Mortel(le)
+pre.Painful=Douloureux(se)
+pre.Killing=Tuant(e)
+pre.Excavator's=D'excavateur
+pre.Fragmenting=Fragmentant(e)
+pre.Flaming=Enflamant(e)
+pre.Burning=Brûlant(e)
+pre.Incinerating=Incinérant(e)
+pre.Well Fed=Bien nourri(e)
+pre.Shanked=A queue
+pre.Porky=Grassouillet(te)
+pre.Harvesting=Récoltant(e)
+pre.Healing=Soignant(e)
+pre.Rejuvenating=Rajeunisant(e)
+pre.Holy=Sacré(e)
+pre.Hardy=Robuste
+pre.Heavy=Lourd(e)
+pre.Bulky=Volumineux(se)
+pre.Sturdy=Vigoureux(se)
+pre.Jumpy=Nerveux(se)
+pre.Bouncing=Bondissant(e)
+pre.Stable=Stable
+pre.Illuminating=Éclairant(e)
+pre.Bright=Brillant(e)
+pre.Shocking=Choquant(e)
+pre.Electric=Électrique
+pre.Webbing=Sanglé(e)
+pre.Mob Slowing=Ralentisseur(se) de créature
+pre.Staunching=Étanchant(e)
+pre.Miner's=De mineur
+pre.Digger's=De terrassier
+pre.Digging=Terrassant(e)
+pre.Sensitive=Sensible
+pre.Recharging=Rechargeant(e)
+pre.Repairing=Réparant(e)
+pre.Refreshing=Rafraîchissant(e)
+pre.Armored=Blindé(e)
+pre.Shielding=protégeant(e)
+pre.Guarding=Gardant(e)
+pre.Regenerative=Régénérateur(trice)
+pre.Swift=Rapide
+pre.Quick=Rapide
+pre.Sensing=Palpeur(se)
+pre.Sighted=Voyant(e)
+pre.Reinvigorating=Revigorant(e)
+pre.Sniping=Tirant(e) avec précision
+pre.Obscured=Obscurci(e)
+pre.Hidden=Cahcé(e)
+pre.Baker's=Du boulanger
+pre.Confectioner's=Du confectionneur
+pre.Musical=Musical(e)
+pre.Harmonious=Harmonieux(se)
+
+#Postpended adjective names (i.e. "SWORD [of borgles]") in french "Épée [de merde]" ^^
+post.of Rage=de rage
+post.of Hermes=d'Hermes
+post.of Flight=de vol
+post.of Breathing=de respiration
+post.of Fresh Air=d'air frais
+post.of Emeralds=d'émeraudes
+post.of Money=d'argent
+post.of Wealth=de fortune
+post.of Rending=de déchirement
+post.of Pain=de douleure
+post.of Excavation=d'excavation
+post.of Explosions=d'explosion
+post.of Flames=de flammes
+post.of Fire=de feu
+post.of Incineration=d'incinération
+post.of Saturation=de saturation
+post.of Noms=de Noms
+post.of Prospecting=de prospection
+post.of Healing=de soin
+post.of Rejuvenation=de rajeunissement
+post.of Toughness=de dureté
+post.of Health=de santé
+post.of Leaping=de sautant
+post.of Lightness=de légèreté
+post.of Stability=de stabilité
+post.of Light=de lumière
+post.of the Sun=du soleil
+post.of Thunder=du tonerre
+post.of Lightning=de la foudre
+post.of Trapping=de la prise au piège
+post.of Quicksand=du sale mouvant
+post.of First Aid=de premier secour
+post.of Mining=de minage
+post.of Quarrying=de la carrière
+post.of Finding=de découverte
+post.of Repair=de réparation
+post.of Renew=de renouvellement
+post.of Protection=de protection
+post.of Armor=de blindage
+post.of Regeneration=de régénération
+post.of Lazarus=de Lazarus
+post.of Swiftness=de rapidité
+post.of Movement=de mouvement
+post.of Speed=de vitesse
+post.of Seeing=d'observation
+post.of Darkvision=de vision nocturne
+post.of Wrath=de colère
+post.of Fireworks=de feu d'artifice
+post.of Obscurity=d'obscurité
+post.of Cloaking=de dissimulation
+post.of Baking=de cuisson
+post.of Icing=de glaçage
+post.of Tunes=d'airs
+post.of Music=de musique
+
+#Tooltip triggers
+tool.All tools, swords, etc.=Tous les outils, épées, etc.
+tool.Helms, boots, etc.=Casques, bottes, etc.
+tool.when equipped.=lorsque pourvu.
+tool.when not equipped.=lorsque non pourvu.
+tool.passively.=passivement.
+tool.after taking damage.=après prise de dégâts.
+tool.after taking lethal damage.=après prise de dégâts mortels.
+tool.when held.=lorsque maintenu.
+tool.when used.=lorsque utilisé.
+tool.when inflicting damage.=lorsque infligeant des dégâts.
+tool.when destroying blocks.=lorsque détruisant des blocs.
+tool.when interacting with entities.=lors d'interaction avec les entités.
+tool.when dropped.=lorsque jeté.
+tool.after taking drowning damage.=après prise de dégâts de noyade.
+
+#Tooltip duration units and associated grammar
+#"5 minute cooldown", "on cooldown: 36 seconds", "8 second fuse" etc.
+time.second=seconde de
+time.seconds=secondes de 
+time.minute=minute de 
+time.minutes=minutes de
+time.fuse=fusible
+time.on=en
+time.cooldown=refroisemment
+
+#Tooltip effect descriptors
+effect.Activates several potion effects=Activates several potion effects
+effect.Allows sneaking on air=Allows sneaking on air
+effect.Converts to emeralds=Converts to emeralds
+effect.Night Vision=Night Vision
+effect.Speed Boost=Speed Boost
+effect.Restores health=Restores health
+effect.Damage resistance=Damage resistance
+effect.Slowly repairs itself=Slowly repairs itself
+effect.Senses nearby ores=Senses nearby ores
+effect.Effective Pickaxe=Effective Pickaxe
+effect.Heals for a half-heart=Heals for a half-heart
+effect.Slows down all mobs=Slows down all mobs
+effect.Causes lightning=Causes lightning
+effect.Provides illumination=Provides illumination
+effect.Knockback Resistance=Knockback Resistance
+effect.Damage Resistance=Damage Resistance
+effect.Jump boost=Jump boost
+effect.Health Boost=Health Boost
+effect.Heals the Player=Heals the Player
+effect.Extra drops from ores=Extra drops from ores
+effect.Food Saturation=Food Saturation
+effect.fills hunger when half empty=fills hunger when half empty
+effect.fills 1 drumstick=fills 1 drumstick
+effect.Shoots fireballs=Shoots fireballs
+effect.Explodes=Explodes
+effect.Digs big holes=Digs big holes
+effect.Repairs other items=Repairs other items
+effect.Water Breathing=Water Breathing
+effect.Invisibility=Invisibility
+#{H} here will use a UTF heart symbol
+effect.Hearts={H}
+effect.Shoots exploding arrows=Shoots exploding arrows
+effect.Reduced vision while invisible.=Reduced vision while invisible.
+effect.Places cakes on solid surfaces=Places cakes on solid surfaces
+effect.Plays the record=Plays the record
+#{Play} is a bunch of coloured music notes
+effect.Play={Play}
+
+#Containers
+container.pedestal=Piédestal de présentation
+
+misc.Owned by:=Owned by:
