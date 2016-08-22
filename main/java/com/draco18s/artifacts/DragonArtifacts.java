@@ -68,6 +68,7 @@ public class DragonArtifacts{
 	public static boolean boundingInvis = true;
 	public static PlaceTraps worldGen;
 	public static boolean mystcraftLoaded = false;
+	public static boolean airwalkDebug = false;
 	
 	public static boolean baublesLoaded = false;
 	public static boolean baublesMustBeEquipped = true;
@@ -217,7 +218,9 @@ public class DragonArtifacts{
     		conf = config.get("rendering", "TrapSwordIcon", "blade");
     		conf.comment = "Sets the rendering type for swords in arrow traps.\nDefault is 'blade' which attempts to maintain the jaggy nature of the vanilla sword.\n'blade_alt' uses a smaller texture, maintaining strait lines and mirroring the vanilla item as closely as possible.\nAdditional textures can be created and set here as well, if desired, without replacing existing textures.";
     		String bladeRender = conf.getString();
-    		
+            airwalkDebug = config.get("debug", "Enables the 'true' spam in console/logs when a player is airwalking", false).getBoolean(false);
+
+
 			String lightID = "light_block";
 			String pedID = "pedestal";
     		String invis2ID = "invisible_bedrock";
